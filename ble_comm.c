@@ -1,0 +1,84 @@
+#include "ble_comm.h"
+
+uint8_t ble_active = 0;
+uint8_t ble_string_put[20] = "";
+
+void ble_correct(uint8_t * buffer);
+void ble_debug(uint8_t * buffer);
+void ble_set(uint8_t * buffer);
+
+void ble_comm_send_num_handler(uint32_t num){
+			sprintf((char*)ble_string_put, "%d", num);
+			ble_comm_send_handler(ble_string_put);
+}
+
+
+
+
+
+int findIdexOfArray(uint8_t *buf, int startIndex, char character){
+		for(uint8_t i = startIndex; i<strlen((char*)buf); i++ )
+		{
+				if(buf[i] == character){
+				return i;
+			}
+		}
+		return 0;
+}
+
+
+void ble_comm(uint8_t * ble_buffer)
+	{
+		
+					switch(ble_buffer[0]){
+							
+						case '$':
+								
+						ble_correct(ble_buffer);
+					  break;
+						
+						case 'd':
+								ble_debug(ble_buffer);
+								break;
+								
+						case 's':
+								ble_set(ble_buffer);
+								//strcpy((char*)ble_string_put, "ivanovich");
+								//ble_comm_send_handler(ble_string_put);
+								break;
+						// demand init parameter
+						case 'i':
+								ble_active = 1;
+								set_send_cor_mode(correct_mode);
+								break;
+						case 'p':
+								remote_mode = STATUS_DEFINE;
+								current_life_counter = life_counter;
+								generate_admin_pass1();
+								ble_comm_send_handler("wait pass");
+								segtext("wait pass");
+						
+								
+								break;
+						
+						case 'a':
+								if(remote_mode == STATUS_DEFINE){
+									test_activate_code = atoi((char*)ble_buffer+1);
+									SEGGER_RTT_printf(0, "get number %d\n", test_activate_code);
+									check_pass();
+								}
+								break;
+						
+		}
+	}
+		
+//	void ble_info(uint8_t* buffer){
+//		if(correct_mode == COR_MANUAL)
+//		ble_comm_send_handler("i1/2");
+//	}
+		
+
+
+
+
+
