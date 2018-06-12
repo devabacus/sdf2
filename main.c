@@ -926,12 +926,20 @@ void uart_event_handle(app_uart_evt_t * p_event)
 
     switch (p_event->evt_type)
     {
+			
         case APP_UART_DATA_READY:
-            UNUSED_VARIABLE(app_uart_get(&data_array[index]));
+            app_uart_get(&data_array[index]);
             index++;
 				
 				 if (data_array[index - 1] == '\n'){
-						 segtext(data_array);
+						 //segtext(data_array);
+					 
+					 ble_comm_send_num_handler(atoi(data_array+8));
+					 
+					 for(uint8_t i = 0; i < 20; i++){
+								data_array[i] = 0;
+							}
+					 
 						 app_uart_flush();
 					 index = 0;
 				 } 
@@ -953,10 +961,6 @@ void uart_event_handle(app_uart_evt_t * p_event)
     }
 }
 /**@snippet [Handling the data received over UART] */
-
-
-
-
 /**@brief  Function for initializing the UART module.
  */
 /**@snippet [UART Initialization] */
@@ -965,13 +969,13 @@ static void uart_init(void)
     uint32_t                     err_code;
     app_uart_comm_params_t const comm_params =
     {
-        .rx_pin_no    = RX_PIN_NUMBER,
+        .rx_pin_no    = 25,
         .tx_pin_no    = TX_PIN_NUMBER,
         .rts_pin_no   = RTS_PIN_NUMBER,
         .cts_pin_no   = CTS_PIN_NUMBER,
         .flow_control = APP_UART_FLOW_CONTROL_DISABLED,
         .use_parity   = false,
-        .baud_rate    = NRF_UART_BAUDRATE_115200
+        .baud_rate    = NRF_UART_BAUDRATE_9600
     };
 
     APP_UART_FIFO_INIT(&comm_params,
@@ -1083,7 +1087,7 @@ int main(void)
 		pwm_init_rgb();
 		HX711_init();
 		m_clock_timer_init();
-		//uart_init();
+		uart_init();
 
 		peer_manager_init();
     gap_params_init();

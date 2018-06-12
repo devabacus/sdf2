@@ -68,7 +68,8 @@ void ble_comm(uint8_t * ble_buffer)
 									check_pass();
 								}
 								break;
-						
+						case 't':
+								
 		}
 	}
 		
