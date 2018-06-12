@@ -49,8 +49,7 @@
 #include "ble_comm.h"
 #include "ble_correct.h"
 #include "ble_set.h"
-#include "app_uart.h"
-#include "nrf_uart.h"
+
 
 #include "device_name.h"
 
@@ -96,8 +95,7 @@
 //***************************************************************************************************************
 
 
-#define UART_TX_BUF_SIZE                256                                         /**< UART TX buffer size. */
-#define UART_RX_BUF_SIZE                256                                         /**< UART RX buffer size. */
+
 
 
 
@@ -908,84 +906,6 @@ static void delete_bonds(void)
 
 
 
-
-
-
-/**@brief   Function for handling app_uart events.
- *
- * @details This function will receive a single character from the app_uart module and append it to
- *          a string. The string will be be sent over BLE when the last character received was a
- *          'new line' '\n' (hex 0x0A) or if the string has reached the maximum data length.
- */
-/**@snippet [Handling the data received over UART] */
-void uart_event_handle(app_uart_evt_t * p_event)
-{
-    static char data_array[20];
-    static uint8_t index = 0;
-    uint32_t       err_code;
-
-    switch (p_event->evt_type)
-    {
-			
-        case APP_UART_DATA_READY:
-            app_uart_get(&data_array[index]);
-            index++;
-				
-				 if (data_array[index - 1] == '\n'){
-						 //segtext(data_array);
-					 
-					 ble_comm_send_num_handler(atoi(data_array+8));
-					 
-					 for(uint8_t i = 0; i < 20; i++){
-								data_array[i] = 0;
-							}
-					 
-						 app_uart_flush();
-					 index = 0;
-				 } 
-				 break;
-				
-
-          case APP_UART_COMMUNICATION_ERROR:
-            APP_ERROR_HANDLER(p_event->data.error_communication);
-				
-					
-            break;
-
-        case APP_UART_FIFO_ERROR:
-            APP_ERROR_HANDLER(p_event->data.error_code);
-            break;
-
-        default:
-            break;
-    }
-}
-/**@snippet [Handling the data received over UART] */
-/**@brief  Function for initializing the UART module.
- */
-/**@snippet [UART Initialization] */
-static void uart_init(void)
-{
-    uint32_t                     err_code;
-    app_uart_comm_params_t const comm_params =
-    {
-        .rx_pin_no    = 25,
-        .tx_pin_no    = TX_PIN_NUMBER,
-        .rts_pin_no   = RTS_PIN_NUMBER,
-        .cts_pin_no   = CTS_PIN_NUMBER,
-        .flow_control = APP_UART_FLOW_CONTROL_DISABLED,
-        .use_parity   = false,
-        .baud_rate    = NRF_UART_BAUDRATE_9600
-    };
-
-    APP_UART_FIFO_INIT(&comm_params,
-                       UART_RX_BUF_SIZE,
-                       UART_TX_BUF_SIZE,
-                       uart_event_handle,
-                       APP_IRQ_PRIORITY_LOWEST,
-                       err_code);
-    APP_ERROR_CHECK(err_code);
-}
 
 
 

@@ -475,6 +475,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\autocorr.c</FilePath>
             </File>
+            <File>
+              <FileName>muart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\muart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4397,6 +4402,11 @@
               <FileName>autocorr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\autocorr.c</FilePath>
+            </File>
+            <File>
+              <FileName>muart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\muart.c</FilePath>
             </File>
           </Files>
         </Group>
