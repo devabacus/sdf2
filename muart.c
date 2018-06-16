@@ -6,6 +6,47 @@
 #include "nrf_drv_ppi.h"
 
 
+uint8_t weight_float = 0;
+char data_array[20];
+uint8_t startWeightIndex = 3;
+uint8_t endWeightIndex 	 = 8;
+
+float uart_weight_f = 0;
+int uart_weight 	 = 0;
+char uart_weight_ch[10];
+float uart_weight_f_last = 0; 
+int uart_weight_last	 = 0;
+
+
+void define_uart_weight(void){
+	
+	
+	if(!weight_float){
+		uart_weight = atoi(data_array+startWeightIndex);		
+		
+		if(uart_weight != uart_weight_last){
+		sprintf(uart_weight_ch, "%d\n", uart_weight);
+		uart_weight_last = uart_weight;
+		segtext(uart_weight_ch);
+		ble_comm_send_handler(uart_weight_ch);
+		}
+		if(!uart_weight) uart_weight = uart_weight_last;
+	}
+	else {
+		uart_weight_f = atof(data_array+startWeightIndex);	
+		if(uart_weight_f != uart_weight_f_last){
+			sprintf(uart_weight_ch, "%.2f\n", uart_weight_f);
+			uart_weight_f_last = uart_weight_f;
+			segtext(uart_weight_ch);
+			ble_comm_send_handler(uart_weight_ch);
+		}
+		if(!uart_weight_f) uart_weight_f = uart_weight_f_last;
+		
+	}
+	
+	
+}
+
 /**@brief   Function for handling app_uart events.
  *
  * @details This function will receive a single character from the app_uart module and append it to
@@ -15,7 +56,6 @@
 /**@snippet [Handling the data received over UART] */
 void uart_event_handle(app_uart_evt_t * p_event)
 {
-    static char data_array[20];
     static uint8_t index = 0;
     uint32_t       err_code;
 
@@ -28,9 +68,12 @@ void uart_event_handle(app_uart_evt_t * p_event)
 							app_uart_get(&data_array[index]);
 							index++;
 							if (data_array[index - 1] == '\n'){
-									segtext(data_array);
-									// ble_comm_send_num_handler(atoi(data_array+3));
-									ble_comm_send_handler(data_array);
+									define_uart_weight();
+									//segnum1(uart_weight);
+									
+									//SEGGER_RTT_printf(0, "%f\n", uart_weight_f);
+									//ble_comm_send_num_handler(uart_weight);
+									
 									for(uint8_t i = 0; i < 20; i++){
 												data_array[i] = 0;
 									}

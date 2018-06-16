@@ -118,13 +118,10 @@ APP_TIMER_DEF(m_adc_timer_id);
 
 int scale_coef = (802-309)/10;
 
-void ble_settings_handler(ble_settings_t ble_settings){
-
-}
-
 void ble_comm_send_handler(uint8_t * buf){
+			
 			uint16_t length = strlen((char*)buf);
-			ble_nus_string_send(&m_nus, buf, &length);
+			if(ble_active) ble_nus_string_send(&m_nus, buf, &length);
 }
 
 
@@ -636,6 +633,8 @@ static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
         err_code = sd_ble_gap_disconnect(m_conn_handle, BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
         APP_ERROR_CHECK(err_code);
     }
+		
+		
 }
 
 
@@ -742,6 +741,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
     {
         case BLE_GAP_EVT_DISCONNECTED:
 			correct(0,0,0);
+				ble_active = 0;
 		// LED indication will be changed when advertising starts.
             break;
 
@@ -749,6 +749,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
             APP_ERROR_CHECK(err_code);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+						
             break;
 
 #ifndef S140

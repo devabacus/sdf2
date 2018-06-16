@@ -75,14 +75,19 @@ void ble_set(uint8_t *ble_set_buffer){
 				break;
 				
 				case UART:
-						if(set_value){ 
+						if(set_value == 0){ 
+							uart_work = 0;
+						}
+						else if (set_value == 1) {
 							app_uart_flush();
 							uart_work = 1;
-							
+							weight_float = 0;
 						}
-						else {
-							uart_work = 0;
-						} 
+						else if (set_value == 2){
+							app_uart_flush();
+							uart_work = 1;
+							weight_float = 1;
+						}
 						
 						fds_update_value(&uart_work, file_id, fds_rk_uart_work);
 						
@@ -116,10 +121,11 @@ void ble_set(uint8_t *ble_set_buffer){
 					reset_counters(set_value);
 				break;
 				
+				
+				
+				
 			}
 			
-			ble_settings_handler(ble_settings);
-	
 		
 }
 

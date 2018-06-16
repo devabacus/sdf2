@@ -8,6 +8,8 @@ void ble_debug(uint8_t * buffer);
 void ble_set(uint8_t * buffer);
 
 void ble_comm_send_num_handler(uint32_t num){
+	
+			
 			sprintf((char*)ble_string_put, "%d", num);
 			ble_comm_send_handler(ble_string_put);
 }
