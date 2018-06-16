@@ -9,11 +9,11 @@
 #include "flash_storage.h"
 
 // Для прошивки рабочей версии строка ниже должна быть зеленой
-#define DEBUG_MODE 1
+//#define DEBUG_MODE 1
 
 ////////////////////////////////////////////////////////
 
-#define DEVICE_NAME                     "scale-driver2"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "scale-driver3"                         /**< Name of device. Will be included in the advertising data. */
 
 
 //728123108

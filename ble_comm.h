@@ -12,11 +12,16 @@
 #include "ble_debug.h"
 #include "ble_correct.h"
 #include "ble_set.h"
-
+#include "muart.h"
 
 
 extern uint8_t ble_active;
 void ble_comm(uint8_t * buffer);
+void zero(uint8_t times, uint16_t delay);
+
+
+
+
 extern uint8_t ble_string_put[20];
 int findIdexOfArray(uint8_t *buf, int startIndex, char character);
 

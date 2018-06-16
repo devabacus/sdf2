@@ -3,7 +3,6 @@
 #include "nrf_drv_gpiote.h"
 #include "nrf_gpio.h"
 #include "nrf_drv_timer.h"
-//#include "nrf_drv_pwm.h"
 #include "nrf_drv_ppi.h"
 
 
@@ -24,35 +23,30 @@ void uart_event_handle(app_uart_evt_t * p_event)
     {
 			
         case APP_UART_DATA_READY:
-            app_uart_get(&data_array[index]);
-            index++;
-				
-				 if (data_array[index - 1] == '\n'){
-					 segtext("weight: ");		
-					 segtext(data_array);
-					 
-					 ble_comm_send_num_handler(atoi(data_array+8));
-					 
-					 for(uint8_t i = 0; i < 20; i++){
-								data_array[i] = 0;
-							}
-					 
-						 app_uart_flush();
-					 index = 0;
-				 } 
-				 break;
-				
-
+							
+							//nrf_delay_ms(100);
+							app_uart_get(&data_array[index]);
+							index++;
+							if (data_array[index - 1] == '\n'){
+									segtext(data_array);
+									// ble_comm_send_num_handler(atoi(data_array+3));
+									ble_comm_send_handler(data_array);
+									for(uint8_t i = 0; i < 20; i++){
+												data_array[i] = 0;
+									}
+									 
+									 app_uart_flush();
+									 index = 0;
+								} 
+						
+				break;
           case APP_UART_COMMUNICATION_ERROR:
             APP_ERROR_HANDLER(p_event->data.error_communication);
-				
-					
             break;
 
         case APP_UART_FIFO_ERROR:
             APP_ERROR_HANDLER(p_event->data.error_code);
             break;
-
         default:
             break;
     }
@@ -67,7 +61,7 @@ void uart_init(void)
     app_uart_comm_params_t const comm_params =
     {
         .rx_pin_no    = 25,
-        .tx_pin_no    = TX_PIN_NUMBER,
+        .tx_pin_no    = 26,
         .rts_pin_no   = RTS_PIN_NUMBER,
         .cts_pin_no   = CTS_PIN_NUMBER,
         .flow_control = APP_UART_FLOW_CONTROL_DISABLED,

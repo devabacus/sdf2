@@ -172,7 +172,7 @@ static void m_adc_timer_handler (void *p_context){
 		
 	  Weighing();
 		adc_value = adc_value_r >> ble_settings.adcBitForCut;
-	
+		//segtext("work\n");
 	if(ble_settings.showADC)
 	{
 		//SEGGER_RTT_printf(0, "%d\r\n", adc_value >> ble_settings.adcBitForCut);
@@ -194,20 +194,6 @@ static void m_clock_timer_handler (void *p_context)
 	{
 		time_to_sleep--; // time for turn hx711 off decrease in seconds
 	}
-	//	SEGGER_RTT_printf(0, "%d\r\n", ble_settings.showADC);
-	//nrf_gpio_pin_toggle(17);
-//	SEGGER_RTT_printf(0, "%d, %d\r\n", life_counter, clock_counter);
-	
-		//adc_value >>= ;
-  	
-	
-	//uint32_t scale_value = (adc_value >> 8)/scale_coef;
-	
-	
-	
-	
-	
-
 	for (uint8_t i = 0; i<=20; i++)
 							{
 								ble_string_adc[i] = 0;
@@ -248,7 +234,7 @@ void fds_get_init_data()
 	fds_get_data(&time_feedback, file_id, fds_rk_time_feedback);
 	fds_get_data(&feedback, file_id, fds_rk_feedback);
 	fds_get_data(&fds_mac_init, file_id_c, fds_rk_mac_init);
-	
+	fds_get_data(&uart_work, file_id, fds_rk_uart_work);
 	
 	fds_get_data(&fds_remote_type, file_id_c, fds_rk_remote_type);
 	fds_get_data(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
@@ -290,6 +276,8 @@ void gpio_init()
 	nrf_gpio_cfg_output(GREEN_PIN);
 	nrf_gpio_cfg_output(BLUE_PIN);
 	nrf_gpio_cfg_output(17);
+//	nrf_gpio_cfg_output(26);
+//	nrf_gpio_pin_clear(26);
 }
 
 /**@brief Handler for shutdown preparation.
@@ -998,7 +986,7 @@ int main(void)
     gpio_init();
 	
 		ble_set_init();
-	
+		
 		nrf_define_test_pin();
   	define_pins();
 		nrf_gpiote();
@@ -1007,7 +995,7 @@ int main(void)
 		pwm_init_rgb();
 		HX711_init();
 		m_clock_timer_init();
-		uart_init();
+		
 
 		peer_manager_init();
     gap_params_init();
@@ -1024,19 +1012,15 @@ int main(void)
 		APP_ERROR_CHECK(err_code);
 		while(init_flag == 0);
 		segtext("app started\n");
-		//SEGGER_RTT_printf(0, "b phone  = %d\n", phone_cor_counter);
-	  //SEGGER_RTT_printf(0, "b type   = %d\n", fds_remote_type);
 		fds_init_values();
 	  fds_get_init_data();
 		
 			
 		test_expired();
 	  start_led();
-		
+		if(uart_work) uart_init();
 		sd_ble_gap_tx_power_set(4);
 		check_for_old_board();
-		//SEGGER_RTT_printf(0, "a phone  = %d\n", phone_cor_counter);
-	  //SEGGER_RTT_printf(0, "a type   = %d\n", fds_remote_type);
     for (;;)
     {
 					if(correct_mode == COR_AUTO)

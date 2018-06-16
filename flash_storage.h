@@ -73,6 +73,7 @@ extern uint32_t fds_clear_counter;
 
 extern uint16_t fds_rk_phone_cor_counter;
 extern uint16_t fds_rk_soft_version;
+extern uint16_t fds_rk_uart_work;
 
 extern volatile uint8_t write_flag;
 extern volatile uint8_t init_flag;

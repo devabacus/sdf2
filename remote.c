@@ -330,6 +330,9 @@ void timer_02s_handler(void *p_context)
 void timer_05s_handler(void *p_context)
 {
 		correct(0,0,0); //reset cor feedback
+		fds_update_value(&cur_res_max, file_id_c, fds_rk_cur_cor_max+2);	
+		//segtext("hello\n");
+		
 }
 
 void timer_adc_handler(void *p_context)

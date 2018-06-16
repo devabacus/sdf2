@@ -3,6 +3,7 @@
 ble_settings_t ble_settings;
 
 uint8_t showadc = 0;
+uint32_t uart_work = 0;
 uint8_t adcBitCut = 0;
 uint8_t but_ble = 0;
 void ble_set_init(void);
@@ -72,6 +73,19 @@ void ble_set(uint8_t *ble_set_buffer){
 				case SHOWADC:
 						ble_settings.showADC = set_value;
 				break;
+				
+				case UART:
+						if(set_value){ 
+							app_uart_flush();
+							uart_work = 1;
+							
+						}
+						else {
+							uart_work = 0;
+						} 
+						
+						fds_update_value(&uart_work, file_id, fds_rk_uart_work);
+						
 				
 				case ADCBIT:
 						ble_settings.adcBitForCut = set_value;

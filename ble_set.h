@@ -26,7 +26,8 @@ typedef enum
 	SAVEBUT,
 	CALIBRATION,
 	NUM_COR_BUT9,
-	RESET_COUNTERS_BLE
+	RESET_COUNTERS_BLE,
+	UART
 } ble_type_sett_t;
 
 
@@ -36,6 +37,7 @@ void set_send_cor_mode(uint8_t set_value);
 
 extern uint8_t but_ble;
 extern uint8_t showadc;
+extern uint32_t uart_work;
 extern uint8_t adcBitCut;
 extern ble_settings_t ble_settings;
 extern void ble_settings_handler(ble_settings_t ble_settings);

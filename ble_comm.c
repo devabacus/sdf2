@@ -14,6 +14,18 @@ void ble_comm_send_num_handler(uint32_t num){
 
 
 
+void zero(uint8_t times, uint16_t delay){
+			
+			for(uint8_t i = 0; i < times; i++){
+					nrf_gpio_pin_set(26);
+					nrf_delay_ms(delay);
+					nrf_gpio_pin_clear(26);
+					nrf_delay_ms(delay);
+			}
+			
+}
+
+
 
 
 int findIdexOfArray(uint8_t *buf, int startIndex, char character){
@@ -69,7 +81,15 @@ void ble_comm(uint8_t * ble_buffer)
 								}
 								break;
 						case 't':
-								
+								app_uart_put(ble_buffer[1]);
+								SEGGER_RTT_printf(0, "get %c\n", ble_buffer[1]);
+						break;
+						
+						case 'z':
+								zero(10, 50);
+							break;
+						
+						
 		}
 	}
 		

@@ -159,7 +159,7 @@ void correct_value(uint32_t value)
 			
 				else if(percent_cor_mode == COR_SIMPLE)
 				{
-					
+						//zero(15, 100);
 						corr_plus(0);
 						corr_minus(0);
 				}

@@ -74,6 +74,7 @@ uint16_t fds_rk_mac_init 		      = 0x0044;
 uint16_t fds_rk_remote_type       = 0x0045;
 uint16_t fds_rk_phone_cor_counter = 0x0046;
 uint16_t fds_rk_soft_version      = 0x0047;
+uint16_t fds_rk_uart_work 				= 0x0048;
 
 
 uint32_t fds_is_values_init 			= 0;
@@ -247,6 +248,7 @@ void fds_init_values(void)
 		
 		fds_mac_init = 1;
 		fds_init_flash(&fds_mac_init, file_id_c, fds_rk_mac_init);
+		fds_init_flash(&uart_work, file_id, fds_rk_uart_work);
 		
 //		fds_init_flash(&fds_remote_type, file_id_c, fds_rk_remote_type);
 //		fds_init_flash(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);

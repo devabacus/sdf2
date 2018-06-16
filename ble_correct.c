@@ -99,6 +99,7 @@ void ble_correct(uint8_t * ble_buffer)
 										remote_mode = WORK_MODE;	
 										current_but = cor_button_ble;
 										correct(0,0,0);
+										
 										if(cor_button_ble < 10) defineCorDir(ble_buffer, 4);
 										else defineCorDir(ble_buffer, 5);
 						
@@ -137,10 +138,12 @@ void ble_correct(uint8_t * ble_buffer)
 							
 							if(correct_mode == COR_MANUAL){
 								correct_value(cor_value + 2000);
+								//if(isButton) zero(15, 100);
 								correct_value(comp_value);
 								
 							} else if(correct_mode == COR_AUTO){
 								cor_value_auto = cor_value;
+								
 								cur_comp_cor = comp_value;
 							}
 							ble_correct_active = 1;
@@ -153,6 +156,7 @@ void ble_correct(uint8_t * ble_buffer)
 							cur_comp_cor = 0;
 							if(correct_mode == COR_MANUAL){
 								correct_value(cor_value);
+								//if(isButton) zero(15, 100);
 								
 								
 							} else if(correct_mode == COR_AUTO){
@@ -168,6 +172,9 @@ void ble_correct(uint8_t * ble_buffer)
 							
 							ble_correct_active = 1;
 					}
+					
+					isButton = 0;
+					
 											
 		}
 		

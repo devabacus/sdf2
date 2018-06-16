@@ -45,7 +45,6 @@
 
 
 #define CORRECT_COUNT_MAX_DEMO		150
-#define CORRECT_COUNT_MAX_DEMO0		300
 #define CORRECT_COUNT_MAX_DEMO1		1000
 #define CORRECT_COUNT_MAX_DEMO2		1500
 #define CORRECT_COUNT_MAX_DEMO3		2000
@@ -53,10 +52,8 @@
 #define CORRECT_COUNT_MAX_DEMO5		3000
 
 #define WORK_HOURS_MAX_DEMO					7
-#define WORK_HOURS_MAX_DEMO0				14
 
 #define WORK_DAYS_MAX_DEMO	    		 2
-#define WORK_DAYS_MAX_DEMO0	    		 4
 #define WORK_DAYS_MAX_DEMO1			   100
 #define WORK_DAYS_MAX_DEMO2			   150
 #define WORK_DAYS_MAX_DEMO3			   200
@@ -64,7 +61,6 @@
 #define WORK_DAYS_MAX_DEMO5			   400
 
 #define RESET_MAX_DEMO			 			 50
-#define RESET_MAX_DEMO0			 			 100
 #define RESET_MAX_DEMO1			       1000
 #define RESET_MAX_DEMO2			       1500
 #define RESET_MAX_DEMO3			       2000

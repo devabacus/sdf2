@@ -47,6 +47,7 @@ uint8_t  ones		 							= 0;
 uint32_t current_life_counter = 0;
 
 
+//APP_TIMER_DEF(m_util_timer_id);
 
 
 
@@ -65,7 +66,8 @@ void fail_attempt(void)
 }
 
 void check_pass(void){
-	
+						
+							
 					  
 						if(test_activate_code == demo1 || test_activate_code == demo_passes(demo1,0,3) || test_activate_code == demo_passes(demo1,3,6))
 							{
@@ -81,9 +83,6 @@ void check_pass(void){
 								} else if (test_activate_code == demo_passes(demo1,3,6)){
 									fds_remote_type = REMOTE_PHONE;
 								}
-									
-								
-								
 								
 							}
 						else if (test_activate_code == demo2 || test_activate_code == demo_passes(demo2,0,3) || test_activate_code == demo_passes(demo2,3,6))
@@ -158,7 +157,6 @@ void check_pass(void){
 									SEGGER_RTT_printf(0, "you expired whole attempts\r\n");
 								}
 								
-								
 															
 							}
 							
@@ -190,16 +188,18 @@ void check_pass(void){
 														if(activate_attempts > ACTIVATE_ATTEMPTS_MAX){
 															rgb_set(50,0,0,5,500);
 														} else{
+															uint32_t ret;
 															activate_status = test_activate_status;
+															
 															SEGGER_RTT_printf(0, "status = %d, code = %d\n\r", activate_status, test_activate_code);
 															ble_comm_send_handler("code is valid");
 															fds_update_value(&fds_remote_type, file_id_c, fds_rk_remote_type);
 															fds_update_value(&activate_status, file_id_c, fds_rk_activate_status);
-															nrf_delay_ms(50);
 															fds_update_value(&cur_cor_max, file_id_c, fds_rk_cur_cor_max);
 															fds_update_value(&cur_hr_max, file_id_c, fds_rk_cur_cor_max+1);
-															nrf_delay_ms(50);
-															fds_update_value(&cur_res_max, file_id_c, fds_rk_cur_cor_max+2);	
+															start_timer(50);
+															
+														  
 														}
 														
 													}
