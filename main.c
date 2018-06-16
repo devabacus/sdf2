@@ -118,7 +118,7 @@ APP_TIMER_DEF(m_adc_timer_id);
 
 int scale_coef = (802-309)/10;
 
-void ble_comm_send_handler(uint8_t * buf){
+void ble_comm_send_handler(uint8_t* buf){
 			
 			uint16_t length = strlen((char*)buf);
 			if(ble_active) ble_nus_string_send(&m_nus, buf, &length);
@@ -232,6 +232,11 @@ void fds_get_init_data()
 	fds_get_data(&feedback, file_id, fds_rk_feedback);
 	fds_get_data(&fds_mac_init, file_id_c, fds_rk_mac_init);
 	fds_get_data(&uart_work, file_id, fds_rk_uart_work);
+	fds_get_data(&weight_float, file_id, fds_rk_weight_float);
+	fds_get_data(&startWeightIndex, file_id, fds_rk_uart_weight_st);
+	fds_get_data(&endWeightIndex, file_id, fds_rk_uart_weight_end);
+	fds_get_data(&uart_ble_mode, file_id, fds_rk_uart_ble_mode);
+	
 	
 	fds_get_data(&fds_remote_type, file_id_c, fds_rk_remote_type);
 	fds_get_data(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);

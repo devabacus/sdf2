@@ -6,16 +6,29 @@
 #include "nrf_drv_ppi.h"
 
 
-uint8_t weight_float = 0;
+uint32_t weight_float = 0;
 char data_array[20];
-uint8_t startWeightIndex = 3;
-uint8_t endWeightIndex 	 = 8;
+uint32_t startWeightIndex = 3;
+uint32_t endWeightIndex 	 = 8;
+uint32_t uart_ble_mode 		 = 0;
 
 float uart_weight_f = 0;
 int uart_weight 	 = 0;
 char uart_weight_ch[10];
 float uart_weight_f_last = 0; 
 int uart_weight_last	 = 0;
+
+void send_uart_msg(void){
+	if(uart_ble_mode == 1){
+		segtext(data_array);
+		ble_comm_send_handler(data_array);
+		
+	} else if (uart_ble_mode == 2){
+		segtext(data_array + startWeightIndex);
+		ble_comm_send_handler(data_array + startWeightIndex);
+	}
+										
+}
 
 
 void define_uart_weight(void){
@@ -25,20 +38,20 @@ void define_uart_weight(void){
 		uart_weight = atoi(data_array+startWeightIndex);		
 		
 		if(uart_weight != uart_weight_last){
-		sprintf(uart_weight_ch, "%d\n", uart_weight);
+		sprintf(uart_weight_ch, "%d", uart_weight);
 		uart_weight_last = uart_weight;
 		segtext(uart_weight_ch);
-		ble_comm_send_handler(uart_weight_ch);
+		ble_comm_send_handler((uint8_t*)uart_weight_ch);
 		}
 		if(!uart_weight) uart_weight = uart_weight_last;
 	}
 	else {
 		uart_weight_f = atof(data_array+startWeightIndex);	
 		if(uart_weight_f != uart_weight_f_last){
-			sprintf(uart_weight_ch, "%.2f\n", uart_weight_f);
+			sprintf(uart_weight_ch, "%.2f", uart_weight_f);
 			uart_weight_f_last = uart_weight_f;
 			segtext(uart_weight_ch);
-			ble_comm_send_handler(uart_weight_ch);
+			ble_comm_send_handler((uint8_t*)uart_weight_ch);
 		}
 		if(!uart_weight_f) uart_weight_f = uart_weight_f_last;
 		
@@ -57,7 +70,7 @@ void define_uart_weight(void){
 void uart_event_handle(app_uart_evt_t * p_event)
 {
     static uint8_t index = 0;
-    uint32_t       err_code;
+   // uint32_t       err_code;
 
     switch (p_event->evt_type)
     {
@@ -65,12 +78,12 @@ void uart_event_handle(app_uart_evt_t * p_event)
         case APP_UART_DATA_READY:
 							
 							//nrf_delay_ms(100);
-							app_uart_get(&data_array[index]);
+							app_uart_get((uint8_t*)&data_array[index]);
 							index++;
 							if (data_array[index - 1] == '\n'){
 									define_uart_weight();
 									//segnum1(uart_weight);
-									
+									send_uart_msg();
 									//SEGGER_RTT_printf(0, "%f\n", uart_weight_f);
 									//ble_comm_send_num_handler(uart_weight);
 									

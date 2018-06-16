@@ -8,6 +8,9 @@ volatile uint8_t init_flag = 0;
 volatile uint8_t write_flag = 0;
 volatile uint8_t delete_flag = 0;
 volatile uint8_t update_flag = 0;
+
+
+
 uint32_t fds_update_counter = 0;
 
 uint8_t fds_no_space = 0;
@@ -70,11 +73,16 @@ uint16_t fds_rk_adc_val1			=	 0x003B;
 //43
 //44
 
-uint16_t fds_rk_mac_init 		      = 0x0044;
-uint16_t fds_rk_remote_type       = 0x0045;
-uint16_t fds_rk_phone_cor_counter = 0x0046;
-uint16_t fds_rk_soft_version      = 0x0047;
-uint16_t fds_rk_uart_work 				= 0x0048;
+uint16_t fds_rk_mac_init 		        = 0x0044;
+uint16_t fds_rk_remote_type         = 0x0045;
+uint16_t fds_rk_phone_cor_counter   = 0x0046;
+uint16_t fds_rk_soft_version        = 0x0047;
+uint16_t fds_rk_uart_work 				  = 0x0048;
+uint16_t fds_rk_weight_float			  = 0x0049;
+uint16_t fds_rk_uart_weight_st 		  = 0x0050;
+uint16_t fds_rk_uart_weight_end		  = 0x0051;
+uint16_t fds_rk_uart_ble_mode				= 0x0052;
+
 
 
 uint32_t fds_is_values_init 			= 0;
@@ -168,7 +176,6 @@ void check_for_old_board(void){
 					fds_update_value(&demo4, file_id_c, fds_rk_demo1+3);
 					nrf_delay_ms(50);
 					fds_update_value(&demo5, file_id_c, fds_rk_demo1+4);
-				
 					fds_init_flash(&fds_mac_init, file_id_c, fds_rk_mac_init);
 					}
 
@@ -187,7 +194,7 @@ void check_for_old_board(void){
 							fds_init_flash(&fds_remote_type, file_id_c, fds_rk_remote_type);
 							fds_init_flash(&fds_soft_version, file_id_c, fds_rk_soft_version);
 							//fds_update_value(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
-					} 
+					}
 		}
 		
 
@@ -249,6 +256,10 @@ void fds_init_values(void)
 		fds_mac_init = 1;
 		fds_init_flash(&fds_mac_init, file_id_c, fds_rk_mac_init);
 		fds_init_flash(&uart_work, file_id, fds_rk_uart_work);
+		fds_init_flash(&weight_float, file_id, fds_rk_weight_float);
+		fds_init_flash(&startWeightIndex, file_id, fds_rk_uart_weight_st);
+		fds_init_flash(&endWeightIndex, file_id, fds_rk_uart_weight_end);
+		fds_init_flash(&uart_ble_mode, file_id, fds_rk_uart_ble_mode);
 		
 //		fds_init_flash(&fds_remote_type, file_id_c, fds_rk_remote_type);
 //		fds_init_flash(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
@@ -302,7 +313,7 @@ ret_code_t fds_update_value(uint32_t* value, uint16_t file_id, uint16_t rec_key)
 		fds_record_t        record;
 		ret_code_t ret;
 
-	// Set up record.
+	  //Set up record.
 		record.file_id              = file_id;
 		record.key              		= rec_key;
 		record.data.p_data= value;
@@ -313,8 +324,8 @@ ret_code_t fds_update_value(uint32_t* value, uint16_t file_id, uint16_t rec_key)
 		{
 			fds_record_find(file_id, rec_key, &record_desc, &ftok);
 			ret = fds_record_update(&record_desc, &record);
-//			SEGGER_RTT_printf(0, "valid rec = %d\n", stat.valid_records);
-//			SEGGER_RTT_printf(0, "dirty rec = %d\n", stat.dirty_records);
+//		SEGGER_RTT_printf(0, "valid rec = %d\n", stat.valid_records);
+//		SEGGER_RTT_printf(0, "dirty rec = %d\n", stat.dirty_records);
 		}
 		
 		if (ret == FDS_ERR_NO_SPACE_IN_FLASH)

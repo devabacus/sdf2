@@ -67,7 +67,7 @@ void ble_set(uint8_t *ble_set_buffer){
 			uint8_t slashIndex = findIdexOfArray(ble_set_buffer, 1, '/')+1;  // index = 1
 			
 			uint8_t set_value = atoi((char*) ble_set_buffer + slashIndex);
-			
+	
 			switch (set_number){
 				
 				case SHOWADC:
@@ -77,20 +77,44 @@ void ble_set(uint8_t *ble_set_buffer){
 				case UART:
 						if(set_value == 0){ 
 							uart_work = 0;
+							ble_comm_send_handler("uart off");
 						}
 						else if (set_value == 1) {
 							app_uart_flush();
 							uart_work = 1;
 							weight_float = 0;
+							ble_comm_send_handler("uart on, int");
 						}
 						else if (set_value == 2){
 							app_uart_flush();
 							uart_work = 1;
 							weight_float = 1;
+							ble_comm_send_handler("uart on, float");
 						}
 						
 						fds_update_value(&uart_work, file_id, fds_rk_uart_work);
+						fds_update_value(&weight_float, file_id, fds_rk_weight_float);
 						
+				break;
+						
+				case UART_ST_INDEX:
+						startWeightIndex = set_value;
+						ble_comm_send_handler("start index changed");
+						fds_update_value(&startWeightIndex, file_id, fds_rk_uart_weight_st);
+				break;
+				
+				case UART_END_INDEX:
+						endWeightIndex = set_value;
+						ble_comm_send_handler("end index changed");
+						fds_update_value(&endWeightIndex, file_id, fds_rk_uart_weight_end);
+				break;
+				
+				case UART_BLE:
+						uart_ble_mode = set_value;
+						ble_comm_send_handler("uart ble changed");
+						SEGGER_RTT_printf(0, "uart_ble_mode = %d\n", set_value);
+						fds_update_value(&uart_ble_mode, file_id, fds_rk_uart_ble_mode);
+				break;
 				
 				case ADCBIT:
 						ble_settings.adcBitForCut = set_value;

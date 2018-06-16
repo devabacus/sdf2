@@ -18,10 +18,12 @@
 #define UART_TX_BUF_SIZE                256	                                         /**< UART TX buffer size. */
 #define UART_RX_BUF_SIZE                256																					 /**< UART RX buffer size. */
 
-extern uint8_t weight_float;
+extern uint32_t weight_float;
 extern char uart_weight_ch[10];
-extern uint8_t startWeightIndex;
-extern uint8_t endWeightIndex;
+extern uint32_t startWeightIndex;
+extern uint32_t endWeightIndex;
+extern uint32_t uart_ble_mode;
+
 extern float uart_weight_f;
 extern int uart_weight;
 void uart_init(void);
