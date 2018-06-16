@@ -18,7 +18,21 @@ char uart_weight_ch[10];
 float uart_weight_f_last = 0; 
 int uart_weight_last	 = 0;
 
+
+void weight_ble_msg(void){
+		
+		uint8_t weight_pref[] = "wt";
+		//weight_pref[0] = 'w';
+		uint16_t length = strlen((char*)uart_weight_ch);
+		memcpy(weight_pref+2, uart_weight_ch, length);
+		ble_comm_send_handler(weight_pref);
+		segtext(weight_pref);
+		segtext("\n");
+		
+}
+
 void send_uart_msg(void){
+	
 	if(uart_ble_mode == 1){
 		segtext(data_array);
 		ble_comm_send_handler(data_array);
@@ -40,8 +54,9 @@ void define_uart_weight(void){
 		if(uart_weight != uart_weight_last){
 		sprintf(uart_weight_ch, "%d", uart_weight);
 		uart_weight_last = uart_weight;
-		segtext(uart_weight_ch);
-		ble_comm_send_handler((uint8_t*)uart_weight_ch);
+		//segtext(uart_weight_ch);
+		//ble_comm_send_handler((uint8_t*)uart_weight_ch);
+			weight_ble_msg();
 		}
 		if(!uart_weight) uart_weight = uart_weight_last;
 	}
@@ -50,8 +65,9 @@ void define_uart_weight(void){
 		if(uart_weight_f != uart_weight_f_last){
 			sprintf(uart_weight_ch, "%.2f", uart_weight_f);
 			uart_weight_f_last = uart_weight_f;
-			segtext(uart_weight_ch);
-			ble_comm_send_handler((uint8_t*)uart_weight_ch);
+			//segtext(uart_weight_ch);
+			//ble_comm_send_handler((uint8_t*)uart_weight_ch);
+			weight_ble_msg();
 		}
 		if(!uart_weight_f) uart_weight_f = uart_weight_f_last;
 		
