@@ -287,13 +287,13 @@ void generate_admin_pass1(void)
 	segnum1(activation_num);
 	demo6 = activation_num * mac_address.addr[5] + mac_address.addr[5];
 	admin_pass = demo6+power_down_count+life_counter/60; 
-	admin_pass += (power_down_count*(life_counter/60));
+	admin_pass += (power_down_count+(life_counter/60))*2;
 	uint32_t add_num = 0;
 	
 	if(power_down_count%2 == 0){
-		add_num += 1389 + (power_down_count*(life_counter/60));
+		add_num += 1389 + (power_down_count + life_counter/60)*4;
 	} else {
-		add_num += 1238 + (power_down_count*(life_counter/60)*3);
+		add_num += 1238 + (power_down_count + life_counter/60)*3;
 	}
 	
 	if(life_counter/60 % 2 == 0){
