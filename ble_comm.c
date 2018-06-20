@@ -90,9 +90,6 @@ void ble_comm(uint8_t * ble_buffer)
 						case 'z':
 								zero(10, 50);
 							break;
-						case 'l':
-							generate_admin_pass1();
-							break;
 						
 		}
 	}

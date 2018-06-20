@@ -8,9 +8,10 @@
 #include "scale_setup.h"
 #include "flash_storage.h"
 
-// Для прошивки рабочей версии строка ниже должна быть зеленой
-#define DEBUG_MODE 1
+//Для прошивки рабочей версии строка ниже должна быть зеленой
+//#define DEBUG_MODE 1
 
+//#define ADC1230 1
 ////////////////////////////////////////////////////////
 
 #define DEVICE_NAME                     "scale-driver3"                         /**< Name of device. Will be included in the advertising data. */
