@@ -25,7 +25,7 @@ uint32_t corr_3_3 = COR_PERC_3;
 
 uint32_t corr_counter = 0;
 uint8_t reset_by_change_but_level = 0;
-percent_cor_mode_t percent_cor_mode = CORR_OFFSET_KG;
+percent_cor_mode_t percent_cor_mode = COR_OFFSET_KG;
 
 void corr_counter_inc(void)
 {
@@ -150,11 +150,11 @@ void correct_value(uint32_t value)
 			if(value > 3000) value = 3000;
 			value = value - 2000;
 			corr_perc(value);
-			// need because increase persent and kg 
+			  //need because increase persent and kg 
 				//corr_counter--;
 				if(percent_cor_mode == COR_OFFSET_KG)
 				{
-						offset_kg_cor_work();
+					 offset_kg_cor_work();
 				}
 			
 				else if(percent_cor_mode == COR_SIMPLE)

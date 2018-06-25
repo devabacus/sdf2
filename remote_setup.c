@@ -38,24 +38,24 @@ void save_corr_values(void)
 		if(corr_mode_button <= 3)
 		{
 				fds_update_value(&corr_1_1, file_id, fds_rk_cor1);
-				fds_update_value(&corr_1_2, file_id, fds_rk_cor1+1);
-				fds_update_value(&corr_1_3, file_id, fds_rk_cor1+2);
+				//fds_update_value(&corr_1_2, file_id, fds_rk_cor1+1);
+				//fds_update_value(&corr_1_3, file_id, fds_rk_cor1+2);
 				
 		}
 		
 		else if (corr_mode_button <= 6)
 		{
 				fds_update_value(&corr_2_1, file_id, fds_rk_cor1+3);
-				fds_update_value(&corr_2_2, file_id, fds_rk_cor1+4);
-				fds_update_value(&corr_2_3, file_id, fds_rk_cor1+5);	
+				//fds_update_value(&corr_2_2, file_id, fds_rk_cor1+4);
+				//fds_update_value(&corr_2_3, file_id, fds_rk_cor1+5);	
 		}
 		
 		else if (corr_mode_button <= 9)
 
 		{
 				fds_update_value(&corr_3_1, file_id, fds_rk_cor1+6);
-				fds_update_value(&corr_3_2, file_id, fds_rk_cor1+7);
-				fds_update_value(&corr_3_3, file_id, fds_rk_cor1+8);
+				//fds_update_value(&corr_3_2, file_id, fds_rk_cor1+7);
+				//fds_update_value(&corr_3_3, file_id, fds_rk_cor1+8);
 		}
 		save_adc_cor_value();
 }

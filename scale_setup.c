@@ -96,6 +96,7 @@ void check_pass(void){
 									if(test_activate_code == demo_passes(demo2,0,3)){
 									fds_remote_type = PHONE_ONLY;
 										segtext("PHONE_ONLY\n");
+										
 								} else if (test_activate_code == demo_passes(demo2,3,6)){
 									fds_remote_type = REMOTE_PHONE;
 										segtext("REM_PHONE\n");
@@ -190,7 +191,9 @@ void check_pass(void){
 														} else{
 															uint32_t ret;
 															activate_status = test_activate_status;
-															
+															if(fds_remote_type == PHONE_ONLY || fds_remote_type == REMOTE_PHONE){
+																ble_comm_send_handler("n7/1");
+															}
 															SEGGER_RTT_printf(0, "status = %d, code = %d\n\r", activate_status, test_activate_code);
 															ble_comm_send_handler("code is valid");
 															fds_update_value(&fds_remote_type, file_id_c, fds_rk_remote_type);
@@ -310,7 +313,6 @@ void generate_admin_pass1(void)
 	SEGGER_RTT_printf(0, "admin pass = %d\n\r", admin_pass);
 }
 
-
 void number_indicate(uint32_t number)
 {	
 	SEGGER_RTT_printf(0, "number for check = %d\n\r", number);
@@ -363,12 +365,25 @@ void start_led(void)
 	{
 		if(activate_status == 1)
 			{
+				#ifndef DEBUG_MODE
 				rgb_set(0, 50, 0, 1, 1500);				
+				#endif
+
+				#ifdef DEBUG_MODE
+				rgb_set(0, 0, 50, 1, 1500);				
+				#endif
+				
 			}
 			
 		else if (activate_status > 1)
 			{
+				#ifndef DEBUG_MODE
 				rgb_set(0, 50, 0, 2, 1500);				
+				#endif
+
+				#ifdef DEBUG_MODE
+				rgb_set(0, 0, 50, 2, 1500);				
+				#endif
 			}
 		else 
 			{

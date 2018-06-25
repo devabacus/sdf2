@@ -145,9 +145,6 @@ void ble_set(uint8_t *ble_set_buffer){
 					reset_counters(set_value);
 				break;
 				
-				
-				
-				
 			}
 			
 		

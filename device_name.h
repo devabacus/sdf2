@@ -9,14 +9,18 @@
 #include "flash_storage.h"
 
 //Для прошивки рабочей версии строка ниже должна быть зеленой
-//#define DEBUG_MODE 1
 
-//#define ADC1230 1
+#define DEBUG_MODE 1
+
+
 ////////////////////////////////////////////////////////
+#ifndef DEBUG_MODE
+#define DEVICE_NAME                     "scale-driver5"                         /**< Name of device. Will be included in the advertising data. */
+#endif
 
-#define DEVICE_NAME                     "scale-driver3"                         /**< Name of device. Will be included in the advertising data. */
-
-
+#ifdef DEBUG_MODE
+#define DEVICE_NAME											"debug5"
+#endif
 //728123108
 //721113101
 
@@ -32,8 +36,6 @@ extern uint32_t demo3;
 extern uint32_t demo4;
 extern uint32_t demo5;
 extern uint32_t demo6;
-
-
 
 void demo_define (void);
 
