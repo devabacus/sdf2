@@ -49,7 +49,7 @@
 #include "ble_comm.h"
 #include "ble_correct.h"
 #include "ble_set.h"
-
+#include "archive.h"
 
 #include "device_name.h"
 
@@ -170,6 +170,9 @@ static void m_adc_timer_handler (void *p_context){
 	  Weighing();
 		adc_value = adc_value_r >> ble_settings.adcBitForCut;
 		//segtext("work\n");
+		show_weight();
+	
+	
 	if(ble_settings.showADC)
 	{
 		//SEGGER_RTT_printf(0, "%d\r\n", adc_value >> ble_settings.adcBitForCut);

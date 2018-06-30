@@ -480,6 +480,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\muart.c</FilePath>
             </File>
+            <File>
+              <FileName>archive.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\archive.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4407,6 +4412,11 @@
               <FileName>muart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\muart.c</FilePath>
+            </File>
+            <File>
+              <FileName>archive.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\archive.c</FilePath>
             </File>
           </Files>
         </Group>

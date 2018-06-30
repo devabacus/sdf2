@@ -17,6 +17,8 @@ int uart_weight 	 = 0;
 char uart_weight_ch[10];
 float uart_weight_f_last = 0; 
 int uart_weight_last	 = 0;
+int uart_weight_max = 0;
+float uart_weigth_f_max = 0;
 
 
 void weight_ble_msg(void){
@@ -26,9 +28,8 @@ void weight_ble_msg(void){
 		uint16_t length = strlen((char*)uart_weight_ch);
 		memcpy(weight_pref+2, uart_weight_ch, length);
 		ble_comm_send_handler(weight_pref);
-		segtext(weight_pref);
-		segtext("\n");
-		
+		//segtext(weight_pref);
+		//segtext("\n");
 }
 
 void send_uart_msg(void){
@@ -54,6 +55,14 @@ void define_uart_weight(void){
 		if(uart_weight != uart_weight_last){
 		sprintf(uart_weight_ch, "%d", uart_weight);
 		uart_weight_last = uart_weight;
+			if(uart_weight_last > uart_weight_max){
+				uart_weight_max = uart_weight;
+			}
+			if(!uart_weight_last){
+				SEGGER_RTT_printf(0, "uart_weight_max = %d\n", uart_weight_max);
+				uart_weight_max = 0;
+			}
+				
 		//segtext(uart_weight_ch);
 		//ble_comm_send_handler((uint8_t*)uart_weight_ch);
 			weight_ble_msg();

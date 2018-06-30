@@ -3,7 +3,7 @@
 ble_settings_t ble_settings;
 
 uint8_t showadc = 0;
-uint32_t uart_work = 0;
+uint32_t uart_work = 1;
 uint8_t adcBitCut = 0;
 uint8_t but_ble = 0;
 void ble_set_init(void);
