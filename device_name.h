@@ -15,7 +15,7 @@
 
 ////////////////////////////////////////////////////////
 #ifndef DEBUG_MODE
-#define DEVICE_NAME                     "scale-driver5"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "scale-driver_5.1"                         /**< Name of device. Will be included in the advertising data. */
 #endif
 
 #ifdef DEBUG_MODE
@@ -25,7 +25,7 @@
 //721113101
 
 
-extern uint8_t device_name[13];
+extern uint8_t device_name[17];
 extern uint8_t activation_code[9];
 extern uint8_t activation_code_mac[9];
 extern ble_gap_addr_t mac_address;

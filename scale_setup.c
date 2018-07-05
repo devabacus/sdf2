@@ -49,8 +49,6 @@ uint32_t current_life_counter = 0;
 
 //APP_TIMER_DEF(m_util_timer_id);
 
-
-
 void fail_attempt(void)
 {
 		
@@ -785,7 +783,17 @@ void scale_setup(void)
 					else if (round_input == 2)
 					{
 						
-							check_pass();
+						if(test_activate_code){
+								check_pass();
+						}
+						else {
+							remote_mode = FEEDBACK_SET_MODE;
+								rgb_set(0, 0, 50, 1, 1000);
+								rgb_set(0, 50, 0, 1, 1000);
+								//activate_status = 0;
+								SEGGER_RTT_printf(0, "FEEDBACK_SET_MODE\r\n");
+						}
+						
 						
 						
 					}

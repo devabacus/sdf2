@@ -1,7 +1,7 @@
 #include "device_name.h"
 
 
-uint8_t device_name[13] = DEVICE_NAME;
+uint8_t device_name[17] = DEVICE_NAME;
 uint8_t activation_code[9] = "";
 uint8_t activation_code_mac[9] = "";
 

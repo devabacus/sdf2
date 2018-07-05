@@ -281,8 +281,8 @@ void gpio_init()
 	nrf_gpio_cfg_output(GREEN_PIN);
 	nrf_gpio_cfg_output(BLUE_PIN);
 	nrf_gpio_cfg_output(17);
-//	nrf_gpio_cfg_output(26);
-//	nrf_gpio_pin_clear(26);
+	nrf_gpio_cfg_output(15);
+	nrf_gpio_pin_clear(15);
 }
 
 /**@brief Handler for shutdown preparation.
@@ -1030,6 +1030,7 @@ int main(void)
 		if(uart_work) uart_init();
 		sd_ble_gap_tx_power_set(4);
 		check_for_old_board();
+		SEGGER_RTT_printf(0, "start_weight_index = %d\n", startWeightIndex);
     for (;;)
     {
 					if(correct_mode == COR_AUTO)

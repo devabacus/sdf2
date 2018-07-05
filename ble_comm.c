@@ -19,9 +19,9 @@ void ble_comm_send_num_handler(uint32_t num){
 void zero(uint8_t times, uint16_t delay){
 			
 			for(uint8_t i = 0; i < times; i++){
-					nrf_gpio_pin_set(26);
+					nrf_gpio_pin_set(15);
 					nrf_delay_ms(delay);
-					nrf_gpio_pin_clear(26);
+					nrf_gpio_pin_clear(15);
 					nrf_delay_ms(delay);
 			}
 			
@@ -88,7 +88,10 @@ void ble_comm(uint8_t * ble_buffer)
 						break;
 						
 						case 'z':
-								zero(10, 50);
+								segtext("zero");
+								zero(5, 200);
+								
+								//ble_comm_send_handler("zero");
 							break;
 						
 		}
