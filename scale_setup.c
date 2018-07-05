@@ -945,11 +945,10 @@ void scale_setup(void)
 								}
 								
 								else if (percent_cor_mode == CORR_OFFSET_KG)
-									
+
 								{
 								
 								}
-								
 								
 								if(pin_in1_long_press)
 					{
@@ -1060,7 +1059,6 @@ void scale_setup(void)
 					}
 					else if (pin_in3_long_press)
 					{
-						
 					}
 					else if (pin_in4_long_press)
 					{
@@ -1072,7 +1070,6 @@ void scale_setup(void)
 				}
 		else if (remote_mode == WORK_MODE)
 				{
-				
 					 //SEGGER_RTT_printf(0, "I entry\r\n");
 					if(pin_in1_is_set && pin_in4_long_press)
 					
@@ -1146,13 +1143,10 @@ void scale_setup(void)
 									counter_for_set_mode = 0;
 								}
 						}
-						
 						if(pin_in1_is_release || pin_in2_is_release || pin_in3_is_release)
 						{
 							counter_for_set_mode = 0;
 						}
-					
-					
 				}						
 				
 

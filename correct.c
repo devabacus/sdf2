@@ -167,7 +167,10 @@ void correct_value(uint32_t value)
 		
 	if((remote_mode == WORK_MODE) && (value)) // because we don't want to count while set up buttons
 		{
-			corr_counter_inc();			
+			if(num_cor_buts == 3){
+				corr_counter_inc();			
+			}
+			
 		}
 	}
 	

@@ -447,7 +447,9 @@ void offset_kg_cor_work()
 			{
 				//SEGGER_RTT_printf(0, "offset_kg_cor_work() for work\n\r");
 				correct_value(kg_offset_ar[current_but-1]);
+				if(num_cor_buts == 3){
 				corr_counter--;
+				}
 
 				//SEGGER_RTT_printf(0, "arr[%d] = %d, cur_kg_value = %d\n\r", current_but-1, kg_offset_ar[current_but-1],cur_kg_value);
 			}

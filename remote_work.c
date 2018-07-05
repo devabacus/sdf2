@@ -40,10 +40,10 @@ void cor_auto_handle(void)
 		if(adc_value > adc_value_max && adc_value < 16000000){
 		
 					adc_value_max = adc_value;
-					SEGGER_RTT_printf(0, "adc_value_max = %d\n", adc_value_max);
+					//SEGGER_RTT_printf(0, "adc_value_max = %d\n", adc_value_max);
 					if((adc_value_max > (cal_turn_on + (cal_turn_on*20/100))) && cor_set){
 						cal_turn_off = cal_turn_on;
-						SEGGER_RTT_printf(0, "calc_turn_off changed = %d\n", cal_turn_off);
+					//SEGGER_RTT_printf(0, "calc_turn_off changed = %d\n", cal_turn_off);
 						}
 			
 		}
@@ -57,8 +57,8 @@ void cor_auto_handle(void)
 				cal_turn_off = (cal_turn_on - adc_cor-adc_cor*20/100);
 			} 
 			
-			SEGGER_RTT_printf(0, "cal_turn_on = %d\n", cal_turn_on);
-			SEGGER_RTT_printf(0, "calc_turn_off = %d\n", cal_turn_off);
+			//SEGGER_RTT_printf(0, "cal_turn_on = %d\n", cal_turn_on);
+			//SEGGER_RTT_printf(0, "calc_turn_off = %d\n", cal_turn_off);
 			
 			last_cor_value_auto = cor_value_auto;
 			correct_value(cor_value_auto);
@@ -84,7 +84,9 @@ void cor_auto_handle(void)
 //			{
 //				unload_weight = 0;
 //			}
-			
+			if(num_cor_buts == 9){
+				corr_counter_inc();
+			}
 			correct(0,0,0);
 			cor_set = 0;
 			adc_value_max = 0;
@@ -220,6 +222,9 @@ void buttons_handle(void)
 		}
 		else if (pin_in4_is_release )
 		{
+			if(current_correct && num_cor_buts == 9){
+				corr_counter_inc();
+			}
 			rgb_set(50, 50, 50, 1, 500);
 			if(ble_active) ble_comm_send_handler("n1/0");
 			correct(0,0,0);
