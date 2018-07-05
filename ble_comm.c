@@ -89,7 +89,7 @@ void ble_comm(uint8_t * ble_buffer)
 						
 						case 'z':
 								segtext("zero");
-								zero(5, 200);
+								zero(2, 150);
 								
 								//ble_comm_send_handler("zero");
 							break;
