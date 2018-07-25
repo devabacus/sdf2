@@ -15,7 +15,7 @@
 
 ////////////////////////////////////////////////////////
 #ifndef DEBUG_MODE
-#define DEVICE_NAME                     "scale-driver_5.1"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "scale-driver_5.2"                         /**< Name of device. Will be included in the advertising data. */
 #endif
 
 #ifdef DEBUG_MODE

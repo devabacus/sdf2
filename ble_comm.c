@@ -71,8 +71,6 @@ void ble_comm(uint8_t * ble_buffer)
 								generate_admin_pass1();
 								ble_comm_send_handler("wait pass");
 								segtext("wait pass");
-						
-								
 								break;
 						
 						case 'a':

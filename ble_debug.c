@@ -59,10 +59,6 @@ void ble_debug(uint8_t * ble_buffer)
 								send_num = fds_clear_counter;	
 							break;
 							
-							case 81:
-								//send_num = demo1;
-							break;
-							
 							case 9:
 								//ble_debug_handler(ble_buffer);
 								//ble_string_put = device_name;

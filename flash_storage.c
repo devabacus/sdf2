@@ -163,7 +163,10 @@ void fds_init_flash(uint32_t* value, uint16_t file_id, uint16_t rec_key)
 }
 
 void check_for_old_board(void){
-		
+					
+				
+				
+	
 					if(!fds_mac_init){
 		
 						

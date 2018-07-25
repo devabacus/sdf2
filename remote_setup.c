@@ -57,7 +57,7 @@ void save_corr_values(void)
 				fds_update_value(&corr_3_2, file_id, fds_rk_cor1+7);
 				fds_update_value(&corr_3_3, file_id, fds_rk_cor1+8);
 		}
-		save_adc_cor_value();
+		//save_adc_cor_value();
 }
 
 
@@ -114,7 +114,6 @@ void buttons_handle_setup(void)
 							//	reset_long_press_flags();
 							 
 					 break;
-						
 					
 					 case CORR_MODE_1_1:
 					
@@ -148,6 +147,7 @@ void buttons_handle_setup(void)
 							if(pin_in2_long_press && (num_cor_buts > 3))  //switch button
 							{
 								  correct(0,0,0);
+									
 									corr_mode_button = CORR_MODE_1_2;
 									rgb_set(0, 50, 0, 1, 1000);
 									correct_value(corr_1_2);
@@ -401,7 +401,6 @@ void buttons_handle_setup(void)
 
 					 case CORR_MODE_3_2:
 						 
-							
 							if(pin_in3_is_release)
 							{
 								corr_3_2++;
@@ -441,9 +440,7 @@ void buttons_handle_setup(void)
 							}
 							break;
 							
-							
 						case CORR_MODE_3_3:
-					 
 						
 							if(pin_in3_is_release)
 							{
@@ -486,8 +483,6 @@ void buttons_handle_setup(void)
 							break;
 							
 				}
-				
-				
 			}				
 				
 				if(pin_in4_is_release)

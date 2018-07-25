@@ -99,6 +99,7 @@ void test_expired(void)
 		}
 		else if (power_down_count >= cur_res_max)
 		{
+			//because of there was fail with activate reset max. (50). So we turn checking off
 			exp_subsriber = 2;
 		}
 		else if (life_counter >= cur_hr_max*60)

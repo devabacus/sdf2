@@ -10,7 +10,7 @@ uint32_t weight_float = 0;
 char data_array[20];
 uint32_t startWeightIndex = 3;
 uint32_t endWeightIndex 	 = 8;
-uint32_t uart_ble_mode 		 = 0;
+uint32_t uart_ble_mode 		 = 1;
 
 float uart_weight_f = 0;
 int uart_weight 	 = 0;

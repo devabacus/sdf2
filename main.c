@@ -1027,7 +1027,7 @@ int main(void)
 			
 		test_expired();
 	  start_led();
-		if(uart_work) uart_init();
+		if(uart_work || uart_ble_mode) uart_init();
 		sd_ble_gap_tx_power_set(4);
 		check_for_old_board();
 		SEGGER_RTT_printf(0, "start_weight_index = %d\n", startWeightIndex);

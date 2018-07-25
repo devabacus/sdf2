@@ -255,15 +255,15 @@ void change_num_cor_but(uint8_t num){
 		num_cor_buts = 9;
 		SEGGER_RTT_printf(0, "but=9\r\n");
 		ble_comm_send_handler("n6/9");
-		rgb_set(50,0,0,1,5000);
-		nrf_delay_ms(2000);
-		rgb_set(50,0,0,4,1000);
+		rgb_set(0,50,0,2,1000);
+		//nrf_delay_ms(2000);
+		//rgb_set(50,0,0,,1000);
 		
 	} else if (num == 3){
 		num_cor_buts = 3;
 		SEGGER_RTT_printf(0, "but=3\r\n");
 		ble_comm_send_handler("n6/3");
-		rgb_set(50,0,0,3,1000);
+		rgb_set(0,50,0,1,1000);
 	}
 	
 	fds_update_value(&num_cor_buts, file_id, fds_rk_num_cor_but);
@@ -1001,6 +1001,7 @@ void scale_setup(void)
 						if(num_cor_buts == 3)
 						{
 							change_num_cor_but(9);
+							//rgb_set(0,50,0,2,1000);
 						}
 						else if (num_cor_buts == 9)
 						{
