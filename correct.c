@@ -182,9 +182,12 @@ void correct_value(uint32_t value)
 		}
 		
 	}
+	else if (exp_subsriber){
+		rgb_set(0,0,50, exp_subsriber, 500);
+	}
 	else if (activate_attempts > ACTIVATE_ATTEMPTS_MAX)
 	{
-		rgb_set(0, 0, 50, 3, 500);
+		rgb_set(0, 50, 0, 3, 500);
 	}
 	
 		

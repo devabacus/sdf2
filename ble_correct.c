@@ -80,6 +80,7 @@ void ble_correct(uint8_t * ble_buffer)
 							cor_value_auto = 0;
 							cor_value = 0;
 							comp_value = 0;
+							test_expired();
 							
 							// send info that correct reset manually
 							ble_comm_send_handler("n1/0");
@@ -156,6 +157,7 @@ void ble_correct(uint8_t * ble_buffer)
 							cur_comp_cor = 0;
 							if(correct_mode == COR_MANUAL){
 								correct_value(cor_value);
+								rgb_set(0, 50, 0, 1, 500);
 								//if(isButton) zero(15, 100);
 								
 								

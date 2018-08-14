@@ -30,7 +30,9 @@ typedef enum
 	UART,
 	UART_ST_INDEX,
 	UART_END_INDEX, //10
-	UART_BLE
+	UART_BLE,
+	CHANGE_MAX_COUNTERS
+	
 } ble_type_sett_t;
 
 

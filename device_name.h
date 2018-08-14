@@ -10,16 +10,16 @@
 
 //Для прошивки рабочей версии строка ниже должна быть зеленой
 
-#define DEBUG_MODE 1
+//#define DEBUG_MODE 1
 
 
 ////////////////////////////////////////////////////////
 #ifndef DEBUG_MODE
-#define DEVICE_NAME                     "scale-driver_5.2"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "scale-driver_5.4"                         /**< Name of device. Will be included in the advertising data. */
 #endif
 
 #ifdef DEBUG_MODE
-#define DEVICE_NAME											"debug5"
+#define DEVICE_NAME											"debug_5_4"
 #endif
 //728123108
 //721113101

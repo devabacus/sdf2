@@ -18,6 +18,27 @@ void ble_set_init(){
 }
 
 
+void change_max_counters(uint8_t param, uint16_t value){
+	if(admin){
+		
+		if(param == 1){ //cur_cor_max
+			cur_cor_max = value;
+			fds_update_value(&cur_cor_max, file_id_c, fds_rk_cur_cor_max);
+		} else if (param == 2){ //cur_res_max
+			cur_hr_max = value;
+			fds_update_value(&cur_hr_max, file_id_c, fds_rk_cur_cor_max+1);
+			
+			
+		} else if (param == 3){ //cur_hr_max
+			cur_res_max = value;
+			fds_update_value(&cur_res_max, file_id_c, fds_rk_cur_cor_max+2);	
+		}
+		ble_comm_send_handler("changed");
+	} else {
+		ble_comm_send_handler("need admin");
+	}
+}
+
 void reset_counters(uint8_t ch_num){
 		if(admin){
 
@@ -46,7 +67,6 @@ void reset_counters(uint8_t ch_num){
 					ble_comm_send_handler("ph res");
 					
 				break;
-				
 			}
 										
 }
@@ -65,8 +85,12 @@ void ble_set(uint8_t *ble_set_buffer){
 			uint8_t set_number = atoi((char*) ble_set_buffer+1);
 			
 			uint8_t slashIndex = findIdexOfArray(ble_set_buffer, 1, '/')+1;  // index = 1
+	
+			uint8_t slashIndex2 = findIdexOfArray(ble_set_buffer, 4, '/')+1;
 			
 			uint8_t set_value = atoi((char*) ble_set_buffer + slashIndex);
+	
+			uint16_t set_value2 = atoi((char*) ble_set_buffer + slashIndex2);
 	
 			switch (set_number){
 				
@@ -143,6 +167,12 @@ void ble_set(uint8_t *ble_set_buffer){
 				
 				case RESET_COUNTERS_BLE:
 					reset_counters(set_value);
+				break;
+				
+				case CHANGE_MAX_COUNTERS:
+					SEGGER_RTT_printf(0, "set_value1 = %d\n", set_value);
+				SEGGER_RTT_printf(0, "set_value2 = %d\n", set_value2);
+					change_max_counters(set_value, set_value2);
 				break;
 				
 			}

@@ -535,10 +535,7 @@ void in_pin_handler4(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 							
 							SEGGER_RTT_printf(0, "reset\n\r");
 							}
-			
-			
 			}
-			
 }
 
 
