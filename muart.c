@@ -6,7 +6,7 @@
 #include "nrf_drv_ppi.h"
 
 
-#define UART_TIME_SEND 5
+#define UART_TIME_SEND 3
 
 uint32_t weight_float = 0;
 char data_array[20];
@@ -68,8 +68,9 @@ void define_uart_weight(void){
 		uart_weight = atoi(data_array+startWeightIndex);		
 		
 		if(uart_weight != uart_weight_last){
-		sprintf(uart_weight_ch, "%d", uart_weight);
-		uart_weight_last = uart_weight;
+			time_changed=0;
+			sprintf(uart_weight_ch, "%d", uart_weight);
+			uart_weight_last = uart_weight;
 			if(uart_weight_last > uart_weight_max){
 				uart_weight_max = uart_weight;
 			}
@@ -81,7 +82,14 @@ void define_uart_weight(void){
 		//segtext(uart_weight_ch);
 		//ble_comm_send_handler((uint8_t*)uart_weight_ch);
 			weight_ble_msg();
+		} else {
+			if(time_changed <= UART_TIME_SEND){
+			time_check();
+			sprintf(uart_weight_ch, "%d", uart_weight);
+			//uart_weight_last = uart_weight;
+			weight_ble_msg();
 		}
+	}
 		if(!uart_weight) uart_weight = uart_weight_last;
 	}
 	else {
@@ -99,7 +107,7 @@ void define_uart_weight(void){
 			//segtext(uart_weight_ch);
 			//ble_comm_send_handler((uint8_t*)uart_weight_ch);
 			weight_ble_msg();
-		} else if ((uart_weight_f == uart_weight_f_last)){
+		} else {
 						time_check();
 						if(time_changed <= UART_TIME_SEND){
 								sprintf(uart_weight_ch, "%.2f", uart_weight_f);
