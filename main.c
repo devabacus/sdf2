@@ -94,12 +94,6 @@
 #define ADC_TIMER												100
 //***************************************************************************************************************
 
-
-
-
-
-
-
 //#define MINUTES_FOR_FDS_CLEAR    60
 
 BLE_NUS_DEF(m_nus);                                                                 /**< BLE NUS service instance. */
