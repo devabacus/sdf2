@@ -34,6 +34,12 @@ void time_check(void){
 
 }
 
+void flushIndexOfArray(uint8_t *buffer, uint8_t ind){
+	for (uint8_t f = ind; f < strlen((char*) buffer); f++){
+		buffer[f] = 0;
+	}
+}
+
 void weight_ble_msg(void){
 		
 		uint8_t weight_pref[] = "wt";
@@ -65,6 +71,7 @@ void define_uart_weight(void){
 	
 	
 	if(!weight_float){
+		flushIndexOfArray(data_array, endWeightIndex);
 		uart_weight = atoi(data_array+startWeightIndex);		
 		
 		if(uart_weight != uart_weight_last){
@@ -93,6 +100,7 @@ void define_uart_weight(void){
 		if(!uart_weight) uart_weight = uart_weight_last;
 	}
 	else {
+		flushIndexOfArray(data_array, endWeightIndex);
 		uart_weight_f = atof(data_array+startWeightIndex);	
 		if(uart_weight_f != uart_weight_f_last){
 			//clock_counter_last = clock_counter;

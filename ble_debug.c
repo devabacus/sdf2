@@ -64,7 +64,10 @@ void ble_debug(uint8_t * ble_buffer)
 								//ble_string_put = device_name;
 							//	memcpy(ble_string_put, device_name, sizeof(device_name));
 
-
+								//can be
+								//REMOTE_ONLY   3
+								//PHONE_ONLY    4
+								//REMOTE_PHONE  5
 							send_num = fds_remote_type;	
 								SEGGER_RTT_printf(0, "fds_remote_type = %d\n", fds_remote_type);
 								break;
