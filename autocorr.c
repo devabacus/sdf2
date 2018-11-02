@@ -30,6 +30,8 @@ void save_adc_cor_value(void)
 		if (adc_value_but_sub < 0) adc_value_but_sub = -adc_value_but_sub;
 		
 		adc_vals_ar[corr_mode_button-1] = adc_value_but_sub;
+		SEGGER_RTT_printf(0, "adc_value = %d\n", adc_value);
+		SEGGER_RTT_printf(0, "adc_value_start = %d\n", adc_value_start);
 		SEGGER_RTT_printf(0, "save adc_value = %d\n", adc_vals_ar[corr_mode_button-1]);
 		fds_update_value(adc_vals_ar + corr_mode_button - 1, file_id, fds_rk_adc_val1 + corr_mode_button-1);
 	}

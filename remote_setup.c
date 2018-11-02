@@ -57,7 +57,7 @@ void save_corr_values(void)
 				fds_update_value(&corr_3_2, file_id, fds_rk_cor1+7);
 				fds_update_value(&corr_3_3, file_id, fds_rk_cor1+8);
 		}
-		//save_adc_cor_value();
+		save_adc_cor_value();
 }
 
 
@@ -508,8 +508,7 @@ void buttons_handle_setup(void)
 							corr_mode_button = 0;
 							correct(0, 0, 0);
 						}
-						
-	}
+				}
 	
 
 }

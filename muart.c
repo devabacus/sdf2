@@ -47,7 +47,7 @@ void weight_ble_msg(void){
 		memcpy(weight_pref+2, uart_weight_ch, length);
 		ble_comm_send_handler(weight_pref);
 		//segtext(weight_pref);
-		segnum1(time_changed);
+		//segnum1(time_changed);
 			//segtext("\n");
 }
 
@@ -59,6 +59,7 @@ void send_uart_msg(void){
 		
 	} else if (uart_ble_mode == 2){
 		segtext(data_array + startWeightIndex);
+		segtext("\n");
 		ble_comm_send_handler(data_array + startWeightIndex);
 	}
 										
@@ -80,11 +81,12 @@ void define_uart_weight(void){
 				uart_weight_max = uart_weight;
 			}
 			if(!uart_weight_last){
-				SEGGER_RTT_printf(0, "uart_weight_max = %d\n", uart_weight_max);
+//				SEGGER_RTT_printf(0, "uart_weight_max = %d\n", uart_weight_max);
 				uart_weight_max = 0;
 			}
 				
 		segtext(uart_weight_ch);
+			segtext("\n");
 		//ble_comm_send_handler((uint8_t*)uart_weight_ch);
 			weight_ble_msg();
 		} else {
@@ -92,6 +94,7 @@ void define_uart_weight(void){
 			time_check();
 			sprintf(uart_weight_ch, "%d", uart_weight);
 			//uart_weight_last = uart_weight;
+			//это тестовый комментарий
 			weight_ble_msg();
 		}
 	}
