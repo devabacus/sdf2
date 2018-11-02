@@ -562,7 +562,7 @@ void nrf_gpiote(void)
 	//	nrf_drv_gpiote_init();
 		
 		nrf_drv_gpiote_in_config_t in_config = GPIOTE_CONFIG_IN_SENSE_TOGGLE(true);
-		in_config.pull = NRF_GPIO_PIN_PULLUP;
+		in_config.pull = NRF_GPIO_PIN_PULLDOWN;
 		
 		
 		nrf_drv_gpiote_in_init(PIN_IN_1, &in_config, in_pin_handler1);

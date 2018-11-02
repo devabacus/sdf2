@@ -21,6 +21,11 @@
 #define EXP_DEMO_RESET  3
 #define EXP_DEMO_TIME   4
 
+#define OPTION_ARCHIVE_Pos (0UL)
+#define OPTION_ARCHIVE_Msk (0x1UL << OPTION_ARCHIVE_Pos)
+#define OPTION_VOLUME_Pos (1UL)
+#define OPTION_VOLUME_Msk (0x1UL << OPTION_VOLUME_Pos)
+
 
 #define FULL 						5
 
@@ -79,6 +84,12 @@ extern uint16_t fds_rk_uart_weight_st;
 extern uint16_t fds_rk_uart_weight_end;
 extern uint16_t fds_rk_uart_ble_mode;
 
+extern uint16_t fds_rk_archive_counter;
+extern uint16_t fds_rk_volume_counter;
+extern uint16_t fds_rk_option_status;
+
+
+
 extern volatile uint8_t write_flag;
 extern volatile uint8_t init_flag;
 extern uint32_t my_data;
@@ -87,7 +98,9 @@ extern uint32_t num_cor_buts;
 
 extern uint32_t fds_soft_version;
 
-
+extern uint32_t fds_archive_counter;
+extern uint32_t fds_volume_counter;
+extern uint32_t fds_option_status;
 
 void check_for_old_board(void);
 

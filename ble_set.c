@@ -1,9 +1,10 @@
 #include "ble_set.h"
+#include "ble_weigh.h"
 
 ble_settings_t ble_settings;
 
 uint8_t showadc = 0;
-uint32_t uart_work = 0;
+uint32_t uart_work = 1;
 uint8_t adcBitCut = 0;
 uint8_t but_ble = 0;
 void ble_set_init(void);
@@ -12,13 +13,17 @@ void remote_but_update(uint8_t but_num);
 int findIdexOfArray(uint8_t *buf, int startIndex, char character);
 
 
+
+
 void ble_set_init(){
 	ble_settings.adcBitForCut = 5;
 	ble_settings.showADC = 0;
+	ble_settings.workADC = 1;
 }
 
 
 void change_max_counters(uint8_t param, uint16_t value){
+	
 	if(admin){
 		
 		if(param == 1){ //cur_cor_max
@@ -65,8 +70,8 @@ void reset_counters(uint8_t ch_num){
 					phone_cor_counter = 1;
 					fds_update_value(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
 					ble_comm_send_handler("ph res");
-					
 				break;
+
 			}
 										
 }
@@ -157,7 +162,10 @@ void ble_set(uint8_t *ble_set_buffer){
 				case CALIBRATION:
 					if(set_value == 1) cal_unload();
 					else if (set_value == 3) define_corr_on();
-					else if (set_value == 2) cal_load();
+					else if (set_value == 2) {
+						SEGGER_RTT_printf(0, "num_of_discrete = %d\n", set_value2);
+						cal_load();
+					}
 					ble_comm_send_handler("s5..");
 					break;
 				case NUM_COR_BUT9:
@@ -175,8 +183,60 @@ void ble_set(uint8_t *ble_set_buffer){
 					change_max_counters(set_value, set_value2);
 				break;
 				
-			}
-			
-		
-}
+				case OPTION_COUNTER:
+					//archive_counter
+					if(set_value == 1){
+						fds_volume_counter++;
+									if((fds_volume_counter > VOLUME_DEMO_COUNTER_MAX) && (!(fds_option_status & (OPTION_VOLUME_Msk)))){
+										//reset volume demo
+											fds_option_status |= (0x0UL << OPTION_VOLUME_Pos);
+											fds_update_value(&fds_option_status, file_id_c, fds_rk_option_status);
+											ble_comm_send_handler("o2/0");	
+									} else {
+											fds_update_value(&fds_volume_counter, file_id_c, fds_rk_volume_counter);
+									}
 
+									//SEGGER_RTT_printf(0, "fds_volume_counter = %d\n", fds_volume_counter);
+					}
+
+
+
+					else if (set_value == 2){
+						fds_archive_counter++;
+								if((fds_archive_counter > ARCHIVE_DEMO_COUNTER_MAX) && (!(fds_option_status & (OPTION_ARCHIVE_Msk)))){
+										fds_option_status |= (0x0UL << OPTION_VOLUME_Pos);
+										fds_update_value(&fds_option_status, file_id_c, fds_rk_option_status);
+										ble_comm_send_handler("o1/0");	
+								} else {
+								fds_update_value(&fds_archive_counter, file_id_c, fds_rk_archive_counter);
+								SEGGER_RTT_printf(0, "fds_archive_counter = %d\n", fds_archive_counter);
+								}
+				}
+					
+				break;
+				
+				case CAL_MAX_WEIGHT:
+					
+					maxWeight = atoi((char*) ble_set_buffer + slashIndex);
+					SEGGER_RTT_printf(0, "maxWeight = %d\n", maxWeight);
+				break;
+					
+				case CAL_DISCRET:
+					char discrete_char[10];
+					discrete = atof((char*) ble_set_buffer + slashIndex);
+					sprintf(discrete_char, "%.2f", discrete);
+					SEGGER_RTT_printf(0, "discrete = %s\n", discrete_char);
+					//float discretes = maxWeight/5;
+					//uint32_t discretes = (maxWeight/(discrete*100))/1;
+//					sprintf(discrete_char, "%.2f", discretes);
+					SEGGER_RTT_printf(0, "discretes = %s\n", discrete_char);
+					//SEGGER_RTT_printf(0, "num of discretes = %f\n", 3000/0.5);
+				break;
+				
+				case CAL_LOAD_WEIGHT:
+					uint32_t cal_weight = atoi((char*) ble_set_buffer + slashIndex);
+					SEGGER_RTT_printf(0, "cal_weight = %d\n", cal_weight);
+
+				
+}
+}

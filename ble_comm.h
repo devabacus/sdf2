@@ -15,16 +15,16 @@
 #include "muart.h"
 
 
+
+#define ARCHIVE_DEMO_COUNTER_MAX  50
+#define VOLUME_DEMO_COUNTER_MAX   50
+
 extern uint8_t ble_active;
 void ble_comm(uint8_t * buffer);
 void zero(uint8_t times, uint16_t delay);
 
-
-
-
 extern uint8_t ble_string_put[20];
 int findIdexOfArray(uint8_t *buf, int startIndex, char character);
-
 
 extern void ble_comm_send_handler(uint8_t * buf);
 void ble_comm_send_num_handler(uint32_t num);

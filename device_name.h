@@ -15,14 +15,15 @@
 
 ////////////////////////////////////////////////////////
 #ifndef DEBUG_MODE
-#define DEVICE_NAME                     "sdr_5.4.2"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "sdr_5.4.5"                         /**< Name of device. Will be included in the advertising data. */
 #endif
 
 #ifdef DEBUG_MODE
-#define DEVICE_NAME											"debug_5_4_2"
+#define DEVICE_NAME											"debug_5_4_5"
 #endif
 //728123108
 //721113101
+//5_4_4 change pin for tx
 
 
 extern uint8_t device_name[17];

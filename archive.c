@@ -10,8 +10,6 @@ void show_weight(void){
 uint32_t stable_time = 2000;
 uint32_t stable_num_discrete = 0;
 
-
-
 float weight_values[];
 
 void define_stable_weight(void){

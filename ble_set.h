@@ -14,6 +14,7 @@
 typedef struct 
 {
 	uint8_t showADC;
+	uint8_t workADC;
 	uint8_t adcBitForCut;
 	uint8_t autocor;
 } ble_settings_t; 
@@ -30,9 +31,12 @@ typedef enum
 	UART,
 	UART_ST_INDEX,
 	UART_END_INDEX, //10
-	UART_BLE,
-	CHANGE_MAX_COUNTERS
-	
+	UART_BLE, //11
+	CHANGE_MAX_COUNTERS, //12
+	OPTION_COUNTER,//13
+	CAL_MAX_WEIGHT,//14
+	CAL_DISCRET,//15
+	CAL_LOAD_WEIGHT//16
 } ble_type_sett_t;
 
 

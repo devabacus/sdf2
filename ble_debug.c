@@ -82,7 +82,17 @@ void ble_debug(uint8_t * ble_buffer)
 								send_num = fds_soft_version;
 							break;
 							
+							case 13:
+								send_num = fds_volume_counter;
+							break;
 							
+							case 14:
+								send_num = fds_archive_counter;
+							break;
+							
+							case 15:
+								send_num = fds_option_status;
+							break;
 						}
 						
 						if(send_num > 0)
@@ -90,10 +100,7 @@ void ble_debug(uint8_t * ble_buffer)
 							uint8_t ble_debug_string[20];
 							sprintf((char*)ble_debug_string, "%d", send_num);
 							ble_comm_send_handler(ble_debug_string);
-							
-							//
-							
-							
+	
 						//	ble_debug_handler(ble_string_put2);
 						}
 		}

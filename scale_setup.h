@@ -52,13 +52,14 @@ extern uint8_t  	root;
 extern uint32_t 	admin_pass;
 extern uint32_t 	current_life_counter;
 
-extern uint32_t test_activate_code;
+extern uint32_t num_of_discrete_for_cal;
 
+extern uint32_t test_activate_code;
 
 uint32_t demo_passes(uint32_t demo_test, uint8_t num_st, uint8_t num_end);
 
 void check_pass(void);
-
+void check_option_pass(void);
 void cal_unload(void);
 void cal_load(void);
 void scale_setup(void);

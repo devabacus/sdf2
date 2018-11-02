@@ -160,14 +160,18 @@ void clock_value_save(void)
 
 
 static void m_adc_timer_handler (void *p_context){
-		
-	  Weighing();
-		adc_value = adc_value_r >> ble_settings.adcBitForCut;
-		//segtext("work\n");
-		show_weight();
+	Weighing();
+			adc_value = adc_value_r >> ble_settings.adcBitForCut;
+			//segtext("work\n");
+			show_weight();	
+	if(ble_settings.showADC >= 2){
+			
+			segnum1(adc_value);
+		}
+	  
 	
 	
-	if(ble_settings.showADC)
+	if(ble_settings.showADC == 1 || ble_settings.showADC == 3)
 	{
 		//SEGGER_RTT_printf(0, "%d\r\n", adc_value >> ble_settings.adcBitForCut);
 		uint8_t adc_pref[] = "ad";
@@ -175,7 +179,7 @@ static void m_adc_timer_handler (void *p_context){
 		uint16_t length = strlen((char*)ble_string_adc);
 		memcpy(adc_pref+2, ble_string_adc, length);
 		uint16_t length2 = strlen((char*)adc_pref);		
-		SEGGER_RTT_printf(0, "%d\r\n", adc_value);
+		//SEGGER_RTT_printf(0, "%d\r\n", adc_value);
 		ble_nus_string_send(&m_nus, adc_pref, &length2);
 	}
 }
@@ -239,6 +243,9 @@ void fds_get_init_data()
 	fds_get_data(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
 	fds_get_data(&fds_soft_version, file_id_c, fds_rk_soft_version);
 	
+	fds_get_data(&fds_volume_counter, file_id_c, fds_rk_volume_counter);
+	fds_get_data(&fds_archive_counter, file_id_c, fds_rk_archive_counter);
+	fds_get_data(&fds_option_status, file_id_c, fds_rk_option_status);
 	
 	fds_get_data(&fds_clear_counter, file_id_c, fds_rk_clear_counter);
 	
@@ -548,6 +555,8 @@ static void gap_params_init(void)
     gap_conn_params.max_conn_interval = MAX_CONN_INTERVAL;
     gap_conn_params.slave_latency     = SLAVE_LATENCY;
     gap_conn_params.conn_sup_timeout  = CONN_SUP_TIMEOUT;
+																					
+																					
 
     err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
     APP_ERROR_CHECK(err_code);
@@ -576,7 +585,6 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
 							
 						}
 		}
-
 }
 
 
@@ -634,6 +642,7 @@ static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
     {
         err_code = sd_ble_gap_disconnect(m_conn_handle, BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
         APP_ERROR_CHECK(err_code);
+			
     }
 		
 		
@@ -1006,7 +1015,7 @@ int main(void)
     advertising_init();
     services_init();
     conn_params_init();
-//test one more comment
+		//test one more comment
     application_timers_start();
     advertising_start(erase_bonds);
 		sd_ble_gap_addr_get(&mac_address);
@@ -1018,13 +1027,16 @@ int main(void)
 		fds_init_values();
 	  fds_get_init_data();
 		
-			
 		test_expired();
 	  start_led();
 		if(uart_work || uart_ble_mode) uart_init();
 		sd_ble_gap_tx_power_set(4);
 		check_for_old_board();
-		SEGGER_RTT_printf(0, "start_weight_index = %d\n", startWeightIndex);
+		//SEGGER_RTT_printf(0, "start_weight_index = %d\n", startWeightIndex);
+		
+		segtext("fds_option_status = ");
+		segnum1(fds_option_status);
+				
     for (;;)
     {
 					if(correct_mode == COR_AUTO)

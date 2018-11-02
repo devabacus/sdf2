@@ -6,13 +6,13 @@
 #include "nrf_drv_ppi.h"
 
 
-#define UART_TIME_SEND 3
+#define UART_TIME_SEND 2
 
 uint32_t weight_float = 0;
 char data_array[20];
 uint32_t startWeightIndex = 3;
 uint32_t endWeightIndex 	 = 8;
-uint32_t uart_ble_mode 		 = 1;
+uint32_t uart_ble_mode 		 = 0;
 uint16_t clock_counter_last = 0;
 uint16_t time_changed = 0;
 
@@ -31,7 +31,6 @@ void time_check(void){
 				clock_counter_last = clock_counter;
 			  time_changed++;
 			}
-
 }
 
 void flushIndexOfArray(uint8_t *buffer, uint8_t ind){
@@ -47,8 +46,7 @@ void weight_ble_msg(void){
 		uint16_t length = strlen((char*)uart_weight_ch);
 		memcpy(weight_pref+2, uart_weight_ch, length);
 		ble_comm_send_handler(weight_pref);
-		segtext(weight_pref);
-		segtext(" / ");
+		//segtext(weight_pref);
 		segnum1(time_changed);
 			//segtext("\n");
 }
@@ -86,7 +84,7 @@ void define_uart_weight(void){
 				uart_weight_max = 0;
 			}
 				
-		//segtext(uart_weight_ch);
+		segtext(uart_weight_ch);
 		//ble_comm_send_handler((uint8_t*)uart_weight_ch);
 			weight_ble_msg();
 		} else {
@@ -112,7 +110,7 @@ void define_uart_weight(void){
 			time_changed=0;
 			sprintf(uart_weight_ch, "%.2f", uart_weight_f);
 			uart_weight_f_last = uart_weight_f;
-			//segtext(uart_weight_ch);
+			segtext(uart_weight_ch);
 			//ble_comm_send_handler((uint8_t*)uart_weight_ch);
 			weight_ble_msg();
 		} else {
@@ -189,8 +187,8 @@ void uart_init(void)
     uint32_t                     err_code;
     app_uart_comm_params_t const comm_params =
     {
-        .rx_pin_no    = 25,
-        .tx_pin_no    = 26,
+        .rx_pin_no    = 26,
+        .tx_pin_no    = 25,
         .rts_pin_no   = RTS_PIN_NUMBER,
         .cts_pin_no   = CTS_PIN_NUMBER,
         .flow_control = APP_UART_FLOW_CONTROL_DISABLED,

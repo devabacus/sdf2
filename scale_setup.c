@@ -38,7 +38,9 @@ uint8_t buf_check_sub_data[11] = "";
 uint8_t  admin 							= 0;
 uint8_t  root								= 0;
 uint32_t admin_pass 				= 0;
-uint32_t full_pass   				= 0;   
+uint32_t full_pass   				= 0;
+uint32_t archive_pass			  = 0;
+uint32_t volume_pass				= 0;
 			
 uint8_t  thousands						= 0;
 uint8_t  hundreds 						= 0;
@@ -46,6 +48,8 @@ uint8_t  tens		 				  		= 0;
 uint8_t  ones		 							= 0;
 uint32_t current_life_counter = 0;
 
+
+uint32_t num_of_discrete_for_cal = NUM_OF_DISCRETE_FOR_CAL;
 
 //APP_TIMER_DEF(m_util_timer_id);
 
@@ -63,9 +67,37 @@ void fail_attempt(void)
 		round_input	= 1;
 }
 
-void check_pass(void){
-						
+void check_option_pass(void){
+					
+						if(activate_attempts < ACTIVATE_ATTEMPTS_MAX){
+								if (test_activate_code == archive_pass)
+							{
+								fds_option_status |= (OPTION_ARCHIVE_Msk);
+								ble_comm_send_handler("archive activated");
+								fds_update_value(&fds_option_status, file_id_c, fds_rk_option_status);
+								nrf_delay_ms(50);
+								ble_comm_send_handler("o1/2");
+							}
 							
+							else if (test_activate_code == volume_pass)
+							{
+								fds_option_status |= (OPTION_VOLUME_Msk);
+								ble_comm_send_handler("volume activated");
+								fds_update_value(&fds_option_status, file_id_c, fds_rk_option_status);
+								nrf_delay_ms(50);
+								ble_comm_send_handler("o2/2");
+							}
+							else{
+								fail_attempt();
+							}
+						} else {
+								ble_comm_send_handler("attempts is over");
+								rgb_set(0,0,50,5,500);
+						}
+						test_activate_code = 0;
+}
+
+void check_pass(void){
 					  
 						if(test_activate_code == demo1 || test_activate_code == demo_passes(demo1,0,3) || test_activate_code == demo_passes(demo1,3,6))
 							{
@@ -155,11 +187,7 @@ void check_pass(void){
 								} else {
 									SEGGER_RTT_printf(0, "you expired whole attempts\r\n");
 								}
-								
-															
 							}
-							
-									
 						
 						if(test_activate_code > 0)
 							
@@ -206,7 +234,8 @@ void check_pass(void){
 													}
 												}
 																										
-										else { fail_attempt();
+										else {
+											fail_attempt();
 												if(activate_attempts > ACTIVATE_ATTEMPTS_MAX){
 															rgb_set(50,0,0,5,500);
 											  } 
@@ -232,6 +261,8 @@ void check_pass(void){
 								round_input	= 1;
 }
 					
+
+
 
 
 uint32_t demo_passes(uint32_t demo_test, uint8_t num_st, uint8_t num_end){
@@ -269,7 +300,15 @@ void change_num_cor_but(uint8_t num){
 	fds_update_value(&num_cor_buts, file_id, fds_rk_num_cor_but);
 	
 }
+//password option generate (archive and volume)
+void generate_option_pass(void){
+	archive_pass = demo6+12385;
+	volume_pass = demo6+13527;
+//	segnum1(archive_pass);
+//	segnum1(volume_pass);
+}
 
+// this is old admin password
 void generate_admin_pass(void)
 {
 	admin_pass = demo5+power_down_count+life_counter/60; 
@@ -278,6 +317,7 @@ void generate_admin_pass(void)
 	SEGGER_RTT_printf(0, "admin pass = %d\n\r", admin_pass);
 }
 
+// this is new admin password
 void generate_admin_pass1(void)
 {
 	uint32_t activation_num = 0;
@@ -458,9 +498,9 @@ void find_average_adc(void)
 							switch(start_average_adc)
 							{
 								case 1:
+									//ble_settings.showADC = 0;
 									cal_zero_value = average_adc;
 									fds_update_value(&cal_zero_value, file_id, fds_rk_cal_zero);
-
 								
 									uint8_t cal_adc_pref[] = "s5/1/";
 									sprintf((char*)ble_string_put1, "%d", cal_zero_value);
@@ -468,57 +508,52 @@ void find_average_adc(void)
 									memcpy(cal_adc_pref+5, ble_string_put1, length);
 									ble_comm_send_handler(cal_adc_pref);
 									segtext((char*)cal_adc_pref);
-								  segtext("start_average_adc == 1\n");
-									
+								  segtext("\nstart_average_adc == 1\n");
+									//we have stopped it by phone before zero calibrating, now start again	
+									ble_settings.showADC = 1;
 								 //	ble_comm_send_handler(ble_string_put);
 								//	SEGGER_RTT_printf(0, "zero - %d\n\r", cal_zero_value);
 								break;
 								
 								case 2:
+									ble_settings.showADC = 0;
 									cal_load_value = average_adc;
 									if((scale_type == SCALE_600) && cal_zero_value)
 										{
 											 // adc value for one discrete //10 
-											cal_coef = (cal_load_value - cal_zero_value)/NUM_OF_DISCRETE_FOR_CAL; 
+											cal_coef = (cal_load_value - cal_zero_value)/num_of_discrete_for_cal; 
 											SEGGER_RTT_printf(0, "cal_coef - %d\n\r", cal_coef);
 										}
 										fds_update_value(&cal_coef, file_id, fds_rk_cal_zero+1);
 										ble_comm_send_handler("s5/2/");
 										SEGGER_RTT_printf(0, "load - %d\n\r", cal_load_value);
-										
 										uint8_t cal_adc_pref2[] = "s5/2/";
 										sprintf((char*)ble_string_put1, "%d", cal_coef);
 										uint16_t length2 = strlen((char*)ble_string_put1);
 										memcpy(cal_adc_pref2+5, ble_string_put1, length2);
 										ble_comm_send_handler(cal_adc_pref2);
 										segtext((char*)cal_adc_pref2);
-										
-										
+										ble_settings.showADC = 1;
 								break;
 								
 								case 3:
 									cal_turn_on = average_adc;
 									fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
 									SEGGER_RTT_printf(0, "turn_on - %d\n\r", cal_turn_on);
-								
 									uint8_t cal_adc_pref3[] = "s5/3/";
 									sprintf((char*)ble_string_put1, "%d", cal_turn_on);
 									uint16_t length3 = strlen((char*)ble_string_put1);
 									memcpy(cal_adc_pref3+5, ble_string_put1, length3);
 									ble_comm_send_handler(cal_adc_pref3);
 									segtext((char*)cal_adc_pref3);
-								
 								break;
-								
 								}
+							
 								count_average_adc = 0;
 								start_average_adc = 0;
 								average_adc = 0;
 								stop_timer_02s();
-								
-								
 								rgb_set(0,0,0,0,0);
-								
 						}
 					
 				

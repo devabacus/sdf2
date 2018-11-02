@@ -40,10 +40,11 @@ void cor_auto_handle(void)
 		if(adc_value > adc_value_max && adc_value < 16000000){
 		
 					adc_value_max = adc_value;
-					//SEGGER_RTT_printf(0, "adc_value_max = %d\n", adc_value_max);
+					SEGGER_RTT_printf(0, "adc_value_max = %d\n", adc_value_max);
+					// if weight with correct value more than cal_turn_on * 120% we can safety equal cal_turn_on and cal_turn_off
 					if((adc_value_max > (cal_turn_on + (cal_turn_on*20/100))) && cor_set){
 						cal_turn_off = cal_turn_on;
-					//SEGGER_RTT_printf(0, "calc_turn_off changed = %d\n", cal_turn_off);
+						SEGGER_RTT_printf(0, "calc_turn_off changed = %d\n", cal_turn_off);
 						}
 			
 		}
@@ -52,13 +53,13 @@ void cor_auto_handle(void)
 		{
 			
 			adc_cor = adc_vals_ar[current_but-1];
-			
+			SEGGER_RTT_printf(0, "adc_cor = %d\n", adc_cor);
 			if(cal_turn_on > adc_cor){
 				cal_turn_off = (cal_turn_on - adc_cor-adc_cor*20/100);
 			} 
 			
-			//SEGGER_RTT_printf(0, "cal_turn_on = %d\n", cal_turn_on);
-			//SEGGER_RTT_printf(0, "calc_turn_off = %d\n", cal_turn_off);
+			SEGGER_RTT_printf(0, "cal_turn_on = %d\n", cal_turn_on);
+			SEGGER_RTT_printf(0, "calc_turn_off = %d\n", cal_turn_off);
 			
 			last_cor_value_auto = cor_value_auto;
 			correct_value(cor_value_auto);

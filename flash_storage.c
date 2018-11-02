@@ -82,8 +82,9 @@ uint16_t fds_rk_weight_float			  = 0x0049;
 uint16_t fds_rk_uart_weight_st 		  = 0x0050;
 uint16_t fds_rk_uart_weight_end		  = 0x0051;
 uint16_t fds_rk_uart_ble_mode				= 0x0052;
-
-
+uint16_t fds_rk_archive_counter			= 0x0053;
+uint16_t fds_rk_volume_counter			= 0x0054;
+uint16_t fds_rk_option_status 			= 0x0055;
 
 uint32_t fds_is_values_init 			= 0;
 uint32_t life_counter 						= 60;
@@ -98,7 +99,9 @@ uint32_t fds_remote_type			  	= 1;
 
 uint32_t fds_soft_version 				= 0;
 
-
+uint32_t fds_archive_counter			= 0;
+uint32_t fds_volume_counter 			= 0;
+uint32_t fds_option_status				= 0;
 
 void fds_evt_handler(fds_evt_t const * const p_fds_evt)
 {
@@ -263,6 +266,10 @@ void fds_init_values(void)
 		fds_init_flash(&startWeightIndex, file_id, fds_rk_uart_weight_st);
 		fds_init_flash(&endWeightIndex, file_id, fds_rk_uart_weight_end);
 		fds_init_flash(&uart_ble_mode, file_id, fds_rk_uart_ble_mode);
+		
+		fds_init_flash(&fds_archive_counter, file_id_c, fds_rk_archive_counter);
+		fds_init_flash(&fds_volume_counter, file_id_c, fds_rk_volume_counter);
+		fds_init_flash(&fds_option_status, file_id_c, fds_rk_option_status);
 		
 //		fds_init_flash(&fds_remote_type, file_id_c, fds_rk_remote_type);
 //		fds_init_flash(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
