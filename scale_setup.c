@@ -590,14 +590,10 @@ void init_cal_values(void)
 		fds_get_data(&cal_zero_value, file_id, fds_rk_cal_zero);
 		fds_get_data(&cal_coef, file_id, fds_rk_cal_zero+1);
 		fds_get_data(&cal_turn_on, file_id, fds_rk_cal_zero+2);
-		
 }
-
-
 
 void delete_fds_c(void)
 {
-	
 	for(uint16_t i = 0x0001; i<=0x000F; i++)
 						{
 						fds_test_find_and_delete(i, file_id_c);
@@ -642,9 +638,7 @@ void scale_setup(void)
 							cal_unload();		
 							rgb_set(50, 0, 0, 1, 1000);
 						}
-						
 					}
-					
 					
 					if(pin_in1_long_press)
 				{
@@ -660,7 +654,6 @@ void scale_setup(void)
 						rgb_set(0, 50, 0, 1, 1000);
 						
 						}
-						
 						//delete_fds();
 						//delete_fds_c();
 						//rgb_set(50, 50, 50, 2, 3000);

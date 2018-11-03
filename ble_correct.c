@@ -6,6 +6,7 @@ int comp_value = 0;
 uint8_t ble_correct_active = 0;
 uint32_t cor_value_save_ble = 0;
 uint32_t phone_cor_counter = 0;
+uint8_t first_time_open_set = 0;
 
 
 uint8_t isdigit(char c);
@@ -74,7 +75,7 @@ void ble_correct(uint8_t * ble_buffer)
 		//when setup correct we send p, +, - in the beginning
 				uint8_t isButton = isdigit(ble_buffer[1]);
 					
-		if(ble_buffer[1] == 'r')
+						if(ble_buffer[1] == 'r')
 						{
 							correct(0,0,0);
 							cor_value_auto = 0;
@@ -85,6 +86,7 @@ void ble_correct(uint8_t * ble_buffer)
 							// send info that correct reset manually
 							ble_comm_send_handler("n1/0");
 							ble_correct_active = 0;
+							first_time_open_set = 0;
 							//return;
 						}
 		
@@ -115,10 +117,18 @@ void ble_correct(uint8_t * ble_buffer)
 						
 					}
 					//corr_mode_button
-					else {
+					else if (ble_buffer[1] != 'r'){
 						 // correct while setup values
-						remote_mode = CORR_BUT_MODE;	
-
+						//SEGGER_RTT_printf(0, "first_time_open_set = %d\n", first_time_open_set);
+							if(!first_time_open_set)
+							{
+								first_time_open_set = 1;
+						  	if(adc_value) adc_value_start = adc_value;
+							}
+							
+							
+						//SEGGER_RTT_printf(0, "adc_value_start_ble = %d\n", adc_value_start);
+						remote_mode = CORR_BUT_MODE;
 						defineCorDir(ble_buffer, 2);
 						}
 					 
@@ -176,7 +186,8 @@ void ble_correct(uint8_t * ble_buffer)
 					}
 					
 					isButton = 0;
-					
+					segtext(ble_buffer);
+					segtext("\n");
 											
 		}
 		

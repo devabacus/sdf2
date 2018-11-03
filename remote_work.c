@@ -15,6 +15,8 @@ uint32_t cal_turn_off = 0;
 uint32_t adc_value_max = 0;
 uint32_t adc_value_last = 0;
 uint32_t adc_cor = 0;
+uint8_t adc_change_counter = 0;
+uint8_t adc_direct = 0;
 
 current_but_t current_but;
 
@@ -37,6 +39,36 @@ void cor_auto_handle(void)
 	if((remote_mode == WORK_MODE)&&(cal_turn_on > 0)&&(cor_value_auto))
 	{
 		
+		if(adc_value != adc_value_last){
+			
+			if(adc_value > adc_value_last){
+				//если ацп до этого уменьшалось или это первое изменение				
+				if(adc_direct == 2 || !adc_direct){
+					adc_change_counter = 0;
+					adc_direct = 1;	
+				}
+				
+			}
+			else {
+				//если ацп до этого увеличивалось или это первое изменение
+				if(adc_direct == 1 || !adc_direct){
+					adc_change_counter = 0;
+					adc_direct = 2;	
+				}
+				
+				}
+				adc_change_counter++;
+				//SEGGER_RTT_printf(0, "direct = %d, counter = %d\n", adc_direct, adc_change_counter);
+				adc_value_last = adc_value;
+			}
+			
+			
+			
+	
+		if(adc_change_counter > 2)
+			
+		{
+		
 		if(adc_value > adc_value_max && adc_value < 16000000){
 		
 					adc_value_max = adc_value;
@@ -49,9 +81,8 @@ void cor_auto_handle(void)
 			
 		}
 		
-		if((adc_value > cal_turn_on) && ((!cor_set) || (last_cor_value_auto != cor_value_auto))) //&& (current_correct_counter != corr_counter)) //&& (!unload_weight))
+		if((adc_value > cal_turn_on) && ((!cor_set)|| (last_cor_value_auto != cor_value_auto))) //&& (current_correct_counter != corr_counter)) //&& (!unload_weight))
 		{
-			
 			adc_cor = adc_vals_ar[current_but-1];
 			SEGGER_RTT_printf(0, "adc_cor = %d\n", adc_cor);
 			if(cal_turn_on > adc_cor){
@@ -69,7 +100,7 @@ void cor_auto_handle(void)
 			}
 			cor_set = 1;
 			
-			SEGGER_RTT_printf(0, "corr %d set\n\r", cor_value_auto);
+			SEGGER_RTT_printf(0, "adc_value = %d, corr %d set\n\r", adc_value, cor_value_auto);
 			//
 			
 		}
@@ -91,11 +122,12 @@ void cor_auto_handle(void)
 			correct(0,0,0);
 			cor_set = 0;
 			adc_value_max = 0;
-			SEGGER_RTT_printf(0, "corr %d reset\n\r", cor_value_auto);
+			SEGGER_RTT_printf(0, "adc_value = %d, corr %d reset\n\r", adc_value, cor_value_auto);
 			ble_comm_send_handler("n2/0");
 			nrf_delay_ms(1000);
 		}
 	}
+}
 		
 }
 
