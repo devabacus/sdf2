@@ -17,7 +17,7 @@
 
 #define AVERAGE_ADC_TIMES 		30
 
-#define NUM_EXCEED_MEMBERS 		6
+#define NUM_EXCEED_MEMBERS 		16
 
 #define SCALE_600   					1   
 #define SCALE_5000  					2			

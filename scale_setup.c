@@ -8,7 +8,9 @@ uint8_t  entry_to_cal = 0;
 uint8_t  start_average_adc = 0;
 uint8_t  count_average_adc = 0;
 uint32_t average_adc = 0;
+float average_adc_float = 0;
 uint32_t adc_array[AVERAGE_ADC_TIMES];
+uint32_t adc_array_filtered[AVERAGE_ADC_TIMES-NUM_EXCEED_MEMBERS];
 
 uint8_t  scale_feedback = 0;
 uint32_t cal_coef = 0;
@@ -47,7 +49,7 @@ uint8_t  hundreds 						= 0;
 uint8_t  tens		 				  		= 0;
 uint8_t  ones		 							= 0;
 uint32_t current_life_counter = 0;
-
+char str[20];
 
 uint32_t num_of_discrete_for_cal = NUM_OF_DISCRETE_FOR_CAL;
 
@@ -399,6 +401,13 @@ void number_indicate(uint32_t number)
 
 
 
+
+//void print_array(uint32_t* array){
+//	uint8_t i = 0;
+//	SEGGER_RTT_printf(0, "array[%d] = %d\n", i, array[i]);
+//	i++;
+//}
+
 void start_led(void)
 	{
 		if(activate_status == 1)
@@ -459,40 +468,69 @@ void sort_array(uint32_t* array, uint8_t size)
 		}
 }
 
+void print_array(uint32_t* array, uint8_t size)
+{
+		for(int i = 0; i<size; i++)
+			{
+					SEGGER_RTT_printf(0, "%d\n\r", array[i]);
+					nrf_delay_ms(50);
+			}
+	}
+
 
 void find_average_in_array(uint32_t* array, uint8_t size)
 {
 				uint8_t start_id = NUM_EXCEED_MEMBERS/2;
 				uint8_t end_id = size - start_id;
-			
+			  uint8_t j = 0;
+	
 				for(uint8_t i = start_id; i < end_id; i++)
 					{
-						average_adc = average_adc + adc_value;
+						average_adc = average_adc + adc_array[i];
+						adc_array_filtered[j] = adc_array[i];
+						j++;
+						//SEGGER_RTT_printf(0, "arr[%d] %d\n\r",i, adc_array[i]);
 					}
-					average_adc = average_adc/(size - NUM_EXCEED_MEMBERS);
-		}
+					segtext("adc_array_filtered\n");
+					print_array(adc_array_filtered, AVERAGE_ADC_TIMES-NUM_EXCEED_MEMBERS);
+					//SEGGER_RTT_printf(0, "average_adc = %d; size-num = %d\n", average_adc, (size-NUM_EXCEED_MEMBERS));
+					average_adc_float = (float)average_adc/(size-NUM_EXCEED_MEMBERS);
+					average_adc = (int)(average_adc_float + 0.5);
+					//average_adc_float = (float)6944495/14;
+					//average_adc_float = (float)634456/14;
+				//	average_adc = roundf((double)average_adc_float);
+					
+					SEGGER_RTT_printf(0, "rounded average = %d; ", average_adc);
+					//sprintf(str, "average_adc_float of 63445/14 = %.4f\n", round(average_adc_float));
+					//sprintf(str, "average_adc_float of 6945/14= %.4f\n", average_adc_float);
+					sprintf(str, "average_adc_float = %.4f\n", average_adc_float);
+					segtext(str);
+					//SEGGER_RTT_printf(0, "result float = %2.2f; ", average_adc_float);
+					
+}
 
 
-void print_array(uint32_t* array, uint8_t size)
-{
-		for(int i = 0; i<size; i++)
-			{
-					SEGGER_RTT_printf(0, "arr[%d] %d\n\r",i, array[i]);
-					nrf_delay_ms(100);
-			}
-	}
 
+
+	
 
 void find_average_adc(void)
 {
 			  rgb_set(50,0,0,0,1000);
+				// записываем в массив новое значение АЦП (каждые 100мс)
 				adc_array[count_average_adc] = adc_value;
 				count_average_adc++;
 	
+	// если мы набрали нужное количество значений ацп в массив
 				if(count_average_adc == AVERAGE_ADC_TIMES)
 						{
+							segtext("not sorted adc_array\n");
+						//	print_array(adc_array, AVERAGE_ADC_TIMES);
+							// сортируем их
 							
 							sort_array(adc_array, AVERAGE_ADC_TIMES);
+							segtext("SORTED adc_array\n");
+						//	print_array(adc_array, AVERAGE_ADC_TIMES);
 							find_average_in_array(adc_array, AVERAGE_ADC_TIMES);
 							
 							switch(start_average_adc)

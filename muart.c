@@ -46,9 +46,9 @@ void weight_ble_msg(void){
 		uint16_t length = strlen((char*)uart_weight_ch);
 		memcpy(weight_pref+2, uart_weight_ch, length);
 		ble_comm_send_handler(weight_pref);
-		//segtext(weight_pref);
-		//segnum1(time_changed);
-			//segtext("\n");
+		segtext(weight_pref);
+		segnum1(time_changed);
+			segtext("\n");
 }
 
 void send_uart_msg(void){
