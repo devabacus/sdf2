@@ -10,6 +10,7 @@
 #include "remote_work.h"
 #include "remote_setup.h"
 #include "scale_setup.h"
+#include "weight.h"
 
 
 #define WORK_MODE 								0

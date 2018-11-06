@@ -8,6 +8,7 @@
 #include "device_name.h"
 #include "offset_perc.h"
 #include "ble_comm.h"
+#include "weight.h"
 
 
 

@@ -5,6 +5,7 @@ void show_weight(void){
 	//sprintf(uart_weight_test, "%.2f", uart_weight_f);
 	//segtext(uart_weight_test);
 	//segtext("\n");
+	
 }
 
 uint32_t stable_time = 2000;

@@ -485,6 +485,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\archive.c</FilePath>
             </File>
+            <File>
+              <FileName>weight.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\weight.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4417,6 +4422,11 @@
               <FileName>archive.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\archive.c</FilePath>
+            </File>
+            <File>
+              <FileName>weight.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\weight.c</FilePath>
             </File>
           </Files>
         </Group>

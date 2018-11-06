@@ -50,6 +50,7 @@
 #include "ble_correct.h"
 #include "ble_set.h"
 #include "archive.h"
+#include "weight.h"
 
 #include "device_name.h"
 
@@ -160,14 +161,17 @@ void clock_value_save(void)
 
 
 static void m_adc_timer_handler (void *p_context){
-	Weighing();
-			adc_value = adc_value_r >> ble_settings.adcBitForCut;
+			Weighing();
+			//adc_value = adc_value_r >> ble_settings.adcBitForCut;
 			//segtext("work\n");
-			show_weight();	
-	if(ble_settings.showADC >= 2){
-			
-			segnum1(adc_value);
-		}
+			//show_weight();	
+			//weight_test();
+			weight_test();
+//	if(ble_settings.showADC >= 2){
+//			//segnum1(adc_value);
+//			
+//			
+//		}
 	  
 	
 	

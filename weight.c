@@ -1,0 +1,206 @@
+#include "weight.h"
+
+
+uint32_t cal_zero_value = 0;
+uint32_t cal_load_value = 0;
+uint32_t cal_turn_on = 0;
+uint8_t  start_average_adc = 0;
+uint8_t  count_average_adc = 0;
+uint32_t average_adc = 0;
+float average_adc_float = 0;
+uint32_t adc_array[AVERAGE_ADC_TIMES];
+uint32_t adc_array_filtered[AVERAGE_ADC_TIMES-NUM_EXCEED_MEMBERS];
+uint32_t cal_coef = 0;
+char str[20];
+
+
+uint32_t adc_value_weight = 0;
+
+void weight_test(void) {
+	
+	adc_value = adc_value_r >> ble_settings.adcBitForCut;
+	if(ble_settings.showADC >= 2){
+	SEGGER_RTT_printf(0, "%d\n", adc_value);
+	}
+}
+
+
+void set_weight(uint16_t weight_value)
+{
+	adc_need = weight_value*((cal_load_value - cal_zero_value)/20)+cal_zero_value; 
+	start_timer_adc();
+	SEGGER_RTT_printf(0, "adc_need = %d\r\n", adc_need);
+}
+
+void sort_array(uint32_t* array, uint8_t size)
+{
+	for(int i = size-1; i>=0; i--)
+		{
+			for (int j=0; j<i; j++)
+				{
+					if(array[j] > array[j+1])
+						{
+							uint32_t tmp = array[j];
+							array[j] = array[j+1];
+							array[j+1] = tmp;
+						}
+				}
+		}
+}
+
+void print_array(uint32_t* array, uint8_t size)
+{
+		for(int i = 0; i<size; i++)
+			{
+					SEGGER_RTT_printf(0, "%d\n\r", array[i]);
+					nrf_delay_ms(50);
+			}
+	}
+
+
+void find_average_in_array(uint32_t* array, uint8_t size)
+{
+				uint8_t start_id = NUM_EXCEED_MEMBERS/2;
+				uint8_t end_id = size - start_id;
+			  uint8_t j = 0;
+	
+				for(uint8_t i = start_id; i < end_id; i++)
+					{
+						average_adc = average_adc + adc_array[i];
+						adc_array_filtered[j] = adc_array[i];
+						j++;
+						//SEGGER_RTT_printf(0, "arr[%d] %d\n\r",i, adc_array[i]);
+					}
+					segtext("adc_array_filtered\n");
+					print_array(adc_array_filtered, AVERAGE_ADC_TIMES-NUM_EXCEED_MEMBERS);
+					//SEGGER_RTT_printf(0, "average_adc = %d; size-num = %d\n", average_adc, (size-NUM_EXCEED_MEMBERS));
+					average_adc_float = (float)average_adc/(size-NUM_EXCEED_MEMBERS);
+					average_adc = (int)(average_adc_float + 0.5);
+					
+					SEGGER_RTT_printf(0, "rounded average = %d; ", average_adc);
+					sprintf(str, "average_adc_float = %.4f\n", average_adc_float);
+					segtext(str);
+					//SEGGER_RTT_printf(0, "result float = %2.2f; ", average_adc_float);
+					
+}
+
+
+
+
+	
+
+void find_average_adc(void)
+{
+			  rgb_set(50,0,0,0,1000);
+				// записываем в массив новое значение АЦП (каждые 100мс)
+				adc_array[count_average_adc] = adc_value;
+				count_average_adc++;
+	
+	// если мы набрали нужное количество значений ацп в массив
+				if(count_average_adc == AVERAGE_ADC_TIMES)
+						{
+							segtext("not sorted adc_array\n");
+						//	print_array(adc_array, AVERAGE_ADC_TIMES);
+							// сортируем их
+							
+							sort_array(adc_array, AVERAGE_ADC_TIMES);
+							segtext("SORTED adc_array\n");
+						//	print_array(adc_array, AVERAGE_ADC_TIMES);
+							find_average_in_array(adc_array, AVERAGE_ADC_TIMES);
+							
+							switch(start_average_adc)
+							{
+								case 1:
+									//ble_settings.showADC = 0;
+									cal_zero_value = average_adc;
+									fds_update_value(&cal_zero_value, file_id, fds_rk_cal_zero);
+								
+									uint8_t cal_adc_pref[] = "s5/1/";
+									sprintf((char*)ble_string_put1, "%d", cal_zero_value);
+									uint16_t length = strlen((char*)ble_string_put1);
+									memcpy(cal_adc_pref+5, ble_string_put1, length);
+									ble_comm_send_handler(cal_adc_pref);
+									segtext((char*)cal_adc_pref);
+								  segtext("\nstart_average_adc == 1\n");
+									//we have stopped it by phone before zero calibrating, now start again	
+									ble_settings.showADC = 1;
+								 //	ble_comm_send_handler(ble_string_put);
+								//	SEGGER_RTT_printf(0, "zero - %d\n\r", cal_zero_value);
+								break;
+								
+								case 2:
+									ble_settings.showADC = 0;
+									cal_load_value = average_adc;
+									if((scale_type == SCALE_600) && cal_zero_value)
+										{
+											 // adc value for one discrete //10 
+											cal_coef = (cal_load_value - cal_zero_value)/num_of_discrete_for_cal; 
+											SEGGER_RTT_printf(0, "cal_coef - %d\n\r", cal_coef);
+										}
+										fds_update_value(&cal_coef, file_id, fds_rk_cal_zero+1);
+										ble_comm_send_handler("s5/2/");
+										SEGGER_RTT_printf(0, "load - %d\n\r", cal_load_value);
+										uint8_t cal_adc_pref2[] = "s5/2/";
+										sprintf((char*)ble_string_put1, "%d", cal_coef);
+										uint16_t length2 = strlen((char*)ble_string_put1);
+										memcpy(cal_adc_pref2+5, ble_string_put1, length2);
+										ble_comm_send_handler(cal_adc_pref2);
+										segtext((char*)cal_adc_pref2);
+										ble_settings.showADC = 1;
+								break;
+								
+								case 3:
+									cal_turn_on = average_adc;
+									fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
+									SEGGER_RTT_printf(0, "turn_on - %d\n\r", cal_turn_on);
+									uint8_t cal_adc_pref3[] = "s5/3/";
+									sprintf((char*)ble_string_put1, "%d", cal_turn_on);
+									uint16_t length3 = strlen((char*)ble_string_put1);
+									memcpy(cal_adc_pref3+5, ble_string_put1, length3);
+									ble_comm_send_handler(cal_adc_pref3);
+									segtext((char*)cal_adc_pref3);
+								break;
+								}
+							
+								count_average_adc = 0;
+								start_average_adc = 0;
+								average_adc = 0;
+								stop_timer_02s();
+								rgb_set(0,0,0,0,0);
+						}
+					
+				
+
+}
+
+
+
+void cal_unload(void)
+{
+		start_average_adc = 1;
+		// handler of this timer in remote.c and ther we call find_average_adc that above
+	  start_timer_02s();
+		segtext("cal_unload\n");
+	}
+
+void cal_load(void) // define adc_value for 10 discretes 
+{
+	start_average_adc = 2;
+	start_timer_02s();
+	segtext("cal_load\n");
+}
+
+void define_corr_on(void)
+{
+	start_average_adc = 3;
+	start_timer_02s();
+	segtext("define_corr_on\n");
+	
+}
+
+void init_cal_values(void)
+{
+		fds_get_data(&cal_zero_value, file_id, fds_rk_cal_zero);
+		fds_get_data(&cal_coef, file_id, fds_rk_cal_zero+1);
+		fds_get_data(&cal_turn_on, file_id, fds_rk_cal_zero+2);
+}
