@@ -86,7 +86,8 @@ void set_send_cor_mode(uint8_t set_value){
 
 void ble_set(uint8_t *ble_set_buffer){
 	
-			
+			segtext(ble_set_buffer);
+			segtext("\n");
 			uint8_t set_number = atoi((char*) ble_set_buffer+1);
 			
 			uint8_t slashIndex = findIdexOfArray(ble_set_buffer, 1, '/')+1;  // index = 1
@@ -222,13 +223,11 @@ void ble_set(uint8_t *ble_set_buffer){
 					
 				case CAL_DISCRET:
 					//char discrete_char[10];
+					SEGGER_RTT_printf(0, "ble_set_buffer = %s\n", ble_set_buffer);
+				SEGGER_RTT_printf(0, "ble_set_buffer+slashIndex = %s\n", ble_set_buffer+slashIndex);
 					discrete = atof((char*) ble_set_buffer + slashIndex);
-					
-					//float discretes = maxWeight/5;
-					//uint32_t discretes = (maxWeight/(discrete*100))/1;
-//					sprintf(discrete_char, "%.2f", discretes);
-				
-					//SEGGER_RTT_printf(0, "num of discretes = %f\n", 3000/0.5);
+					sprintf(discrete_char1, "%.2f", discrete);
+					SEGGER_RTT_printf(0, "discrete = %s\n", discrete_char1);
 				break;
 				
 				case CAL_LOAD_WEIGHT:

@@ -15,11 +15,13 @@ float cal_coef_float = 0;
 float weight = 0;
 uint32_t num_of_discrete_for_cal = NUM_OF_DISCRETE_FOR_CAL;
 char str[20];
+char weight_char[10];
 uint32_t cal_weight = 0;
 uint32_t maxWeight = 0;
-float 	  discrete = 0;
+double discrete = 0;
 float last_weight = 0;
 int weight_int = 0;
+char discrete_char1[20];
 
 
 uint32_t adc_value_weight = 0;
@@ -39,28 +41,47 @@ void weight_define(void){
 		//	sprintf(str, "weight = %.4f\n", weight);
 			//segtext(str);
 			if(discrete >= 0.01 && discrete < 0.1){
-				sprintf(str, "weight = %.2f\n", weight);
-			} else if (discrete >= 0.1 && discrete < 1)
+				sprintf(weight_char, "weight = %.2f\n", weight);
+			} else if (discrete == 0.1)
 			{
 				weight = ((int)(weight*10 + 0.5))/10.0;
-		  	sprintf(str, "weight = %.1f\n", weight);
+		  	sprintf(weight_char, "weight = %.1f\n", weight);
+			} else if (discrete == 0.2){
+				
+				//weight = ((int)(weight*10 + 0.5))/10.0;
+				int weight_test = (int)(weight*10);
+				if(weight_test % 2 == 0)
+						{					
+							// weight is even
+							weight = weight_test/10.0;
+						}
+					else 
+						{
+							// weight is odd
+							weight = (weight_test + 1)/10.0;
+						}
+				
+		  	sprintf(weight_char, "weight = %.1f\n", weight);
+					
+					
 			}
 			 else if (discrete >= 1)
 			{
 				weight = ((int)(weight + 0.5))/1.0;
-			sprintf(str, "weight = %.1f\n", weight);
+		   	sprintf(weight_char, "weight = %.1f\n", weight);
 			}
+//			switch (discrete){
+//				case: 0.2
+//			}
 			
 			
-			
-		if(last_weight != weight){
-			segtext(str);
-//			SEGGER_RTT_printf(0, "weight_int = %d\n", weight_int);
-//			weight_int = (int) (weight+0.5);
-			last_weight = weight;
-		}
-			//segtext(str);
-			//segnum1(weight);
+		if(last_weight != weight)
+			{
+				segtext(weight_char);
+					
+				last_weight = weight;
+			}
+
 	}
 	
 }
@@ -112,15 +133,15 @@ void find_average_in_array(uint32_t* array, uint8_t size)
 						j++;
 						//SEGGER_RTT_printf(0, "arr[%d] %d\n\r",i, adc_array[i]);
 					}
-					segtext("adc_array_filtered\n");
+					//segtext("adc_array_filtered\n");
 					print_array(adc_array_filtered, AVERAGE_ADC_TIMES-NUM_EXCEED_MEMBERS);
 					//SEGGER_RTT_printf(0, "average_adc = %d; size-num = %d\n", average_adc, (size-NUM_EXCEED_MEMBERS));
 					average_adc_float = (float)average_adc/(size-NUM_EXCEED_MEMBERS);
 					average_adc = (int)(average_adc_float + (float)0.5);
 					
-					SEGGER_RTT_printf(0, "rounded average = %d; ", average_adc);
-					sprintf(str, "average_adc_float = %.4f\n", average_adc_float);
-					segtext(str);
+					//SEGGER_RTT_printf(0, "rounded average = %d; ", average_adc);
+					//sprintf(str, "average_adc_float = %.4f\n", average_adc_float);
+					//segtext(str);
 					//SEGGER_RTT_printf(0, "result float = %2.2f; ", average_adc_float);
 					
 }
@@ -163,9 +184,10 @@ void find_average_adc(void)
 									ble_comm_send_handler(cal_adc_pref);
 									segtext((char*)cal_adc_pref);
 								  segtext("\nstart_average_adc == 1\n");
-									sprintf(str, "%.2f", discrete);
+								// почему то записывается значение ацп в discrete_char1, поэтому повторно пишем туда дискрет
+									sprintf(discrete_char1, "%.2f", discrete);
 									SEGGER_RTT_printf(0, "maxWeight = %d\n", maxWeight);
-									SEGGER_RTT_printf(0, "discrete = %s\n", str);
+									SEGGER_RTT_printf(0, "discrete = %s\n", discrete_char1);
 									SEGGER_RTT_printf(0, "cal_weight = %d\n", cal_weight);
 									num_of_discrete_for_cal = cal_weight/(float)discrete;
 									SEGGER_RTT_printf(0, "num_of_discrete_for_cal = %d\n", num_of_discrete_for_cal);
@@ -191,6 +213,9 @@ void find_average_adc(void)
 										fds_update_value(&cal_coef, file_id, fds_rk_cal_zero+1);
 										ble_comm_send_handler("s5/2/");
 										SEGGER_RTT_printf(0, "load - %d\n\r", cal_load_value);
+										//discrete+=1000;
+										sprintf(discrete_char1, "%.2f", discrete);
+										SEGGER_RTT_printf(0, "maxWeight = %d\n", maxWeight);
 										uint8_t cal_adc_pref2[] = "s5/2/";
 										sprintf((char*)ble_string_put1, "%d", cal_coef);
 										uint16_t length2 = strlen((char*)ble_string_put1);

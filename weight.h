@@ -37,7 +37,8 @@ void adc_cut(void);
 extern uint32_t adc_value_weight;
 
 extern uint32_t maxWeight;
-extern float 		discrete;
+extern double	discrete;
+extern char discrete_char1[20];
 extern uint32_t cal_weight;
 
 void weight_define(void);
