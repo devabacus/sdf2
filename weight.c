@@ -11,17 +11,58 @@ float average_adc_float = 0;
 uint32_t adc_array[AVERAGE_ADC_TIMES];
 uint32_t adc_array_filtered[AVERAGE_ADC_TIMES-NUM_EXCEED_MEMBERS];
 uint32_t cal_coef = 0;
+float cal_coef_float = 0;
+float weight = 0;
+uint32_t num_of_discrete_for_cal = NUM_OF_DISCRETE_FOR_CAL;
 char str[20];
+uint32_t cal_weight = 0;
+uint32_t maxWeight = 0;
+float 	  discrete = 0;
+float last_weight = 0;
+int weight_int = 0;
 
 
 uint32_t adc_value_weight = 0;
 
-void weight_test(void) {
-	
+void adc_cut(void) {
 	adc_value = adc_value_r >> ble_settings.adcBitForCut;
 	if(ble_settings.showADC >= 2){
 	SEGGER_RTT_printf(0, "%d\n", adc_value);
 	}
+}
+
+void weight_define(void){
+	if(cal_coef_float){
+			weight = ((adc_value-cal_zero_value)/cal_coef_float)*discrete;
+			//выделяем целую часть
+			
+		//	sprintf(str, "weight = %.4f\n", weight);
+			//segtext(str);
+			if(discrete >= 0.01 && discrete < 0.1){
+				sprintf(str, "weight = %.2f\n", weight);
+			} else if (discrete >= 0.1 && discrete < 1)
+			{
+				weight = ((int)(weight*10 + 0.5))/10.0;
+		  	sprintf(str, "weight = %.1f\n", weight);
+			}
+			 else if (discrete >= 1)
+			{
+				weight = ((int)(weight + 0.5))/1.0;
+			sprintf(str, "weight = %.1f\n", weight);
+			}
+			
+			
+			
+		if(last_weight != weight){
+			segtext(str);
+//			SEGGER_RTT_printf(0, "weight_int = %d\n", weight_int);
+//			weight_int = (int) (weight+0.5);
+			last_weight = weight;
+		}
+			//segtext(str);
+			//segnum1(weight);
+	}
+	
 }
 
 
@@ -75,7 +116,7 @@ void find_average_in_array(uint32_t* array, uint8_t size)
 					print_array(adc_array_filtered, AVERAGE_ADC_TIMES-NUM_EXCEED_MEMBERS);
 					//SEGGER_RTT_printf(0, "average_adc = %d; size-num = %d\n", average_adc, (size-NUM_EXCEED_MEMBERS));
 					average_adc_float = (float)average_adc/(size-NUM_EXCEED_MEMBERS);
-					average_adc = (int)(average_adc_float + 0.5);
+					average_adc = (int)(average_adc_float + (float)0.5);
 					
 					SEGGER_RTT_printf(0, "rounded average = %d; ", average_adc);
 					sprintf(str, "average_adc_float = %.4f\n", average_adc_float);
@@ -122,6 +163,12 @@ void find_average_adc(void)
 									ble_comm_send_handler(cal_adc_pref);
 									segtext((char*)cal_adc_pref);
 								  segtext("\nstart_average_adc == 1\n");
+									sprintf(str, "%.2f", discrete);
+									SEGGER_RTT_printf(0, "maxWeight = %d\n", maxWeight);
+									SEGGER_RTT_printf(0, "discrete = %s\n", str);
+									SEGGER_RTT_printf(0, "cal_weight = %d\n", cal_weight);
+									num_of_discrete_for_cal = cal_weight/(float)discrete;
+									SEGGER_RTT_printf(0, "num_of_discrete_for_cal = %d\n", num_of_discrete_for_cal);
 									//we have stopped it by phone before zero calibrating, now start again	
 									ble_settings.showADC = 1;
 								 //	ble_comm_send_handler(ble_string_put);
@@ -134,7 +181,11 @@ void find_average_adc(void)
 									if((scale_type == SCALE_600) && cal_zero_value)
 										{
 											 // adc value for one discrete //10 
-											cal_coef = (cal_load_value - cal_zero_value)/num_of_discrete_for_cal; 
+											
+										cal_coef_float = (cal_load_value - cal_zero_value)/(float)num_of_discrete_for_cal; 
+										sprintf(str, "cal_coef = %.4f\n", cal_coef_float);
+										segtext(str);
+											
 											SEGGER_RTT_printf(0, "cal_coef - %d\n\r", cal_coef);
 										}
 										fds_update_value(&cal_coef, file_id, fds_rk_cal_zero+1);

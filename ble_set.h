@@ -10,6 +10,7 @@
 #include "device_name.h"
 #include "ble_comm.h"
 #include "sd_util.h"
+#include "weight.h"
 
 typedef struct 
 {

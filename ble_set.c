@@ -16,7 +16,7 @@ int findIdexOfArray(uint8_t *buf, int startIndex, char character);
 
 
 void ble_set_init(){
-	ble_settings.adcBitForCut = 5;
+	ble_settings.adcBitForCut = 7;
 	ble_settings.showADC = 0;
 	ble_settings.workADC = 1;
 }
@@ -216,26 +216,23 @@ void ble_set(uint8_t *ble_set_buffer){
 				break;
 				
 				case CAL_MAX_WEIGHT:
-					
 					maxWeight = atoi((char*) ble_set_buffer + slashIndex);
-					SEGGER_RTT_printf(0, "maxWeight = %d\n", maxWeight);
+				
 				break;
 					
 				case CAL_DISCRET:
-					char discrete_char[10];
+					//char discrete_char[10];
 					discrete = atof((char*) ble_set_buffer + slashIndex);
-					sprintf(discrete_char, "%.2f", discrete);
-					SEGGER_RTT_printf(0, "discrete = %s\n", discrete_char);
+					
 					//float discretes = maxWeight/5;
 					//uint32_t discretes = (maxWeight/(discrete*100))/1;
 //					sprintf(discrete_char, "%.2f", discretes);
-					SEGGER_RTT_printf(0, "discretes = %s\n", discrete_char);
+				
 					//SEGGER_RTT_printf(0, "num of discretes = %f\n", 3000/0.5);
 				break;
 				
 				case CAL_LOAD_WEIGHT:
-					uint32_t cal_weight = atoi((char*) ble_set_buffer + slashIndex);
-					SEGGER_RTT_printf(0, "cal_weight = %d\n", cal_weight);
+					cal_weight = atoi((char*) ble_set_buffer + slashIndex);
 
 				
 }

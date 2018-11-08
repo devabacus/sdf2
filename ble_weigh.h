@@ -9,9 +9,6 @@
 #include "flash_storage.h"
 #include "device_name.h"
 
-extern uint32_t maxWeight;
-extern float 		discrete;
-
 
 
 #endif

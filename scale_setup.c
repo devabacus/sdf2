@@ -40,7 +40,7 @@ uint8_t  ones		 							= 0;
 uint32_t current_life_counter = 0;
 
 
-uint32_t num_of_discrete_for_cal = NUM_OF_DISCRETE_FOR_CAL;
+
 
 //APP_TIMER_DEF(m_util_timer_id);
 

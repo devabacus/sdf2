@@ -166,7 +166,8 @@ static void m_adc_timer_handler (void *p_context){
 			//segtext("work\n");
 			//show_weight();	
 			//weight_test();
-			weight_test();
+			adc_cut();
+			weight_define();
 //	if(ble_settings.showADC >= 2){
 //			//segnum1(adc_value);
 //			
