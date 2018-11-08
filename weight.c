@@ -22,6 +22,7 @@ double discrete = 0;
 float last_weight = 0;
 int weight_int = 0;
 char discrete_char1[20];
+uint32_t weight_rem = 0;
 
 
 uint32_t adc_value_weight = 0;
@@ -36,6 +37,7 @@ void adc_cut(void) {
 void weight_define(void){
 	if(cal_coef_float){
 			weight = ((adc_value-cal_zero_value)/cal_coef_float)*discrete;
+			int weight_test = (int)(weight*10);
 			//выделяем целую часть
 			
 		//	sprintf(str, "weight = %.4f\n", weight);
@@ -46,29 +48,50 @@ void weight_define(void){
 			{
 				weight = ((int)(weight*10 + 0.5))/10.0;
 		  	sprintf(weight_char, "weight = %.1f\n", weight);
-			} else if (discrete == 0.2){
+			} else if (discrete == 0.2)
+					{
 				
-				//weight = ((int)(weight*10 + 0.5))/10.0;
-				int weight_test = (int)(weight*10);
-				if(weight_test % 2 == 0)
-						{					
-							// weight is even
-							weight = weight_test/10.0;
-						}
-					else 
-						{
-							// weight is odd
-							weight = (weight_test + 1)/10.0;
-						}
-				
-		  	sprintf(weight_char, "weight = %.1f\n", weight);
+					//weight = ((int)(weight*10 + 0.5))/10.0;
+						
+						if(weight_test % 2 == 0)
+								{					
+									// weight is even
+									weight = weight_test/10.0;
+								}
+							else 
+								{
+									// weight is odd
+									weight = (weight_test + 1)/10.0;
+								}
+						
+						sprintf(weight_char, "weight = %.1f\n", weight);
+					} 
+					
+					else if (discrete == 0.5)
+							{
+								//segtext("discrete == 0.5");
+								weight_rem = weight_test % 5;
+								
+									if(weight_rem < 3)
+										{
+											weight = (weight_test - weight_rem)/10.0;
+										}
+									else 
+									{
+										  weight = (weight_test + (5 - weight_rem))/10.0;
+									}
+								sprintf(weight_char, "weight = %.1f\n", weight);
+							}
 					
 					
-			}
+					
+					
 			 else if (discrete >= 1)
 			{
 				weight = ((int)(weight + 0.5))/1.0;
+			//	SEGGER_RTT_printf(0, "(%d + (5 - %d))/10.0 = %d;\n", weight_test, weight_test, (weight_test + (5 - weight_test))/10.0);
 		   	sprintf(weight_char, "weight = %.1f\n", weight);
+				
 			}
 //			switch (discrete){
 //				case: 0.2
@@ -78,6 +101,8 @@ void weight_define(void){
 		if(last_weight != weight)
 			{
 				segtext(weight_char);
+			//	SEGGER_RTT_printf(0, "weight_rem = %d\n", weight_rem);
+			//	SEGGER_RTT_printf(0, "weight_test = %d\n", weight_test);
 					
 				last_weight = weight;
 			}
