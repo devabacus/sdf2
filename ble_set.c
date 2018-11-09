@@ -223,8 +223,8 @@ void ble_set(uint8_t *ble_set_buffer){
 					
 				case CAL_DISCRET:
 					//char discrete_char[10];
-					SEGGER_RTT_printf(0, "ble_set_buffer = %s\n", ble_set_buffer);
-				SEGGER_RTT_printf(0, "ble_set_buffer+slashIndex = %s\n", ble_set_buffer+slashIndex);
+//					SEGGER_RTT_printf(0, "ble_set_buffer = %s\n", ble_set_buffer);
+//				SEGGER_RTT_printf(0, "ble_set_buffer+slashIndex = %s\n", ble_set_buffer+slashIndex);
 					discrete = atof((char*) ble_set_buffer + slashIndex);
 					sprintf(discrete_char1, "%.2f", discrete);
 					SEGGER_RTT_printf(0, "discrete = %s\n", discrete_char1);
