@@ -37,14 +37,31 @@ void adc_cut(void) {
 void weight_define(void){
 	if(cal_coef_float){
 			weight = ((adc_value-cal_zero_value)/cal_coef_float)*discrete;
-			int weight_test = (int)(weight*10);
+			int weight_10 = (int)(weight*10);
+			int weight_100 = (int)(weight*100);
 			//выделяем целую часть
 			
 		//	sprintf(str, "weight = %.4f\n", weight);
 			//segtext(str);
-			if(discrete >= 0.01 && discrete < 0.1){
+			if(discrete == 0.01){
 				sprintf(weight_char, "weight = %.2f\n", weight);
-			} else if (discrete == 0.1)
+			} 
+			else if (discrete == 0.02)
+			{
+				if((weight_100)%2 == 0){
+						weight = weight_100/100.0;
+				} else {
+					weight = (weight_100 + 1)/100.0;
+				}
+				
+				sprintf(weight_char, "weight = %.2f\n", weight);
+				
+				
+			}
+
+
+
+			else if (discrete == 0.1)
 			{
 				weight = ((int)(weight*10 + 0.5))/10.0;
 		  	sprintf(weight_char, "weight = %.1f\n", weight);
@@ -53,15 +70,15 @@ void weight_define(void){
 				
 					//weight = ((int)(weight*10 + 0.5))/10.0;
 						
-						if(weight_test % 2 == 0)
+						if(weight_10 % 2 == 0)
 								{					
 									// weight is even
-									weight = weight_test/10.0;
+									weight = weight_10/10.0;
 								}
 							else 
 								{
 									// weight is odd
-									weight = (weight_test + 1)/10.0;
+									weight = (weight_10 + 1)/10.0;
 								}
 						
 						sprintf(weight_char, "weight = %.1f\n", weight);
@@ -70,15 +87,15 @@ void weight_define(void){
 					else if (discrete == 0.5)
 							{
 								//segtext("discrete == 0.5");
-								weight_rem = weight_test % 5;
+								weight_rem = weight_10 % 5;
 								
 									if(weight_rem < 3)
 										{
-											weight = (weight_test - weight_rem)/10.0;
+											weight = (weight_10 - weight_rem)/10.0;
 										}
 									else 
 									{
-										  weight = (weight_test + (5 - weight_rem))/10.0;
+										  weight = (weight_10 + (5 - weight_rem))/10.0;
 									}
 								sprintf(weight_char, "weight = %.1f\n", weight);
 							}
@@ -89,7 +106,7 @@ void weight_define(void){
 			 else if (discrete >= 1)
 			{
 				weight = ((int)(weight + 0.5))/1.0;
-			//	SEGGER_RTT_printf(0, "(%d + (5 - %d))/10.0 = %d;\n", weight_test, weight_test, (weight_test + (5 - weight_test))/10.0);
+			//	SEGGER_RTT_printf(0, "(%d + (5 - %d))/10.0 = %d;\n", weight_10, weight_10, (weight_10 + (5 - weight_10))/10.0);
 		   	sprintf(weight_char, "weight = %.1f\n", weight);
 				
 			}
@@ -102,7 +119,7 @@ void weight_define(void){
 			{
 				segtext(weight_char);
 			//	SEGGER_RTT_printf(0, "weight_rem = %d\n", weight_rem);
-			//	SEGGER_RTT_printf(0, "weight_test = %d\n", weight_test);
+			//	SEGGER_RTT_printf(0, "weight_10 = %d\n", weight_10);
 					
 				last_weight = weight;
 			}
