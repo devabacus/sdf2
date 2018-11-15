@@ -32,6 +32,9 @@ uint32_t admin_pass 				= 0;
 uint32_t full_pass   				= 0;
 uint32_t archive_pass			  = 0;
 uint32_t volume_pass				= 0;
+uint32_t config_pass1 = 0;
+uint32_t config_pass2 = 0;
+uint32_t config_pass3 = 0;
 			
 uint8_t  thousands						= 0;
 uint8_t  hundreds 						= 0;
@@ -87,6 +90,31 @@ void check_option_pass(void){
 						}
 						test_activate_code = 0;
 }
+
+void check_config_pass(void){
+				if(activate_attempts < ACTIVATE_ATTEMPTS_MAX){
+						if (test_activate_code == config_pass2){
+							ble_comm_send_handler("profi activated");
+							fds_pcb_config = 2;
+							//ble_comm_send_handler("c1/2");
+						}
+						else if (test_activate_code == config_pass3){
+							ble_comm_send_handler("expert activated");
+							fds_pcb_config = 3;
+						//	ble_comm_send_handler("c1/3");
+						}
+						else{
+								fail_attempt();
+						}
+						fds_update_value(&fds_pcb_config, file_id_c, fds_rk_pcb_config);
+				}else {
+								ble_comm_send_handler("attempts is over");
+								rgb_set(0,0,50,5,500);
+						}
+						test_activate_code = 0;
+}
+
+
 
 void check_pass(void){
 					  
@@ -251,10 +279,6 @@ void check_pass(void){
 								test_activate_code = 0;
 								round_input	= 1;
 }
-					
-
-
-
 
 uint32_t demo_passes(uint32_t demo_test, uint8_t num_st, uint8_t num_end){
 	
@@ -295,6 +319,10 @@ void change_num_cor_but(uint8_t num){
 void generate_option_pass(void){
 	archive_pass = demo6+12385;
 	volume_pass = demo6+13527;
+	//config_pass1 = demo6+14431;
+	config_pass2 = demo6+15718;
+	config_pass3 = demo6+16097;
+	
 //	segnum1(archive_pass);
 //	segnum1(volume_pass);
 }
@@ -339,7 +367,7 @@ void generate_admin_pass1(void)
 	full_pass = (admin_pass + 158)/2;
 	
 	
-	SEGGER_RTT_printf(0, "admin pass = %d\n\r", admin_pass);
+	//SEGGER_RTT_printf(0, "admin pass = %d\n\r", admin_pass);
 }
 
 void number_indicate(uint32_t number)

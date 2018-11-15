@@ -93,6 +93,10 @@ void ble_debug(uint8_t * ble_buffer)
 							case 15:
 								send_num = fds_option_status;
 							break;
+							
+							case 16:
+								send_num = fds_pcb_config;
+							break;
 						}
 						
 						if(send_num > 0)

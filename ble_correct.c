@@ -7,6 +7,7 @@ uint8_t ble_correct_active = 0;
 uint32_t cor_value_save_ble = 0;
 uint32_t phone_cor_counter = 0;
 uint8_t first_time_open_set = 0;
+uint8_t allowed_corr  			= 0;
 
 
 uint8_t isdigit(char c);
@@ -95,16 +96,53 @@ void ble_correct(uint8_t * ble_buffer)
 					if (isButton){
 						if((fds_remote_type != REMOTE_ONLY) || admin || (phone_cor_counter < PHONE_COR_COUNTER_MAX_DEMO)){
 										
-										phone_cor_counter++;
-										fds_update_value(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
-										SEGGER_RTT_printf(0, "phone_cor_counter = %d\n", phone_cor_counter);
 										uint8_t cor_button_ble = atoi((char*)ble_buffer+1);
-										remote_mode = WORK_MODE;	
-										current_but = cor_button_ble;
-										correct(0,0,0);
+										//конфигурация новичок. Допускается работа с телефона только первых 2-х кнопок
+										if(fds_pcb_config == 1 && (cor_button_ble == 1 || cor_button_ble == 4)){
+												defineCorDir(ble_buffer, 4);
+												allowed_corr = 1;
+											//  segtext("newbie and accept button\n");
+										} 
+										else if (fds_pcb_config == 1 && (cor_button_ble != 1 && cor_button_ble != 4)){
+										//	  segtext("newbie and other button\n");		
+												ble_comm_send_handler("c1/0");
+										}
 										
-										if(cor_button_ble < 10) defineCorDir(ble_buffer, 4);
-										else defineCorDir(ble_buffer, 5);
+										else if (fds_pcb_config == 2 && (cor_button_ble > 0 && cor_button_ble <= 8 )){
+												//segtext("profi and accept button\n");		
+												allowed_corr = 1;
+												
+										}
+										else if (fds_pcb_config == 2 && (cor_button_ble == 0 || cor_button_ble > 8 )){
+												segtext("profi and other button\n");		
+												ble_comm_send_handler("c2/0");
+										}
+										else if (fds_pcb_config == 3){
+												allowed_corr = 1;
+												//segtext("expert's allowed all of the buttons\n");		
+										}
+										
+										
+										if(allowed_corr){
+											phone_cor_counter++;
+											fds_update_value(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
+											//SEGGER_RTT_printf(0, "phone_cor_counter = %d\n", phone_cor_counter);
+											
+											remote_mode = WORK_MODE;	
+											current_but = cor_button_ble;
+											//SEGGER_RTT_printf(0, "cor_button_ble = %d\n", cor_button_ble);
+											correct(0,0,0);
+											
+											if(cor_button_ble < 10) defineCorDir(ble_buffer, 4);
+											else defineCorDir(ble_buffer, 5);
+											allowed_corr = 0;
+										} 
+										
+										else {
+											// the button forbidden for such config
+											rgb_set(50, 0, 0, 3, 500);
+										}
+										
 						
 						} else {
 									phone_cor_counter++;
@@ -177,23 +215,12 @@ void ble_correct(uint8_t * ble_buffer)
 											ble_correct_active = 1;
 											SEGGER_RTT_printf(0, "adc_value_but = %d\n\r", adc_vals_ar[current_but-1]);
 											ble_comm_send_handler("n2/1");
-											
 									}
-									
 							}
-							
 							ble_correct_active = 1;
 					}
-					
 					isButton = 0;
 					segtext(ble_buffer);
 					segtext("\n");
-											
 		}
-		
-		
-
-
-
-
 

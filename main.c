@@ -251,6 +251,8 @@ void fds_get_init_data()
 	fds_get_data(&fds_volume_counter, file_id_c, fds_rk_volume_counter);
 	fds_get_data(&fds_archive_counter, file_id_c, fds_rk_archive_counter);
 	fds_get_data(&fds_option_status, file_id_c, fds_rk_option_status);
+	fds_get_data(&fds_pcb_config, file_id_c, fds_rk_pcb_config);
+	
 	
 	fds_get_data(&fds_clear_counter, file_id_c, fds_rk_clear_counter);
 	
@@ -260,7 +262,6 @@ void fds_get_init_data()
 	init_cal_values();
 	offset_fds_kg_get_data();
 	autocor_adc_values_get();
-	
 	SEGGER_RTT_printf(0, "STATUS = %d\r\n", activate_status);
 		//APP_ERROR_CHECK(err_code);
 }
@@ -1001,19 +1002,14 @@ int main(void)
     timers_init();
     power_management_init();
     gpio_init();
-	
 		ble_set_init();
-		
 		nrf_define_test_pin();
   	define_pins();
 		nrf_gpiote();
-	
 		pwm_init_corr();
 		pwm_init_rgb();
 		HX711_init();
 		m_clock_timer_init();
-		
-
 		peer_manager_init();
     gap_params_init();
     gatt_init();

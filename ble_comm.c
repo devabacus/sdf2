@@ -124,6 +124,14 @@ void ble_comm(uint8_t * ble_buffer)
 								}
 								break;
 								
+						case 'c':
+								if(remote_mode == STATUS_DEFINE){
+								  test_activate_code = atoi((char*)ble_buffer+1);
+									SEGGER_RTT_printf(0, "get number %d\n", test_activate_code);
+									check_config_pass();
+								}
+								break;
+								
 						case 't':
 								app_uart_put(ble_buffer[1]);
 								SEGGER_RTT_printf(0, "get %c\n", ble_buffer[1]);

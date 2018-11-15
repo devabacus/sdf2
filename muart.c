@@ -6,7 +6,7 @@
 #include "nrf_drv_ppi.h"
 
 
-#define UART_TIME_SEND 2
+#define UART_TIME_SEND 1
 
 uint32_t weight_float = 0;
 char data_array[20];

@@ -87,6 +87,7 @@ extern uint16_t fds_rk_uart_ble_mode;
 extern uint16_t fds_rk_archive_counter;
 extern uint16_t fds_rk_volume_counter;
 extern uint16_t fds_rk_option_status;
+extern uint16_t fds_rk_pcb_config;
 
 
 
@@ -101,6 +102,7 @@ extern uint32_t fds_soft_version;
 extern uint32_t fds_archive_counter;
 extern uint32_t fds_volume_counter;
 extern uint32_t fds_option_status;
+extern uint32_t fds_pcb_config;					
 
 void check_for_old_board(void);
 

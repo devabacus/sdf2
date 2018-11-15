@@ -85,6 +85,7 @@ uint16_t fds_rk_uart_ble_mode				= 0x0052;
 uint16_t fds_rk_archive_counter			= 0x0053;
 uint16_t fds_rk_volume_counter			= 0x0054;
 uint16_t fds_rk_option_status 			= 0x0055;
+uint16_t fds_rk_pcb_config					= 0x0056;
 
 uint32_t fds_is_values_init 			= 0;
 uint32_t life_counter 						= 60;
@@ -102,6 +103,7 @@ uint32_t fds_soft_version 				= 0;
 uint32_t fds_archive_counter			= 0;
 uint32_t fds_volume_counter 			= 0;
 uint32_t fds_option_status				= 0;
+uint32_t fds_pcb_config						= 1;
 
 void fds_evt_handler(fds_evt_t const * const p_fds_evt)
 {
@@ -166,13 +168,8 @@ void fds_init_flash(uint32_t* value, uint16_t file_id, uint16_t rec_key)
 }
 
 void check_for_old_board(void){
-					
-				
-				
-	
-					if(!fds_mac_init){
-		
-						
+
+	if(!fds_mac_init){
 						SEGGER_RTT_printf(0, "ch mac= %d\n", fds_mac_init);
 				  demo_define();
 					fds_update_value(&demo1, file_id_c, fds_rk_demo1);
@@ -270,6 +267,7 @@ void fds_init_values(void)
 		fds_init_flash(&fds_archive_counter, file_id_c, fds_rk_archive_counter);
 		fds_init_flash(&fds_volume_counter, file_id_c, fds_rk_volume_counter);
 		fds_init_flash(&fds_option_status, file_id_c, fds_rk_option_status);
+		fds_init_flash(&fds_pcb_config, file_id_c, fds_rk_pcb_config);
 		
 //		fds_init_flash(&fds_remote_type, file_id_c, fds_rk_remote_type);
 //		fds_init_flash(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
@@ -288,9 +286,7 @@ void fds_init_values(void)
 	{
 		SEGGER_RTT_printf(0, "init=%d\r\n", fds_is_values_init);
 	}
-	
 }
-
 
 ret_code_t fds_write_value(uint32_t* value, uint16_t file_id, uint16_t rec_key)
 {
@@ -315,7 +311,6 @@ ret_code_t fds_write_value(uint32_t* value, uint16_t file_id, uint16_t rec_key)
 		// SEGGER_RTT_printf(0,"Writing Record ID = %d, value = %d\r\n",record_desc.record_id, *value);
 		return NRF_SUCCESS;
 }
-
 
 ret_code_t fds_update_value(uint32_t* value, uint16_t file_id, uint16_t rec_key)
 {

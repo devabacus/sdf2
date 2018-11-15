@@ -59,5 +59,5 @@ void save_call_data(void);
 void start_led(void);
 void change_num_cor_but(uint8_t num);
 void generate_admin_pass1(void);
-
+void check_config_pass(void);
 #endif
