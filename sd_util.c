@@ -1,9 +1,5 @@
 #include "sd_util.h"
 
-
-
-
-
 void segtext(char* text) {
 	SEGGER_RTT_printf(0, text);
 }

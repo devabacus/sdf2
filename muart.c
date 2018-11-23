@@ -25,7 +25,6 @@ int uart_weight_max = 0;
 float uart_weigth_f_max = 0;
 APP_TIMER_DEF(m_timer_muart);
 
-
 void time_check(void){
 			if(clock_counter != clock_counter_last){
 				clock_counter_last = clock_counter;
@@ -40,7 +39,6 @@ void flushIndexOfArray(uint8_t *buffer, uint8_t ind){
 }
 
 void weight_ble_msg(void){
-		
 		uint8_t weight_pref[] = "wt";
 		//weight_pref[0] = 'w';
 		uint16_t length = strlen((char*)uart_weight_ch);

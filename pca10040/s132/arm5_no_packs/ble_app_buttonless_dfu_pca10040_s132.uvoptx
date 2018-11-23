@@ -150,22 +150,6 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>65</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>231044</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\weight.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\nrf52832_xxaa\../../../weight.c\65</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
           <LineNumber>187</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>182362</Address>
@@ -180,55 +164,7 @@
           <Expression>\\nrf52832_xxaa\../../../weight.c\187</Expression>
         </Bp>
         <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>227</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>163566</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\ble_set.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\nrf52832_xxaa\../../../ble_set.c\227</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>226</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\ble_set.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>228</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\..\ble_set.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
+          <Number>1</Number>
           <Type>0</Type>
           <LineNumber>218</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -244,7 +180,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>6</Number>
+          <Number>2</Number>
           <Type>0</Type>
           <LineNumber>331</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -260,7 +196,7 @@
           <Expression></Expression>
         </Bp>
         <Bp>
-          <Number>7</Number>
+          <Number>3</Number>
           <Type>0</Type>
           <LineNumber>245</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -1348,7 +1284,7 @@
 
   <Group>
     <GroupName>Board Definition</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1368,7 +1304,7 @@
 
   <Group>
     <GroupName>Board Support</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1412,7 +1348,7 @@
 
   <Group>
     <GroupName>nRF_BLE</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1624,7 +1560,7 @@
 
   <Group>
     <GroupName>nRF_DFU</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1668,7 +1604,7 @@
 
   <Group>
     <GroupName>nRF_Drivers</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1760,7 +1696,7 @@
 
   <Group>
     <GroupName>nRF_Libraries</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2044,7 +1980,7 @@
 
   <Group>
     <GroupName>nRF_Log</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2144,7 +2080,7 @@
 
   <Group>
     <GroupName>nRF_Segger_RTT</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2232,7 +2168,7 @@
 
   <Group>
     <GroupName>nRF_BLE_Services</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

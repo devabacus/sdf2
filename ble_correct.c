@@ -15,7 +15,7 @@ uint8_t isdigit(char c);
 void remote_but_update(uint8_t but_num){
 		
 	corr_mode_button = but_num;
-	switch(corr_mode_button){
+ 	switch(corr_mode_button){
 		case 1:
 			corr_1_1 = cor_value;
 		break;
@@ -98,26 +98,26 @@ void ble_correct(uint8_t * ble_buffer)
 										
 										uint8_t cor_button_ble = atoi((char*)ble_buffer+1);
 										//конфигурация новичок. Допускается работа с телефона только первых 2-х кнопок
-										if(fds_pcb_config == 1 && (cor_button_ble == 1 || cor_button_ble == 4)){
+										if(fds_pcb_config == NEWBIE_CONFIG && (cor_button_ble == 1 || cor_button_ble == 4)){
 												defineCorDir(ble_buffer, 4);
 												allowed_corr = 1;
 											//  segtext("newbie and accept button\n");
 										} 
-										else if (fds_pcb_config == 1 && (cor_button_ble != 1 && cor_button_ble != 4)){
+										else if (fds_pcb_config == NEWBIE_CONFIG && (cor_button_ble != 1 && cor_button_ble != 4)){
 										//	  segtext("newbie and other button\n");		
 												ble_comm_send_handler("c1/0");
 										}
 										
-										else if (fds_pcb_config == 2 && (cor_button_ble > 0 && cor_button_ble <= 8 )){
+										else if (fds_pcb_config == PROFI_CONFIG && (cor_button_ble > 0 && cor_button_ble <= 8 )){
 												//segtext("profi and accept button\n");		
 												allowed_corr = 1;
 												
 										}
-										else if (fds_pcb_config == 2 && (cor_button_ble == 0 || cor_button_ble > 8 )){
+										else if (fds_pcb_config == PROFI_CONFIG && (cor_button_ble == 0 || cor_button_ble > 8 )){
 												segtext("profi and other button\n");		
 												ble_comm_send_handler("c2/0");
 										}
-										else if (fds_pcb_config == 3){
+										else if (fds_pcb_config == EXPERT_CONFIG){
 												allowed_corr = 1;
 												//segtext("expert's allowed all of the buttons\n");		
 										}

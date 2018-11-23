@@ -33,7 +33,6 @@ void change_max_counters(uint8_t param, uint16_t value){
 			cur_hr_max = value;
 			fds_update_value(&cur_hr_max, file_id_c, fds_rk_cur_cor_max+1);
 			
-			
 		} else if (param == 3){ //cur_hr_max
 			cur_res_max = value;
 			fds_update_value(&cur_res_max, file_id_c, fds_rk_cur_cor_max+2);	
@@ -184,6 +183,7 @@ void ble_set(uint8_t *ble_set_buffer){
 					change_max_counters(set_value, set_value2);
 				break;
 				
+				// увеличение счетчика записи в архив и нажатий кнопок громкости
 				case OPTION_COUNTER:
 					//archive_counter
 					if(set_value == 1){

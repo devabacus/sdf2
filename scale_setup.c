@@ -42,9 +42,6 @@ uint8_t  tens		 				  		= 0;
 uint8_t  ones		 							= 0;
 uint32_t current_life_counter = 0;
 
-
-
-
 //APP_TIMER_DEF(m_util_timer_id);
 
 void fail_attempt(void)
@@ -95,26 +92,24 @@ void check_config_pass(void){
 				if(activate_attempts < ACTIVATE_ATTEMPTS_MAX){
 						if (test_activate_code == config_pass2){
 							ble_comm_send_handler("profi activated");
-							fds_pcb_config = 2;
+							fds_pcb_config = PROFI_CONFIG;
 							//ble_comm_send_handler("c1/2");
 						}
 						else if (test_activate_code == config_pass3){
 							ble_comm_send_handler("expert activated");
-							fds_pcb_config = 3;
+							fds_pcb_config = EXPERT_CONFIG;
 						//	ble_comm_send_handler("c1/3");
 						}
 						else{
 								fail_attempt();
 						}
 						fds_update_value(&fds_pcb_config, file_id_c, fds_rk_pcb_config);
-				}else {
+				}	else {
 								ble_comm_send_handler("attempts is over");
 								rgb_set(0,0,50,5,500);
 						}
 						test_activate_code = 0;
 }
-
-
 
 void check_pass(void){
 					  

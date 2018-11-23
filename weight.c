@@ -102,7 +102,7 @@ void find_average_in_array(uint32_t* array, uint8_t size)
 						//SEGGER_RTT_printf(0, "arr[%d] %d\n\r",i, adc_array[i]);
 					}
 					//segtext("adc_array_filtered\n");
-					print_array(adc_array_filtered, AVERAGE_ADC_TIMES-NUM_EXCEED_MEMBERS);
+					//print_array(adc_array_filtered, AVERAGE_ADC_TIMES-NUM_EXCEED_MEMBERS);
 					//SEGGER_RTT_printf(0, "average_adc = %d; size-num = %d\n", average_adc, (size-NUM_EXCEED_MEMBERS));
 					average_adc_float = (float)average_adc/(size-NUM_EXCEED_MEMBERS);
 					average_adc = (int)(average_adc_float + (float)0.5);
@@ -387,7 +387,7 @@ void weight_define(void){
 											weight_stable_arr[weight_stable_count] = weight;
 											weight_stable_count++;
 										  if(weight_stable_count >= weight_count_for_stable){
-												print_array_float(weight_stable_arr, 10);
+												//print_array_float(weight_stable_arr, 10);
 												start_stable_find = 0;
 												weight_stable_count = 0;
 												segtext("---------------------\n");

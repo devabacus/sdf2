@@ -12,7 +12,9 @@
 
 
 
-
+#define NEWBIE_CONFIG 	1
+#define PROFI_CONFIG	2 	
+#define EXPERT_CONFIG	3
 
 
 #define SCALE_600   					1   

@@ -21,17 +21,12 @@
 #define APP_TIMER_PRESCALER     0
 #define APP_TIMER_OP_QUEUE_SIZE 2
 
-
-
-
 #define RED 		1
 #define GREEN 	2
 #define BLUE  	3
 #define WHITE   4
 #define PURPLE  5
 #define YELLOW  6
-
-
 
 #define RED_FIRE 		2
 #define GREEN_FIRE 	3

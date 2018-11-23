@@ -106,10 +106,6 @@ uint32_t Weighing(void)
 				
 			#endif
 				
-			
-				
-				
-				
 				#ifndef ADC1230
 				//additional pulses for 64 gain (look at the datasheet's table)
 		// 25		
