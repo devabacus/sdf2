@@ -11,8 +11,8 @@
 uint32_t weight_float = 0;
 char data_array[20];
 uint32_t startWeightIndex = 3;
-uint32_t endWeightIndex 	 = 8;
-uint32_t uart_ble_mode 		 = 0;
+uint32_t endWeightIndex 	 = 15;
+uint32_t uart_ble_mode 		 = 1;
 uint16_t clock_counter_last = 0;
 uint16_t time_changed = 0;
 
@@ -147,12 +147,16 @@ void uart_event_handle(app_uart_evt_t * p_event)
     {
 			
         case APP_UART_DATA_READY:
-							
+							//blink by led when data is receiving
+							if(uart_ble_mode) {
+							 nrf_gpio_pin_toggle(17);
+							}
 							//nrf_delay_ms(100);
 							app_uart_get((uint8_t*)&data_array[index]);
 							index++;
 							if (data_array[index - 1] == '\n'){
 									define_uart_weight();
+									
 									//segnum1(uart_weight);
 								//send directly from uart to ble without changings
 									send_uart_msg();
