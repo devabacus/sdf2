@@ -290,6 +290,8 @@ void gpio_init()
 	nrf_gpio_cfg_output(17);
 	nrf_gpio_cfg_output(15);
 	nrf_gpio_pin_clear(15);
+	//nrf_gpio_cfg_output(31);
+	
 }
 
 /**@brief Handler for shutdown preparation.

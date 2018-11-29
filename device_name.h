@@ -10,21 +10,21 @@
 
 //Для прошивки рабочей версии строка ниже должна быть зеленой
 
-#define DEBUG_MODE 1
+//#define DEBUG_MODE 1
 
 
 ////////////////////////////////////////////////////////
 #ifndef DEBUG_MODE
-#define DEVICE_NAME                     "sdr_5.4.6"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "sdr_5.4.7"                         /**< Name of device. Will be included in the advertising data. */
 #endif
 
 #ifdef DEBUG_MODE
-#define DEVICE_NAME											"debug_5_4_6"
+#define DEVICE_NAME											"debug_5_4_7"
 #endif
+
 //728123108
 //721113101
 //5_4_4 change pin for tx
-
 
 extern uint8_t device_name[17];
 extern uint8_t activation_code[9];

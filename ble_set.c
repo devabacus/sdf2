@@ -101,6 +101,8 @@ void ble_set(uint8_t *ble_set_buffer){
 				
 				case SHOWADC:
 						ble_settings.showADC = set_value;
+						SEGGER_RTT_printf(0, "ble_settings.showADC = %d\n", ble_settings.showADC);
+						
 				break;
 				
 				case UART:
@@ -232,7 +234,17 @@ void ble_set(uint8_t *ble_set_buffer){
 				
 				case CAL_LOAD_WEIGHT:
 					cal_weight = atoi((char*) ble_set_buffer + slashIndex);
-
-				
+				break;
+//				case 17:
+//					if(set_value == 0){
+//						nrf_gpio_pin_clear(31);
+//						nrf_gpio_pin_clear(17);
+//					} else if (set_value == 1){
+//						nrf_gpio_pin_set(31);
+//						nrf_gpio_pin_set(17);
+//					}
+//					//nrf_gpio_pin_toggle(31);
+//				//nrf_gpio_pin_toggle(17);
+//				break;
 }
 }
