@@ -419,12 +419,27 @@ void cal_load(void) // define adc_value for 10 discretes
 }
 
 void define_corr_on(void)
-{
+{	
 	start_average_adc = 3;
 	start_timer_02s();
 	segtext("define_corr_on\n");
 	
 }
+
+void define_corr_on_uart(void)
+{
+	if(uart_weight > 0)
+	{
+		cal_turn_on = uart_weight;
+		fds_uart_automode = 1;
+		fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
+		fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
+		SEGGER_RTT_printf(0, "uart turn_on = %d\n\r", cal_turn_on);
+		rgb_set(0, 50, 0, 5, 500);
+	}
+	
+}
+
 
 void init_cal_values(void)
 {

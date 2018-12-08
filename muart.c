@@ -22,7 +22,11 @@ char uart_weight_ch[10];
 float uart_weight_f_last = 0; 
 int uart_weight_last	 = 0;
 int uart_weight_max = 0;
+//пропуски блинка 17 светодиода для индикации получения веса с uart
+uint8_t counter_uart_blink = 0;
 float uart_weigth_f_max = 0;
+// в эту переменную пишем либо флоат либо инт переменной uart_weight
+float uart_weight1 = 0;
 APP_TIMER_DEF(m_timer_muart);
 
 void time_check(void){
@@ -44,9 +48,9 @@ void weight_ble_msg(void){
 		uint16_t length = strlen((char*)uart_weight_ch);
 		memcpy(weight_pref+2, uart_weight_ch, length);
 		ble_comm_send_handler(weight_pref);
-		segtext(weight_pref);
-		segnum1(time_changed);
-			segtext("\n");
+		//segtext(weight_pref);
+		//segnum1(time_changed);
+		//	segtext("\n");
 }
 
 void send_uart_msg(void){
@@ -66,7 +70,7 @@ void send_uart_msg(void){
 
 void define_uart_weight(void){
 	
-	
+	// если отправили s8/2 через телефон то weight_float = 1
 	if(!weight_float){
 		flushIndexOfArray(data_array, endWeightIndex);
 		uart_weight = atoi(data_array+startWeightIndex);		
@@ -149,7 +153,22 @@ void uart_event_handle(app_uart_evt_t * p_event)
         case APP_UART_DATA_READY:
 							//blink by led when data is receiving
 							if(uart_ble_mode) {
-							 nrf_gpio_pin_toggle(17);
+								if(uart_weight > 0){
+									
+									if(counter_uart_blink == 100){
+									//	segtextn("blink toggle");
+										nrf_gpio_pin_toggle(17);
+										counter_uart_blink = 0;
+									}
+									
+									counter_uart_blink++;
+								//	SEGGER_RTT_printf(0, "counter_uart_blink = %d\n", counter_uart_blink);
+								}
+								else if(uart_weight == 0)
+								{
+									nrf_gpio_pin_toggle(17);
+								}
+							 
 							}
 							//nrf_delay_ms(100);
 							app_uart_get((uint8_t*)&data_array[index]);
@@ -209,9 +228,3 @@ void uart_init(void)
                        err_code);
     APP_ERROR_CHECK(err_code);
 }
-
-
-
-
-
-

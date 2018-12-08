@@ -48,4 +48,5 @@ void find_average_adc(void);
 void init_cal_values(void);
 void set_weight(uint16_t weight_value);
 void define_corr_on(void);
+void define_corr_on_uart(void);
 #endif

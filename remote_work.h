@@ -3,6 +3,7 @@
 
 #define COR_AUTO	 1
 #define COR_MANUAL 2
+#define COR_AUTO_PORT 3
 #define COR_MODE
 
 

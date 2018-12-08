@@ -15,11 +15,11 @@
 
 ////////////////////////////////////////////////////////
 #ifndef DEBUG_MODE
-#define DEVICE_NAME                     "sdr_5.4.7"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "sdr_5.4.8"                         /**< Name of device. Will be included in the advertising data. */
 #endif
 
 #ifdef DEBUG_MODE
-#define DEVICE_NAME											"debug_5_4_7"
+#define DEVICE_NAME											"debug_5_4_8"
 #endif
 
 //728123108

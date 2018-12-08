@@ -43,11 +43,14 @@ void init_corr_values(void)
 void cor_auto_handle(void)
 {
 	//если кнопки находятся в рабочем режиме, установлен порог и нажата кнопка корректировки
+	
+	
 	if((remote_mode == WORK_MODE)&&(cal_turn_on > 0)&&(cor_value_auto))
 	{
 		//SEGGER_RTT_printf(0, "adc_value = %d\n", adc_value);
 		//если ацп изменяется в одну сторону то считаем сколько раз
 		//и пишем в adc_change_counter. При смене направления счетчик сбрасывается
+				
 		if(adc_value != adc_value_last)
 			{
 			
@@ -112,6 +115,9 @@ void cor_auto_handle(void)
 					
 			  }
 			
+				
+				
+			
 				if(adc_value_lowest)
 				{
 						if((adc_value > (adc_value_lowest*10)) && cor_set)
@@ -147,74 +153,102 @@ void cor_auto_handle(void)
 ////								}
 //					
 //					}
-				//включение корректировки
-				if((adc_monoton_change) && (adc_value > cal_turn_on) && ((!cor_set)|| (last_cor_value_auto != cor_value_auto)))
+				//если авторежим работает с порта
+				if(fds_uart_automode)
+
+				{
+					if((uart_weight > cal_turn_on) && (!cor_set || (last_cor_value_auto != cor_value_auto)))
 					{
-						// получаем значение ацп настроенной кнопки
-						adc_over = 0;
-						adc_value_lowest = 0;
-						adc_cor = adc_vals_ar[current_but-1];
-						SEGGER_RTT_printf(0, "adc_cor = %d\n", adc_cor);
-						if(cal_turn_on > adc_cor)
-							{
-								//определяем выключение корректировки
-								//cal_turn_off = (cal_turn_on - adc_cor-adc_cor*20/100);
+							cor_set = 1;
+							last_cor_value_auto = cor_value_auto;
+							correct_value(cor_value_auto);
+							//SEGGER_RTT_printf(0, "uart_weight = %d, corr %d set\n\r", uart_weight, cor_value_auto);
+					}
+					
+					else if ((uart_weight < cal_turn_on) && uart_weight)
+					{
+							correct(0,0,0);
+							cor_set = 0;
+							SEGGER_RTT_printf(0, "uart_weight = %d, corr %d set\n\r", uart_weight, cor_value_auto);
+						
+					}
+				
+				}
+				
+				else 
+				{
+								if((adc_monoton_change) && (adc_value > cal_turn_on) && ((!cor_set)|| (last_cor_value_auto != cor_value_auto)))
+								{
+									// получаем значение ацп настроенной кнопки
+									adc_over = 0;
+									adc_value_lowest = 0;
+									adc_cor = adc_vals_ar[current_but-1];
+									SEGGER_RTT_printf(0, "adc_cor = %d\n", adc_cor);
+									if(cal_turn_on > adc_cor)
+										{
+											//определяем выключение корректировки
+											//cal_turn_off = (cal_turn_on - adc_cor-adc_cor*20/100);
+											
+										} 
+										
+										SEGGER_RTT_printf(0, "-----------------ON-------------------\n");
+										
+										SEGGER_RTT_printf(0, "adc_value = %d, cal_turn_on = %d, adc_change_counter = %d, adc_direct = %d\n", adc_value, cal_turn_on, adc_change_counter, adc_direct);
+										//SEGGER_RTT_printf(0, "adc_over = %d, adc_value_lowest = %d, adc_value = %d, direct = %d, counter = %d, adc_value_max = %d\n", adc_over, adc_value_lowest, adc_value, adc_direct, adc_change_counter, adc_value_max);
+									//SEGGER_RTT_printf(0, "cal_turn_on = %d\n", cal_turn_on);
+									//SEGGER_RTT_printf(0, "calc_turn_off = %d\n", cal_turn_off);
+									
+									last_cor_value_auto = cor_value_auto;
+									correct_value(cor_value_auto);
+									if(cur_comp_cor > 0 && cor_value_auto > 2000)
+										{
+											correct_value(cur_comp_cor);
+										}
+									cor_set = 1;
+									
+									SEGGER_RTT_printf(0, "adc_value = %d, corr %d set\n\r", adc_value, cor_value_auto);
+									//
+								}
 								
-							} 
-							
-							SEGGER_RTT_printf(0, "-----------------ON-------------------\n");
-							
-							SEGGER_RTT_printf(0, "adc_value = %d, cal_turn_on = %d, adc_change_counter = %d, adc_direct = %d\n", adc_value, cal_turn_on, adc_change_counter, adc_direct);
-							//SEGGER_RTT_printf(0, "adc_over = %d, adc_value_lowest = %d, adc_value = %d, direct = %d, counter = %d, adc_value_max = %d\n", adc_over, adc_value_lowest, adc_value, adc_direct, adc_change_counter, adc_value_max);
-						//SEGGER_RTT_printf(0, "cal_turn_on = %d\n", cal_turn_on);
-						//SEGGER_RTT_printf(0, "calc_turn_off = %d\n", cal_turn_off);
-						
-						last_cor_value_auto = cor_value_auto;
-						correct_value(cor_value_auto);
-						if(cur_comp_cor > 0 && cor_value_auto > 2000)
-							{
-								correct_value(cur_comp_cor);
-							}
-						cor_set = 1;
-						
-						SEGGER_RTT_printf(0, "adc_value = %d, corr %d set\n\r", adc_value, cor_value_auto);
-						//
-					}
-				    else if (((adc_value < cal_turn_off) || (adc_over>3)) && cor_set)  // если возникне ошибка тоже нужно сбросить adc_value > 10000000
-					{
-							SEGGER_RTT_printf(0, "-----------------OFF-------------------\n");
-							SEGGER_RTT_printf(0, "adc_value = %d, cal_turn_off = %d, adc_over = %d, adc_change_counter = %d, direct = %d\n", adc_value, cal_turn_on, adc_over, adc_change_counter, adc_direct);		
-						//SEGGER_RTT_printf(0, "adc_over = %d, adc_value_lowest = %d, adc_value = %d, direct = %d, counter = %d\n", adc_over, adc_value_lowest, adc_value, adc_direct, adc_change_counter);
-			//			if(current_adc_value >= adc_value)
-			//			{
-			//				unload_weight = 1;
-			//				current_adc_value = adc_value;
-			//			}
-//						if(adc_value < cal_zero_value)
-//							{
-//								SEGGER_RTT_printf(0, "adc_value < cal_zero_value\n");
-//							}
-//						SEGGER_RTT_printf(0, "cal_turn_on = %d\n", cal_turn_on);
-//						SEGGER_RTT_printf(0, "calc_turn_off = %d\n", cal_turn_off);
-			//			else 
-			//			{
-			//				unload_weight = 0;
-			//			}
-						SEGGER_RTT_printf(0, "reset\n");
-							
-						if(num_cor_buts == 9){
-							corr_counter_inc();
+									else if (((adc_value < cal_turn_off) || (adc_over>3)) && cor_set)  // если возникне ошибка тоже нужно сбросить adc_value > 10000000
+									{
+										SEGGER_RTT_printf(0, "-----------------OFF-------------------\n");
+										SEGGER_RTT_printf(0, "adc_value = %d, cal_turn_off = %d, adc_over = %d, adc_change_counter = %d, direct = %d\n", adc_value, cal_turn_on, adc_over, adc_change_counter, adc_direct);		
+									//SEGGER_RTT_printf(0, "adc_over = %d, adc_value_lowest = %d, adc_value = %d, direct = %d, counter = %d\n", adc_over, adc_value_lowest, adc_value, adc_direct, adc_change_counter);
+						//			if(current_adc_value >= adc_value)
+						//			{
+						//				unload_weight = 1;
+						//				current_adc_value = adc_value;
+						//			}
+			//						if(adc_value < cal_zero_value)
+			//							{
+			//								SEGGER_RTT_printf(0, "adc_value < cal_zero_value\n");
+			//							}
+			//						SEGGER_RTT_printf(0, "cal_turn_on = %d\n", cal_turn_on);
+			//						SEGGER_RTT_printf(0, "calc_turn_off = %d\n", cal_turn_off);
+						//			else 
+						//			{
+						//				unload_weight = 0;
+						//			}
+									SEGGER_RTT_printf(0, "reset\n");
+										
+									if(num_cor_buts == 9){
+										corr_counter_inc();
+									}
+									correct(0,0,0);
+									adc_monoton_change = 0;
+									adc_value_last = 0;
+									cor_set = 0;
+									adc_over = 0;
+									adc_value_max = 0;
+									SEGGER_RTT_printf(0, "adc_value = %d, corr %d reset\n\r", adc_value, cor_value_auto);
+									ble_comm_send_handler("n2/0");
+									nrf_delay_ms(1000);
+									}
+				
 						}
-						correct(0,0,0);
-						adc_monoton_change = 0;
-						adc_value_last = 0;
-						cor_set = 0;
-						adc_over = 0;
-						adc_value_max = 0;
-						SEGGER_RTT_printf(0, "adc_value = %d, corr %d reset\n\r", adc_value, cor_value_auto);
-						ble_comm_send_handler("n2/0");
-						nrf_delay_ms(1000);
-					}
+				
+			
 			}
 }
 		

@@ -527,13 +527,38 @@ void scale_setup(void)
 				
 				else if (pin_in3_is_release)
 					{
+						
 						if((adc_value - cal_zero_value)>100)
 						{
 							define_corr_on();
 							rgb_set(0, 0, 50, 1, 1000);
+							fds_uart_automode = 0;
+							fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
 							//remote_mode = WORK_MODE;
 						}
 					}
+					
+					
+					else if (pin_in3_long_press){
+						if(uart_weight > 0)
+						{
+							cal_turn_on = uart_weight;
+							fds_uart_automode = 1;
+							fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
+							fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
+							SEGGER_RTT_printf(0, "uart turn_on = %d\n\r", cal_turn_on);
+							rgb_set(0, 50, 0, 5, 500);
+						}
+						else {
+							rgb_set(50, 0, 0, 5, 500);
+							fds_uart_automode = 0;
+							cal_turn_on = 0;
+							fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
+							fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
+
+						}
+					}
+					
 					
 				else if (pin_in4_long_press)
 						{
@@ -912,8 +937,7 @@ void scale_setup(void)
 						fds_update_value(&cor_feedback, file_id, fds_rk_cor_feedback);
 						fds_update_value(&time_feedback, file_id, fds_rk_time_feedback);
 						remote_mode = FACTORY_MODE;
-						rgb_set(50, 0, 0, 1, 1000);
-						rgb_set(50, 0, 50, 1, 1000);
+						rgb_set(0, 0, 50, 5, 300);
 						SEGGER_RTT_printf(0, "FACTORY_MODE\r\n");
 					}
 					
@@ -944,7 +968,10 @@ void scale_setup(void)
 					{
 //						delete_fds();
 //						delete_fds_c();
-						rgb_set(50, 50, 50, 2, 3000);
+						fds_is_values_init = 0;
+						fds_update_value(&fds_is_values_init, file_id, fds_rk_init);
+
+						rgb_set(50, 50, 50, 5, 500);
 					}
 					
 					

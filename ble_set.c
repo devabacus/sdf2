@@ -81,6 +81,7 @@ void set_send_cor_mode(uint8_t set_value){
 		correct_mode = set_value;
 		if(set_value == 1) ble_comm_send_handler("n3/1");
 		else if (set_value == 2) ble_comm_send_handler("n3/2");
+		else if (set_value == 3) ble_comm_send_handler ("n3/3");
 }
 
 void ble_set(uint8_t *ble_set_buffer){
@@ -103,6 +104,14 @@ void ble_set(uint8_t *ble_set_buffer){
 						ble_settings.showADC = set_value;
 						SEGGER_RTT_printf(0, "ble_settings.showADC = %d\n", ble_settings.showADC);
 						
+				break;
+								
+				case ADCBIT:
+						ble_settings.adcBitForCut = set_value;
+				break;
+				
+				case AUTOCOR:
+						set_send_cor_mode(set_value);
 				break;
 				
 				case UART:
@@ -147,13 +156,7 @@ void ble_set(uint8_t *ble_set_buffer){
 						fds_update_value(&uart_ble_mode, file_id, fds_rk_uart_ble_mode);
 				break;
 				
-				case ADCBIT:
-						ble_settings.adcBitForCut = set_value;
-				break;
 				
-				case AUTOCOR:
-						set_send_cor_mode(set_value);
-				break;
 				
 				case SAVEBUT:
 					//but_ble = set_value;
@@ -163,7 +166,19 @@ void ble_set(uint8_t *ble_set_buffer){
 				
 				case CALIBRATION:
 					if(set_value == 1) cal_unload();
-					else if (set_value == 3) define_corr_on();
+					else if (set_value == 3) 
+						{
+								if(uart_weight > 0)
+								{
+									define_corr_on_uart();
+								}
+								else 
+								{
+									define_corr_on();
+								}
+   					}
+					
+					
 					else if (set_value == 2) {
 						SEGGER_RTT_printf(0, "num_of_discrete = %d\n", set_value2);
 						cal_load();
@@ -235,16 +250,16 @@ void ble_set(uint8_t *ble_set_buffer){
 				case CAL_LOAD_WEIGHT:
 					cal_weight = atoi((char*) ble_set_buffer + slashIndex);
 				break;
-//				case 17:
-//					if(set_value == 0){
-//						nrf_gpio_pin_clear(31);
-//						nrf_gpio_pin_clear(17);
-//					} else if (set_value == 1){
-//						nrf_gpio_pin_set(31);
-//						nrf_gpio_pin_set(17);
-//					}
-//					//nrf_gpio_pin_toggle(31);
-//				//nrf_gpio_pin_toggle(17);
-//				break;
+				case 17:
+					if(set_value == 0){
+						nrf_gpio_pin_clear(15);
+						nrf_gpio_pin_clear(17);
+					} else if (set_value == 1){
+						nrf_gpio_pin_set(15);
+						nrf_gpio_pin_set(17);
+					}
+					//nrf_gpio_pin_toggle(31);
+				//nrf_gpio_pin_toggle(17);
+				break;
 }
 }

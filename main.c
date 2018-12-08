@@ -252,7 +252,7 @@ void fds_get_init_data()
 	fds_get_data(&fds_archive_counter, file_id_c, fds_rk_archive_counter);
 	fds_get_data(&fds_option_status, file_id_c, fds_rk_option_status);
 	fds_get_data(&fds_pcb_config, file_id_c, fds_rk_pcb_config);
-	
+	fds_get_data(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
 	
 	fds_get_data(&fds_clear_counter, file_id_c, fds_rk_clear_counter);
 	
@@ -991,6 +991,15 @@ static void power_management_init(void)
     APP_ERROR_CHECK(err_code);
 }
 
+
+static void power_manage(void)
+{
+    ret_code_t err_code = sd_app_evt_wait();
+    APP_ERROR_CHECK(err_code);
+}
+
+
+
 /**@brief Function for application main entry.
  */
 int main(void)
@@ -1036,7 +1045,7 @@ int main(void)
 		sd_ble_gap_tx_power_set(4);
 		check_for_old_board();
 		//SEGGER_RTT_printf(0, "start_weight_index = %d\n", startWeightIndex);
-		
+		SEGGER_RTT_printf(0, "fds_uart_automode = %d, cal_turn_on = %d\n", fds_uart_automode, cal_turn_on);
 		segtext("fds_option_status = ");
 		segnum1(fds_option_status);
 				
@@ -1047,6 +1056,7 @@ int main(void)
 						{
 							cor_auto_handle();
 						}
+					power_manage();
 			}
 
 }
