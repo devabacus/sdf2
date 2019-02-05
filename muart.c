@@ -10,8 +10,8 @@
 
 uint32_t weight_float = 0;
 char data_array[20];
-uint32_t startWeightIndex = 3;
-uint32_t endWeightIndex 	 = 15;
+uint32_t startWeightIndex = 2;
+uint32_t endWeightIndex 	 = 11;
 uint32_t uart_ble_mode 		 = 1;
 uint16_t clock_counter_last = 0;
 uint16_t time_changed = 0;

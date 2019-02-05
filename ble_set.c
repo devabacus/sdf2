@@ -70,6 +70,26 @@ void reset_counters(uint8_t ch_num){
 					fds_update_value(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
 					ble_comm_send_handler("ph res");
 				break;
+				
+				case 5:
+					fds_archive_counter = 0;
+					fds_option_status |= (0x0UL << OPTION_ARCHIVE_Pos);
+					fds_update_value(&fds_option_status, file_id_c, fds_rk_option_status);
+					ble_comm_send_handler("arch res");
+				break;
+				
+				case 6:
+					fds_volume_counter = 0;
+					fds_option_status |= (0x0UL << OPTION_VOLUME_Pos);
+					fds_update_value(&fds_option_status, file_id_c, fds_rk_option_status);
+				ble_comm_send_handler("vol res");
+				break;
+				
+				case 7:
+					activate_status = 1;
+					fds_update_value(&activate_status, file_id_c, fds_rk_activate_status);
+			   	ble_comm_send_handler("demo res");
+				break;
 
 			}
 										
@@ -222,7 +242,7 @@ void ble_set(uint8_t *ble_set_buffer){
 					else if (set_value == 2){
 						fds_archive_counter++;
 								if((fds_archive_counter > ARCHIVE_DEMO_COUNTER_MAX) && (!(fds_option_status & (OPTION_ARCHIVE_Msk)))){
-										fds_option_status |= (0x0UL << OPTION_VOLUME_Pos);
+										fds_option_status |= (0x0UL << OPTION_ARCHIVE_Pos);
 										fds_update_value(&fds_option_status, file_id_c, fds_rk_option_status);
 										ble_comm_send_handler("o1/0");	
 								} else {

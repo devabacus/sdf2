@@ -277,7 +277,6 @@ static void m_clock_timer_init(void)
 	app_timer_start(m_clock_id, APP_TIMER_TICKS(TIMER_DEBUG_MS), NULL);
 	#else
 	app_timer_start(m_clock_id, APP_TIMER_TICKS(TIMER_PROD_MS), NULL);
-	
 	#endif
 	
 }

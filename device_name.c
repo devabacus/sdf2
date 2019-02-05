@@ -38,18 +38,10 @@ void demo_define(void){
 			demo4 = activation_num * activation_code_mac[3] + activation_code_mac[1];
 			demo5 = activation_num * activation_code_mac[4] + activation_code_mac[0];
 			demo6 = activation_num * activation_code_mac[5] + activation_code_mac[5];
-			
-
-		
-		
 				fds_mac_init = 1;
 //generate_admin_pass1();
 		//segnum1(admin);
-		
 }
-
-
-
 
 void name_convert(void) {
 	

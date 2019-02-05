@@ -72,7 +72,7 @@ void reset_activate()
 
 void test_expired(void)
 {
-	if(activate_status == DEMO)
+	if(activate_status <= DEMO)
 	{
 		if(corr_counter >= CORRECT_COUNT_MAX_DEMO)
 		{
@@ -454,12 +454,17 @@ void in_pin_handler2(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 			reset_long_press_flags();
 			app_timer_stop(m_timer_remote02);
 			button_event = 1;
-			buttons_handle();
+			if(fds_pcb_config != NEWBIE_CONFIG){
+				buttons_handle();
+			}
+			else
+			{
+				segtext("only first button");
+				rgb_set(50, 0, 0, 3, 1000);
+			}
 			buttons_handle_setup();
 			scale_setup();
 		}
-		
-
 }
 
 void in_pin_handler3(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
@@ -483,7 +488,14 @@ void in_pin_handler3(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 			reset_long_press_flags();
 			app_timer_stop(m_timer_remote02);
 			button_event = 1;
-			buttons_handle();
+			if(fds_pcb_config != NEWBIE_CONFIG){
+				buttons_handle();
+			}
+			else
+			{
+				rgb_set(50, 0, 0, 3, 1000);
+				segtext("only first button");
+			}
 			buttons_handle_setup();
 			scale_setup();
 		}
@@ -555,9 +567,8 @@ void nrf_define_test_pin(void){
 }
 
 
-void nrf_gpiote(void)
-	
 
+void nrf_gpiote(void)
 	{
 	//	nrf_drv_gpiote_init();
 		

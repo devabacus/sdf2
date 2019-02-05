@@ -7,7 +7,13 @@ uint8_t ble_correct_active = 0;
 uint32_t cor_value_save_ble = 0;
 uint32_t phone_cor_counter = 0;
 uint8_t first_time_open_set = 0;
-uint8_t allowed_corr  			= 0;
+
+//#ifdef CHECK_CONFIG
+//	uint8_t allowed_corr  			= 0;
+//#else
+//	uint8_t allowed_corr  			= 1;
+//#endif
+uint8_t allowed_corr = 0;
 
 
 uint8_t isdigit(char c);
@@ -100,17 +106,18 @@ void ble_correct(uint8_t * ble_buffer)
 										//конфигурация новичок. Допускается работа с телефона только первых 2-х кнопок
 										if(fds_pcb_config == NEWBIE_CONFIG && (cor_button_ble == 1 || cor_button_ble == 4)){
 												defineCorDir(ble_buffer, 4);
+												
 												allowed_corr = 1;
-											//  segtext("newbie and accept button\n");
+											  segtext("newbie and accept button\n");
 										} 
 										else if (fds_pcb_config == NEWBIE_CONFIG && (cor_button_ble != 1 && cor_button_ble != 4)){
-										//	  segtext("newbie and other button\n");		
+										    //segtext("newbie and other button\n");		
 												ble_comm_send_handler("c1/0");
 										}
 										
 										else if (fds_pcb_config == PROFI_CONFIG && (cor_button_ble > 0 && cor_button_ble <= 8 )){
-												//segtext("profi and accept button\n");		
-												allowed_corr = 1;
+												 //segtext("profi and accept button\n");		
+											  	allowed_corr = 1;
 												
 										}
 										else if (fds_pcb_config == PROFI_CONFIG && (cor_button_ble == 0 || cor_button_ble > 8 )){
@@ -135,7 +142,17 @@ void ble_correct(uint8_t * ble_buffer)
 											
 											if(cor_button_ble < 10) defineCorDir(ble_buffer, 4);
 											else defineCorDir(ble_buffer, 5);
+											
+//											#ifdef CHECK_CONFIG
+//												uint8_t allowed_corr  			= 0;
+//											#else
+//												uint8_t allowed_corr  			= 1;
+//											#endif
+											
+											
+
 											allowed_corr = 0;
+											
 										} 
 										
 										else {
@@ -207,8 +224,6 @@ void ble_correct(uint8_t * ble_buffer)
 								correct_value(cor_value);
 								rgb_set(0, 50, 0, 1, 500);
 								//if(isButton) zero(15, 100);
-								
-								
 							} else if(correct_mode == COR_AUTO){
 									if(cor_value > 0){
 											cor_value_auto = cor_value;

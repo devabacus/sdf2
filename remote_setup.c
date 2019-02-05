@@ -57,7 +57,8 @@ void save_corr_values(void)
 				fds_update_value(&corr_3_2, file_id, fds_rk_cor1+7);
 				fds_update_value(&corr_3_3, file_id, fds_rk_cor1+8);
 		}
-		save_adc_cor_value();
+		// иначе компенсация не сохраняется
+		//save_adc_cor_value();
 }
 
 

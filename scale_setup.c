@@ -96,8 +96,8 @@ void check_config_pass(void){
 							//ble_comm_send_handler("c1/2");
 						}
 						else if (test_activate_code == config_pass3){
-							ble_comm_send_handler("expert activated");
-							fds_pcb_config = EXPERT_CONFIG;
+							ble_comm_send_handler("newbie activated");
+							fds_pcb_config = NEWBIE_CONFIG;
 						//	ble_comm_send_handler("c1/3");
 						}
 						else{
@@ -918,7 +918,15 @@ void scale_setup(void)
 					{
 						if(num_cor_buts == 3)
 						{
-							change_num_cor_but(9);
+							if(fds_pcb_config == EXPERT_CONFIG)
+								{
+									change_num_cor_but(9);
+								}
+							else
+								{
+									rgb_set(50, 0, 0, 3, 1000);
+									segtext("only expert allowed");
+								}
 							//rgb_set(0,50,0,2,1000);
 						}
 						else if (num_cor_buts == 9)
@@ -960,8 +968,6 @@ void scale_setup(void)
 							segtext("reset attempts\n");
 							rgb_set(0,50,0,3,500);
 						}
-						
-						
 					}
 					
 					if(pin_in2_long_press)
