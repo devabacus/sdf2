@@ -93,8 +93,6 @@ void define_uart_weight(void){
 				uart_weight_max = 0;
 			}
 			
-			
-			
 		beginPacket();
 		lora_write(uart_weight_ch, strlen(uart_weight_ch));
 		endPacket();

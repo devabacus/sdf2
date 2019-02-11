@@ -1134,7 +1134,6 @@ int main(void)
 		SEGGER_RTT_printf(0, "fds_uart_automode = %d, cal_turn_on = %d\n", fds_uart_automode, cal_turn_on);
 		segtext("fds_option_status = ");
 		segnum1(fds_option_status);
-		
 			
 		
 				
