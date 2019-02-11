@@ -4,7 +4,7 @@
 #include "nrf_gpio.h"
 #include "nrf_drv_timer.h"
 #include "nrf_drv_ppi.h"
-
+#include "LoRa.h"
 
 #define UART_TIME_SEND 1
 
@@ -44,10 +44,15 @@ void flushIndexOfArray(uint8_t *buffer, uint8_t ind){
 
 void weight_ble_msg(void){
 		uint8_t weight_pref[] = "wt";
+		//uint8_t weight_pref[] = "";
 		//weight_pref[0] = 'w';
 		uint16_t length = strlen((char*)uart_weight_ch);
 		memcpy(weight_pref+2, uart_weight_ch, length);
 		ble_comm_send_handler(weight_pref);
+		//segtext("i");
+		//segtext(weight_pref);
+		//segtext("ivan\n");
+	
 		//segtext(weight_pref);
 		//segnum1(time_changed);
 		//	segtext("\n");
@@ -58,6 +63,7 @@ void send_uart_msg(void){
 	if(uart_ble_mode == 1){
 		segtext(data_array);
 		ble_comm_send_handler(data_array);
+		
 		
 	} else if (uart_ble_mode == 2){
 		segtext(data_array + startWeightIndex);
@@ -86,9 +92,18 @@ void define_uart_weight(void){
 //				SEGGER_RTT_printf(0, "uart_weight_max = %d\n", uart_weight_max);
 				uart_weight_max = 0;
 			}
-				
+			
+			
+			
+		beginPacket();
+		lora_write(uart_weight_ch, strlen(uart_weight_ch));
+		endPacket();
 		segtext(uart_weight_ch);
-			segtext("\n");
+		segtext("\n");
+			
+			
+			
+			
 		//ble_comm_send_handler((uint8_t*)uart_weight_ch);
 			weight_ble_msg();
 		} else {
@@ -116,7 +131,17 @@ void define_uart_weight(void){
 			sprintf(uart_weight_ch, "%.2f", uart_weight_f);
 			uart_weight_f_last = uart_weight_f;
 			segtext(uart_weight_ch);
+			segtext("\n");
+			
+			beginPacket();
+		lora_write(uart_weight_ch, strlen(uart_weight_ch));
+		endPacket();
+			
 			//ble_comm_send_handler((uint8_t*)uart_weight_ch);
+			
+			
+			
+			
 			weight_ble_msg();
 		} else {
 						time_check();

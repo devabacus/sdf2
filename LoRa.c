@@ -19,9 +19,9 @@ uint8_t singleTransfer(uint8_t address, uint8_t value)
 //			.miso_pin     = SPI_MISO_PIN,                
 //			.ss_pin       = SPI_SS_PIN,  
 			.sck_pin      = 19,                
-			.mosi_pin     = 21,                
-			.miso_pin     = 23,                
-			.ss_pin       = 20,  			
+			.mosi_pin     = 16,                
+			.miso_pin     = 20,                
+			.ss_pin       = 18,  			
 			.irq_priority = SPI_DEFAULT_CONFIG_IRQ_PRIORITY,         
 			.orc          = 0x00,                                    
 			.frequency    = NRF_DRV_SPI_FREQ_8M,                     
@@ -141,8 +141,9 @@ uint8_t lora_init(nrf_drv_spi_t spi, long frequency, p_lora_hendler_t p_lora_hen
 	
 		nrf_gpio_cfg_output(LORA_DEFAULT_RESET_PIN);
 	
-		err_code = nrf_drv_gpiote_init();
-    APP_ERROR_CHECK(err_code);
+	//todo add check init in main file
+		//err_code = nrf_drv_gpiote_init();
+    //APP_ERROR_CHECK(err_code);
 		
 		 nrf_drv_gpiote_in_config_t config =   {       
         .is_watcher = false,                    

@@ -53,6 +53,7 @@
 #include "weight.h"
 
 #include "device_name.h"
+#include "LoRa.h"
 
 
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2        /**< Reply when unsupported features are requested. */
@@ -102,6 +103,11 @@ NRF_BLE_GATT_DEF(m_gatt);                                                       
 BLE_ADVERTISING_DEF(m_advertising);                                                 /**< Advertising module instance. */
 
 
+#define SCHED_MAX_EVENT_DATA_SIZE 8
+#define SCHED_QUEUE_SIZE 64
+
+
+
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                            /**< Handle of the current connection. */
 static void advertising_start(bool erase_bonds);                                    /**< Forward declaration of advertising start function */
 
@@ -110,6 +116,12 @@ uint8_t ble_string_get[20] = "";
 uint8_t ble_string_adc[20] = "ad";
 APP_TIMER_DEF(m_clock_id);
 APP_TIMER_DEF(m_adc_timer_id);
+
+
+#define SPI_INSTANCE  0 /**< SPI instance index. */
+static const nrf_drv_spi_t spi_lora = NRF_DRV_SPI_INSTANCE(SPI_INSTANCE);  /**< SPI instance. */
+
+
 
 int scale_coef = (802-309)/10;
 
@@ -999,6 +1011,73 @@ static void power_manage(void)
 
 
 
+
+void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
+{
+	switch (event)
+		{
+		case RX_DONE:
+			{
+				NRF_LOG_INFO("%s %d %d", _p_arr, size, rssi());
+				//beginPacket();
+//				lora_write("12345678", 8);
+//				endPacket();
+				//NRF_LOG_INFO("%d", rssi());
+				lora_recive();
+				
+/*				
+//				if(memcmp(p_arr, _p_arr, size) == 0)
+//				{
+//					uint8_t str[64];
+//					sprintf((char*)str, "RSSI = %d\r\n%s", rssi(), _p_arr);
+//					uint16_t strl = (uint16_t)strlen((char*)str);
+				
+//					
+//					
+//					do{
+//										
+//                    err_code = ble_nus_data_send(&m_nus, str, &strl, m_conn_handle);
+//                    if ( (err_code != NRF_ERROR_INVALID_STATE) && (err_code != NRF_ERROR_BUSY) )
+//                    {
+//                        APP_ERROR_CHECK(err_code);
+//                    }
+//                } while (err_code == NRF_ERROR_BUSY);
+////				}
+//				else
+//				{
+//					NRF_LOG_INFO("%d", strlen((char*)_p_arr));
+//					NRF_LOG_INFO("%d", size);
+//					for(uint8_t i = 0; i < size; i++)
+//					{
+//						NRF_LOG_INFO("%x    %x", *p_arr+i, *_p_arr+i);
+//					}
+//					uint8_t str[] = "Transfer success data are NOT consistent";
+//					uint16_t strl = (uint16_t)strlen((char*)str);
+//					do{
+//										
+//                    err_code = ble_nus_string_send(&m_nus, str, &strl);
+//                    if ( (err_code != NRF_ERROR_INVALID_STATE) && (err_code != NRF_ERROR_BUSY) )
+//                    {
+//                        APP_ERROR_CHECK(err_code);
+//                    }
+//                } while (err_code == NRF_ERROR_BUSY);
+//				}
+*/
+				
+				break;
+			}
+		case TX_DONE:
+			{
+				NRF_LOG_INFO("lora_recive");
+				//lora_recive();
+				break;
+			}
+		}
+}
+
+
+
+
 /**@brief Function for application main entry.
  */
 int main(void)
@@ -1028,6 +1107,14 @@ int main(void)
     conn_params_init();
 		//test one more comment
     application_timers_start();
+		
+		APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
+		
+		//simple init lora
+		lora_init(spi_lora, 433E6, &lora_hendler);
+		//lora_receive();
+		
+		
     advertising_start(erase_bonds);
 		sd_ble_gap_addr_get(&mac_address);
 			
@@ -1047,9 +1134,14 @@ int main(void)
 		SEGGER_RTT_printf(0, "fds_uart_automode = %d, cal_turn_on = %d\n", fds_uart_automode, cal_turn_on);
 		segtext("fds_option_status = ");
 		segnum1(fds_option_status);
+		
+			
+		
 				
     for (;;)
     {
+			
+			app_sched_execute();
 					if(correct_mode == COR_AUTO)
 	
 						{
