@@ -2540,7 +2540,7 @@
 // <i>  Size of each memory blocks identified as 'large' block. Memory block are recommended to be word-sized.
 
 #ifndef MEMORY_MANAGER_LARGE_BLOCK_SIZE
-#define MEMORY_MANAGER_LARGE_BLOCK_SIZE 512
+#define MEMORY_MANAGER_LARGE_BLOCK_SIZE 0
 #endif
 
 // <o> MEMORY_MANAGER_XLARGE_BLOCK_COUNT - Size of each memory blocks identified as 'extra large' block.  <0-255> 
@@ -2554,7 +2554,7 @@
 // <i>  Size of each memory blocks identified as 'extra large' block. Memory block are recommended to be word-sized.
 
 #ifndef MEMORY_MANAGER_XLARGE_BLOCK_SIZE
-#define MEMORY_MANAGER_XLARGE_BLOCK_SIZE 1024
+#define MEMORY_MANAGER_XLARGE_BLOCK_SIZE 0
 #endif
 
 // <o> MEMORY_MANAGER_XXLARGE_BLOCK_COUNT - Size of each memory blocks identified as 'extra extra large' block.  <0-255> 

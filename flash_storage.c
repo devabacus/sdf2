@@ -425,12 +425,8 @@ ret_code_t fds_test_init (void)
 					return ret;
 		}
 		ret = fds_init();
-		if (ret != FDS_SUCCESS)
-		{
-				return ret;
-		}
 		
-		return NRF_SUCCESS;
+		return ret;
 }
 
 ret_code_t fds_test_find_and_delete (uint16_t rec_key, uint16_t file_id_del)

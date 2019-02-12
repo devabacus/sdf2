@@ -54,6 +54,7 @@
 
 #include "device_name.h"
 #include "LoRa.h"
+#include "interface.h"
 
 
 #define APP_FEATURE_NOT_SUPPORTED       BLE_GATT_STATUS_ATTERR_APP_BEGIN + 2        /**< Reply when unsupported features are requested. */
@@ -103,10 +104,105 @@ NRF_BLE_GATT_DEF(m_gatt);                                                       
 BLE_ADVERTISING_DEF(m_advertising);                                                 /**< Advertising module instance. */
 
 
+
+
+
+
 #define SCHED_MAX_EVENT_DATA_SIZE 8
 #define SCHED_QUEUE_SIZE 64
 
 
+#define LORA_SPI_INSTANCE  0 /**< SPI instance index. */
+static const nrf_drv_spi_t spi_lora = NRF_DRV_SPI_INSTANCE(LORA_SPI_INSTANCE);  /**< SPI instance. */
+
+#define DISLAY_SPI_INSTANCE  1 /**< SPI instance index. */
+static const nrf_drv_spi_t spi_oled = NRF_DRV_SPI_INSTANCE(DISLAY_SPI_INSTANCE);  /**< SPI instance. */
+
+
+static uint8_t* p_arr;
+
+
+
+
+
+
+
+
+
+
+void interface_evnt_handler(void * interface)
+{
+	
+	switch(((interface_t*)interface)->interface_evt)
+		{		
+			case INTERFACE_INIT:
+				{
+//					uint8_t * p_arr;
+//					
+//					p_arr = nrf_calloc(7, sizeof(correction_t));
+//					
+//					uint8_t p_buff[RANDOM_BUFF_SIZE];
+//					random_vector_generate(p_buff,RANDOM_BUFF_SIZE);
+//					
+//					if(((interface_t*)interface)->use_grams)
+//						{
+//							((interface_t*)interface)->weight =  (float)(((*(p_buff)) 				+ ((*(p_buff+1)) << 4) - \
+//																													 ((*(p_buff+2)) << 8) + ((*(p_buff+3)) << 12)) % 1000 )+(float)1/(float)((*(p_buff+2))%10 + 2);
+//								
+//						}
+//						else
+//						{
+//							((interface_t*)interface)->weight = ((*(p_buff)) 					+ ((*(p_buff+1)) << 4)	+ ((*(p_buff+2)) << 8) 	+ ((*(p_buff+3)) << 12) - \
+//																									((*(p_buff+4)) << 16) + ((*(p_buff+5)) << 20) + ((*(p_buff+6)) << 22) + ((*(p_buff+7)) << 24)) % 100000;
+//						}
+//					
+//					((interface_t*)interface)->rssi = ((*(p_buff)) % 30) + 70;
+//					
+//					((interface_t*)interface)->bat = ((*(p_buff+3)) % 4) + 0x32;
+//						
+//					
+//						
+//					for(uint8_t i = 0; i <= sizeof(correction_t)*7; i += sizeof(correction_t))
+//					{
+//						char * str = nrf_calloc(10, sizeof(char));
+//						
+//						random_vector_generate(p_buff,RANDOM_BUFF_SIZE);
+//						
+//						((correction_t*)(p_arr+i))->name 	 = str;
+//						((correction_t*)(p_arr+i))->corr_n = i/sizeof(correction_t);
+//						((correction_t*)(p_arr+i))->value  = (((*(p_buff+3))+(*p_buff+4)) % 1001);
+//						((correction_t*)(p_arr+i))->v_type = (v_type_t)(((*p_buff)+(*p_buff+1)) % 3);
+//						
+//						if(((correction_t*)(p_arr+i))->v_type == 0)
+//						{
+//							snprintf(str, 10, "-%d",	((*(p_buff)) 					+ ((*(p_buff+1)) << 4)	+ ((*(p_buff+2)) << 8) 	+ ((*(p_buff+3)) << 12)) % 100000);
+//						}
+//						else if(((correction_t*)(p_arr+i))->v_type == 1)
+//						{
+//							snprintf(str, 10, "+%d",	((*(p_buff)) 					+ ((*(p_buff+1)) << 4)	+ ((*(p_buff+2)) << 8) 	+ ((*(p_buff+3)) << 12)) % 100000);
+//						}
+//						else
+//						{
+//							snprintf(str, 10, "-%d%%",	(((*p_buff)+(*p_buff+1)) % 100));
+//						}
+//						
+//						((correction_t*)(p_arr+i))->active = false;
+//					}
+//					
+//					((correction_t*)(p_arr))->active = true;
+//					
+//					((interface_t*)interface)->p_arr = p_arr;
+//					((interface_t*)interface)->current_corr = (correction_t*)(((interface_t*)interface)->p_arr + (sizeof(correction_t)*((*p_buff)%8)));
+//					
+					break;
+				}
+			case INTERFACE_CORRECTION_SELECT:
+				{
+					
+					break;
+				}
+		}	
+}
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                            /**< Handle of the current connection. */
 static void advertising_start(bool erase_bonds);                                    /**< Forward declaration of advertising start function */
@@ -116,10 +212,6 @@ uint8_t ble_string_get[20] = "";
 uint8_t ble_string_adc[20] = "ad";
 APP_TIMER_DEF(m_clock_id);
 APP_TIMER_DEF(m_adc_timer_id);
-
-
-#define SPI_INSTANCE  0 /**< SPI instance index. */
-static const nrf_drv_spi_t spi_lora = NRF_DRV_SPI_INSTANCE(SPI_INSTANCE);  /**< SPI instance. */
 
 
 
@@ -1083,6 +1175,15 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 int main(void)
 {
 		
+		interface_t interface;
+	
+		interface.interface_evnt_handler = interface_evnt_handler;
+		interface.use_grams = false;
+	
+		
+	
+	
+	
     bool erase_bonds;
 		uint32_t err_code;
     // Initialize.
@@ -1135,7 +1236,9 @@ int main(void)
 		segtext("fds_option_status = ");
 		segnum1(fds_option_status);
 			
-		
+			
+		APP_ERROR_CHECK(nrf_mem_init());	
+		interface_init(&spi_oled, &interface);	
 				
     for (;;)
     {
