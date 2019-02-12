@@ -1132,12 +1132,14 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 							case PLUS:
 							{
 								SEGGER_RTT_printf(0,"PLUS");
+								correct_value(1000 + p_correction->value);
 								segtext("\n");
 
 								break;
 							}
 							case MINUS:
 							{
+								correct_value(p_correction->value);
 								SEGGER_RTT_printf(0,"MINUS");
 								segtext("\n");
 
@@ -1145,14 +1147,12 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 							}
 							case PERCENT:
 							{
+								correct_value(2000 + p_correction->value);
 								SEGGER_RTT_printf(0,"PERCENT");
 								segtext("\n");
-
 								break;
 							}
-							
 						}
-						
 						break;
 					}
 				}
@@ -1259,6 +1259,7 @@ int main(void)
 		
 		//simple init lora
 		lora_init(spi_lora, 433E6, &lora_hendler);
+		lora_recive();
 		//lora_receive();
 		
 		

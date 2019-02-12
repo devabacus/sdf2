@@ -108,14 +108,6 @@ extern uint8_t PIN_IN_2;
 extern uint8_t PIN_IN_3;
 extern uint8_t PIN_IN_4;
 
-
-
-
-
-
-
-
-
 extern uint8_t short_delay;
 
 extern uint16_t time_to_sleep;
