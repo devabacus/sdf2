@@ -122,7 +122,7 @@ static const nrf_drv_spi_t spi_oled = NRF_DRV_SPI_INSTANCE(DISLAY_SPI_INSTANCE);
 static uint8_t* p_arr;
 
 
-
+interface_t * _interface;
 
 
 
@@ -1110,11 +1110,53 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 		{
 		case RX_DONE:
 			{
-				NRF_LOG_INFO("%s %d %d", _p_arr, size, rssi());
-				//beginPacket();
-//				lora_write("12345678", 8);
-//				endPacket();
-				//NRF_LOG_INFO("%d", rssi());
+				//NRF_LOG_INFO("%s %d %d", _p_arr, size, rssi());
+
+				
+				switch((interface_evt_t)*_p_arr)
+				{
+					case INTERFACE_CORRECTION_SELECT:
+					{
+						
+						//SEGGER_RTT_printf(0,"%d", sizeof(correction_t));
+						
+						correction_t correction;
+						
+						correction_t *p_correction = &correction;
+						
+						p_correction = (correction_t*)(_p_arr+1);
+						
+						SEGGER_RTT_printf(0,"%d\n", p_correction->value);
+						switch(p_correction->v_type)
+						{
+							case PLUS:
+							{
+								SEGGER_RTT_printf(0,"PLUS");
+								segtext("\n");
+
+								break;
+							}
+							case MINUS:
+							{
+								SEGGER_RTT_printf(0,"MINUS");
+								segtext("\n");
+
+								break;
+							}
+							case PERCENT:
+							{
+								SEGGER_RTT_printf(0,"PERCENT");
+								segtext("\n");
+
+								break;
+							}
+							
+						}
+						
+						break;
+					}
+				}
+				
 				lora_recive();
 				
 /*				
@@ -1161,7 +1203,7 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 		case TX_DONE:
 			{
 				NRF_LOG_INFO("lora_recive");
-				//lora_recive();
+				lora_recive();
 				break;
 			}
 		}
@@ -1176,6 +1218,10 @@ int main(void)
 {
 		
 		interface_t interface;
+	
+		_interface = &interface;
+	
+		interface.p_arr = nrf_calloc(7, sizeof(correction_t));
 	
 		interface.interface_evnt_handler = interface_evnt_handler;
 		interface.use_grams = false;
@@ -1235,11 +1281,7 @@ int main(void)
 		SEGGER_RTT_printf(0, "fds_uart_automode = %d, cal_turn_on = %d\n", fds_uart_automode, cal_turn_on);
 		segtext("fds_option_status = ");
 		segnum1(fds_option_status);
-			
-			
-		APP_ERROR_CHECK(nrf_mem_init());	
-		interface_init(&spi_oled, &interface);	
-				
+							
     for (;;)
     {
 			
