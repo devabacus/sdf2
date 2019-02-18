@@ -99,29 +99,29 @@ void reset_counters(uint8_t ch_num){
 
 void set_send_cor_mode(uint8_t set_value){
 		correct_mode = set_value;
-		bool mode_state;
-		interface_evt_t interface_enum = INTERFACE_MODE_CHANGE; 
+		uint8_t mode_state;
+		uint8_t interface_enum = REMOTE_MODE_CHANGE; 
 		if(set_value == 1){
 			 ble_comm_send_handler("n3/1");
-				bool mode_state = true;
+				mode_state = 1;
 		}
 		else if (set_value == 2) {
 			ble_comm_send_handler("n3/2");
-			  bool mode_state = false;
+			  mode_state = 0;
 		}
 		else if (set_value == 3){
 			 ble_comm_send_handler ("n3/3");
 		}
 		beginPacket();
-		lora_write(&interface_enum, sizeof(interface_evt_t));
-		lora_write(&mode_state, sizeof(interface_evt_t));
+		lora_write(&interface_enum, 1);
+		lora_write(&mode_state, 1);
 		endPacket();
 	  
 }
 
 void ble_set(uint8_t *ble_set_buffer){
 	
-			segtext(ble_set_buffer);
+			segtext((char*)ble_set_buffer);
 			segtext("\n");
 			uint8_t set_number = atoi((char*) ble_set_buffer+1);
 			

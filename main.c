@@ -104,11 +104,6 @@ BLE_NUS_DEF(m_nus);                                                             
 NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
 BLE_ADVERTISING_DEF(m_advertising);                                                 /**< Advertising module instance. */
 
-
-
-
-
-
 #define SCHED_MAX_EVENT_DATA_SIZE 8
 #define SCHED_QUEUE_SIZE 64
 
@@ -1020,116 +1015,47 @@ static void power_manage(void)
 
 
 
-void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
+
+static void correct_handle(uint8_t type, uint16_t value){
+		uint16_t add_number = 0;
+		switch(type){
+			case PLUS: add_number = 1000;
+				break;
+			case PERCENT: add_number = 2000;
+				break;
+		}
+		correct_value(add_number + value);
+}
+
+void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 {
 	switch (event)
 		{
 		case RX_DONE:
 			{
-				//NRF_LOG_INFO("%s %d %d", _p_arr, size, rssi());
-
 						correction_t correction;
-						
 						correction_t *p_correction = &correction;
-						
 						p_correction = (correction_t*)(_p_arr+1);
 				
-				switch((interface_evt_t)*_p_arr)
+				switch(*_p_arr)
 				{
-					case INTERFACE_CORRECTION_SELECT:
-					{
-						
-						//SEGGER_RTT_printf(0,"%d", sizeof(correction_t));
-						
-						
-						
-						SEGGER_RTT_printf(0,"%d\n", p_correction->value);
-								switch(p_correction->v_type)
-								{
-									
-											case PLUS:
-											{
-												SEGGER_RTT_printf(0,"PLUS");
-												correct_value(1000 + p_correction->value);
-												segtext("\n");
-
-												break;
-											}
-											case MINUS:
-											{
-												
-												correct_value(p_correction->value);
-												SEGGER_RTT_printf(0,"MINUS");
-												segtext("\n");
-
-												break;
-											}
-											case PERCENT:
-											{
-												
-												correct_value(2000 + p_correction->value);
-												SEGGER_RTT_printf(0,"PERCENT");
-												segtext("\n");
-												break;
-											}
-											
-									
-								}
-						break;
-					}
-					
-				case INTERFACE_CORRECTION_CANCEL:
-								correct(0,0,0);
+						case REMOTE_CORRECTION_SELECT: correct_handle(p_correction->v_type, p_correction->value);
+								break;
+						case REMOTE_CORRECTION_CANCEL: correct(0,0,0);
 							break;
-							
-				case INTERFACE_CORRECTION_EDIT:
-						
-							switch(p_correction->v_type)
-								{
-									
-									
-									
-									case PLUS:
-									{
-										SEGGER_RTT_printf(0,"PLUS");
-										correct_value(1000 + p_correction->value);
-										
-										segtext("\n");
-
-										break;
-									}
-									case MINUS:
-									{
-										correct_value(p_correction->value);
-										SEGGER_RTT_printf(0,"MINUS");
-										segtext("\n");
-
-										break;
-									}
-									case PERCENT:
-									{
-										correct_value(2000 + p_correction->value);
-										SEGGER_RTT_printf(0,"PERCENT");
-										segtext("\n");
-										break;
-									}
-								}
-								
-								
-				
-							break;
-							
-	     case INTERFACE_MODE_CHANGE:
+						case REMOTE_CORRECTION_EDIT: correct_handle(p_correction->v_type, p_correction->value);
+								break;
+						case REMOTE_MODE_CHANGE:
 							
 						//change_correct_mode();
 						if(correct_mode == COR_MANUAL)
 								{
 									correct_mode = COR_AUTO;
-									interface_evt_t interface_enum = INTERFACE_MODE_CHANGE; 
+									uint8_t interface_enum = REMOTE_MODE_CHANGE; 
 									uint8_t mode_state = 0;
 									beginPacket();
-									lora_write(&interface_enum, sizeof(interface_evt_t));
-									lora_write(&mode_state, sizeof(interface_evt_t));
+									lora_write(&interface_enum, 1);
+									lora_write(&mode_state, 1);
 									endPacket();
 									rgb_set(50,0,0,2,1000);
 									
@@ -1138,11 +1064,11 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 								else if (correct_mode == COR_AUTO)
 									{
 										correct_mode = COR_MANUAL;
-										interface_evt_t interface_enum = INTERFACE_MODE_CHANGE; 
+										uint8_t interface_enum = REMOTE_MODE_CHANGE; 
 										uint8_t mode_state = 1;
 										beginPacket();
-										lora_write(&interface_enum, sizeof(interface_evt_t));
-										lora_write(&mode_state, sizeof(interface_evt_t));
+										lora_write(&interface_enum, 1);
+										lora_write(&mode_state, 1);
 										endPacket();
 										rgb_set(0,50,0,2,1000);
 										
@@ -1150,25 +1076,25 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 															 
 			  break;
 						
-					 case INTERFACE_INIT:
+					 case REMOTE_INIT:
 						 
 							if(correct_mode == COR_MANUAL)
 								{
 									
-									interface_evt_t interface_enum = INTERFACE_MODE_CHANGE; 
+									uint8_t interface_enum = REMOTE_MODE_CHANGE; 
 									uint8_t mode_state = 0;
 									beginPacket();
-									lora_write(&interface_enum, sizeof(interface_evt_t));
-									lora_write(&mode_state, sizeof(interface_evt_t));
+									lora_write(&interface_enum, 1);
+									lora_write(&mode_state, 1);
 									endPacket();
 								}
 								else if (correct_mode == COR_AUTO)
 									{
-										interface_evt_t interface_enum = INTERFACE_MODE_CHANGE; 
+										uint8_t interface_enum = REMOTE_MODE_CHANGE; 
 										uint8_t mode_state = 1;
 										beginPacket();
-										lora_write(&interface_enum, sizeof(interface_evt_t));
-										lora_write(&mode_state, sizeof(interface_evt_t));
+										lora_write(&interface_enum, 1);
+										lora_write(&mode_state, 1);
 										endPacket();
 									}
 						}
@@ -1232,11 +1158,9 @@ int main(void)
 		APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 		
 		//simple init lora
-		lora_init(spi_lora, 433E6, &lora_hendler);
+		lora_init(spi_lora, 433E6, &lora_handler);
 		lora_recive();
-		//lora_receive();
-		
-		
+
     advertising_start(erase_bonds);
 		sd_ble_gap_addr_get(&mac_address);
 			

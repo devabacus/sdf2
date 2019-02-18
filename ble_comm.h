@@ -13,6 +13,7 @@
 #include "ble_correct.h"
 #include "ble_set.h"
 #include "muart.h"
+#include "scale_setup.h"
 
 
 

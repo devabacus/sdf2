@@ -1,7 +1,7 @@
 #include "sd_util.h"
 
-void segtext(char* text) {
-	SEGGER_RTT_printf(0, text);
+void segtext(uint8_t* text) {
+	SEGGER_RTT_printf(0, (char*)text);
 }
 
 void segtextn(char* text) {

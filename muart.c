@@ -10,7 +10,7 @@
 #define UART_TIME_SEND 1
 
 uint32_t weight_float = 0;
-char data_array[20];
+uint8_t data_array[20];
 uint32_t startWeightIndex = 2;
 uint32_t endWeightIndex 	 = 11;
 uint32_t uart_ble_mode 		 = 1;
@@ -29,7 +29,7 @@ uint8_t counter_uart_blink = 0;
 float uart_weigth_f_max = 0;
 // в эту переменную пишем либо флоат либо инт переменной uart_weight
 float uart_weight1 = 0;
-APP_TIMER_DEF(m_timer_muart);
+//APP_TIMER_DEF(m_timer_muart);
 
 void time_check(void){
 			if(clock_counter != clock_counter_last){
@@ -81,7 +81,7 @@ void define_uart_weight(void){
 	// если отправили s8/2 через телефон то weight_float = 1
 	if(!weight_float){
 		flushIndexOfArray(data_array, endWeightIndex);
-		uart_weight = atoi(data_array+startWeightIndex);		
+		uart_weight = atoi((char*)(data_array+startWeightIndex));		
 		
 		if(uart_weight != uart_weight_last){
 			time_changed=0;
@@ -95,10 +95,10 @@ void define_uart_weight(void){
 				uart_weight_max = 0;
 			}
 			
-		interface_evt_t interface_enum = INTERFACE_WEIGHT; 
+		uint8_t interface_enum = REMOTE_WEIGHT; 
 		beginPacket();
-			lora_write(&interface_enum, sizeof(interface_evt_t));
-		lora_write(uart_weight_ch, strlen(uart_weight_ch));
+			lora_write(&interface_enum, 1);
+		lora_write((uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
 		endPacket();
 //		segtext(uart_weight_ch);
 //		segtext("\n");
@@ -121,7 +121,7 @@ void define_uart_weight(void){
 	}
 	else {
 		flushIndexOfArray(data_array, endWeightIndex);
-		uart_weight_f = atof(data_array+startWeightIndex);	
+		uart_weight_f = atof((char*)data_array+startWeightIndex);	
 		if(uart_weight_f != uart_weight_f_last){
 			//clock_counter_last = clock_counter;
 //			if(clock_counter != clock_counter_last){
@@ -136,7 +136,7 @@ void define_uart_weight(void){
 //			segtext("\n");
 			
 			beginPacket();
-		lora_write(uart_weight_ch, strlen(uart_weight_ch));
+		lora_write((uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
 		endPacket();
 			
 			//ble_comm_send_handler((uint8_t*)uart_weight_ch);

@@ -15,7 +15,7 @@ uint32_t cal_coef = 0;
 float cal_coef_float = 0;
 float weight = 0;
 uint32_t num_of_discrete_for_cal = NUM_OF_DISCRETE_FOR_CAL;
-char str[20];
+uint8_t str[20];
 char weight_char[10];
 uint32_t cal_weight = 0;
 uint32_t maxWeight = 0;
@@ -142,7 +142,7 @@ void find_average_adc(void)
 									uint16_t length = strlen((char*)ble_string_put1);
 									memcpy(cal_adc_pref+5, ble_string_put1, length);
 									ble_comm_send_handler(cal_adc_pref);
-									segtext((char*)cal_adc_pref);
+									segtext(cal_adc_pref);
 								  segtext("\nstart_average_adc == 1\n");
 								// почему то записывается значение ацп в discrete_char1, поэтому повторно пишем туда дискрет
 									sprintf(discrete_char1, "%.2f", discrete);

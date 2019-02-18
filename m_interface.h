@@ -11,27 +11,44 @@
 typedef	void (*interface_evnt_handler_t)(void*);
 
 
-typedef enum
+//typedef enum
+//{
+//	REMOTE_INIT,
+//	INTERFACE_WEIGHT,
+//	INTERFACE_CORRECTION_SELECT,
+//	INTERFACE_CORRECTION_ACTIVATE,
+//	INTERFACE_CORRECTION_DEACTIVATE,
+//	INTERFACE_CORRECTION_CANCEL,
+//	INTERFACE_CORRECTION_EDIT,
+//	INTERFACE_CORRECTION_EDIT_SAVE,
+//	INTERFACE_CORRECTION_EDIT_CANCEL,
+//	INTERFACE_MODE_CHANGE,
+//}interface_evt_t;
+
+
+enum REMOTE_EVENT
 {
-	INTERFACE_INIT,
-	INTERFACE_WEIGHT,
-	INTERFACE_CORRECTION_SELECT,
-	INTERFACE_CORRECTION_ACTIVATE,
-	INTERFACE_CORRECTION_DEACTIVATE,
-	INTERFACE_CORRECTION_CANCEL,
-	INTERFACE_CORRECTION_EDIT,
-	INTERFACE_CORRECTION_EDIT_SAVE,
-	INTERFACE_CORRECTION_EDIT_CANCEL,
-	INTERFACE_MODE_CHANGE,
-}interface_evt_t;
+	REMOTE_INIT,
+	REMOTE_WEIGHT,
+	REMOTE_CORRECTION_SELECT,
+	REMOTE_CORRECTION_ACTIVATE,
+	REMOTE_CORRECTION_DEACTIVATE,
+	REMOTE_CORRECTION_CANCEL,
+	REMOTE_CORRECTION_EDIT,
+	REMOTE_CORRECTION_EDIT_SAVE,
+	REMOTE_CORRECTION_EDIT_CANCEL,
+	REMOTE_MODE_CHANGE,
+};
 
 
-typedef enum
+
+
+enum COR_VALUE_TYPE
 {
 	MINUS,
 	PLUS,
-	PERCENT,
-}v_type_t;
+	PERCENT
+};
 
 
 typedef enum
@@ -47,7 +64,7 @@ typedef struct
 	uint8_t corr_n;
 	char 	* name;
 	uint16_t value;
-	v_type_t v_type;
+	uint8_t  v_type;
 	uint16_t compensation;
 }correction_t;
 
@@ -67,7 +84,7 @@ typedef struct
 	correction_t 					 * current_corr;           
 	uint8_t			 					 * p_arr;
 	interface_evnt_handler_t interface_evnt_handler;
-	interface_evt_t 				 interface_evt;
+	uint8_t 				 interface_evt;
 	
 	interface_state_t 	interface_state;
 	
