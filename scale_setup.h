@@ -9,6 +9,7 @@
 #include "offset_perc.h"
 #include "ble_comm.h"
 #include "weight.h"
+#include "m_interface.h"
 
 
 
@@ -53,6 +54,8 @@ uint32_t demo_passes(uint32_t demo_test, uint8_t num_st, uint8_t num_end);
 
 void check_pass(void);
 void check_option_pass(void);
+
+//void change_correct_mode();
 
 void scale_setup(void);
 

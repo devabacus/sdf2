@@ -11,6 +11,8 @@
 #include "ble_comm.h"
 #include "sd_util.h"
 #include "weight.h"
+#include "LoRa.h"
+#include "m_interface.h"
 
 typedef struct 
 {

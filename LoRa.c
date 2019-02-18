@@ -93,11 +93,11 @@ static void serial_scheduled_ex (void * p_event_data, uint16_t event_size)
 {
 	uint8_t adr = 0;
 	uint8_t packetLength = 0;
-	uint8_t rx_byte =	0;
+//	uint8_t rx_byte =	0;
 	uint8_t * arr;
 	
 	uint8_t event = readRegister(REG_IRQ_FLAGS);
-	if(event == 0x50)
+	if((event & IRQ_RX_DONE_MASK) == IRQ_RX_DONE_MASK)
 		{	
 			writeRegister(REG_IRQ_FLAGS, IRQ_RX_DONE_MASK | IRQ_VALID_HEDER_MASK);
 			
@@ -116,7 +116,7 @@ static void serial_scheduled_ex (void * p_event_data, uint16_t event_size)
 			_p_lora_hendler(arr, packetLength, RX_DONE);
 			free(arr);
 		}
-	if(event == IRQ_TX_DONE_MASK)
+	if((event & IRQ_TX_DONE_MASK) == IRQ_TX_DONE_MASK)
 	{
 		writeRegister(REG_IRQ_FLAGS, IRQ_TX_DONE_MASK);
 		_p_lora_hendler(NULL, NULL, TX_DONE);
@@ -132,16 +132,12 @@ void dio(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 
 uint8_t lora_init(nrf_drv_spi_t spi, long frequency, p_lora_hendler_t p_lora_hendler)
 {
-	_spi = spi;
-	_p_lora_hendler = p_lora_hendler;
-			ret_code_t err_code;
-	
-	
-	
-	
+		_spi = spi;
+		_p_lora_hendler = p_lora_hendler;
+		ret_code_t err_code;
+
 		nrf_gpio_cfg_output(LORA_DEFAULT_RESET_PIN);
 	
-	//todo add check init in main file
 		//err_code = nrf_drv_gpiote_init();
     //APP_ERROR_CHECK(err_code);
 		
@@ -172,9 +168,9 @@ uint8_t lora_init(nrf_drv_spi_t spi, long frequency, p_lora_hendler_t p_lora_hen
 	NRF_LOG_INFO("Check LoRa version");
 	uint8_t version = 0;
 	version = readRegister(REG_VERSION);
-  if (version != 0x12) {
-		NRF_LOG_ERROR("%x",	version);
-		NRF_LOG_ERROR("LoRa version invalid");
+  if (version == 0x00) {
+		NRF_LOG_ERROR("NO CONNECTION");
+		APP_ERROR_CHECK(NRF_ERROR_NOT_FOUND);
     return 0;
   }
 	

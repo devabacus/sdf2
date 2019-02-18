@@ -550,9 +550,6 @@ void in_pin_handler4(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 			}
 }
 
-
-
-
 void in_pin_handler5(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action){
 	segtext("8 changed\n");
 }

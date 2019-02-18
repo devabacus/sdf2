@@ -44,6 +44,42 @@ uint32_t current_life_counter = 0;
 
 //APP_TIMER_DEF(m_util_timer_id);
 
+
+
+void change_correct_mode()
+					{
+										SEGGER_RTT_printf(0, "COR_AUTO_MODE\r\n");
+							if(correct_mode == COR_MANUAL)
+								{
+									
+									correct_mode = COR_AUTO;
+									time_to_sleep = TIME_TO_SLEEP;
+									rgb_set(0,50,0,2,1000);
+									correct_value(cor_feedback);
+									stop_timer();
+									start_timer(time_feedback);
+								  fds_update_value(&correct_mode, file_id, fds_rk_corr_mode);
+									
+								}
+								else if (correct_mode == COR_AUTO)
+									{
+										adc_value = 0;
+										rgb_set(50,0,0,2,1000);
+										time_to_sleep = 0;
+										correct_mode = COR_MANUAL;
+										correct_value(cor_feedback);
+										stop_timer();
+										start_timer(time_feedback);
+										fds_update_value(&correct_mode, file_id, fds_rk_corr_mode);
+										
+									}
+									// send info about correct_mode via ble
+									set_send_cor_mode(correct_mode);
+						}
+
+
+
+
 void fail_attempt(void)
 {
 		
@@ -1032,35 +1068,17 @@ void scale_setup(void)
 								}
 						}
 					
+						
+				
+						
+						
+						
+						
 			  		if (pin_in4_long_press)
 						{
 							if(counter_for_set_mode == 3)
 							{
-									SEGGER_RTT_printf(0, "COR_AUTO_MODE\r\n");
-							if(correct_mode == COR_MANUAL)
-								{
-									
-									correct_mode = COR_AUTO;
-									time_to_sleep = TIME_TO_SLEEP;
-									rgb_set(0,50,0,2,1000);
-									correct_value(cor_feedback);
-									stop_timer();
-									start_timer(time_feedback);
-									fds_update_value(&correct_mode, file_id, fds_rk_corr_mode);
-								}
-								else if (correct_mode == COR_AUTO)
-									{
-										adc_value = 0;
-										rgb_set(50,0,0,2,1000);
-										time_to_sleep = 0;
-										correct_mode = COR_MANUAL;
-										correct_value(cor_feedback);
-										stop_timer();
-										start_timer(time_feedback);
-										fds_update_value(&correct_mode, file_id, fds_rk_corr_mode);
-									}
-									// send info about correct_mode via ble
-									set_send_cor_mode(correct_mode);
+									change_correct_mode();
 							}
 							
 						  else if(counter_for_set_mode == 5)

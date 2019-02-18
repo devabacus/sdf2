@@ -5,6 +5,7 @@
 #include "nrf_drv_timer.h"
 #include "nrf_drv_ppi.h"
 #include "LoRa.h"
+#include "m_interface.h"
 
 #define UART_TIME_SEND 1
 
@@ -15,6 +16,7 @@ uint32_t endWeightIndex 	 = 11;
 uint32_t uart_ble_mode 		 = 1;
 uint16_t clock_counter_last = 0;
 uint16_t time_changed = 0;
+
 
 float uart_weight_f = 0;
 int uart_weight 	 = 0;
@@ -93,12 +95,14 @@ void define_uart_weight(void){
 				uart_weight_max = 0;
 			}
 			
+		interface_evt_t interface_enum = INTERFACE_WEIGHT; 
 		beginPacket();
+			lora_write(&interface_enum, sizeof(interface_evt_t));
 		lora_write(uart_weight_ch, strlen(uart_weight_ch));
 		endPacket();
-		segtext(uart_weight_ch);
-		segtext("\n");
-			
+//		segtext(uart_weight_ch);
+//		segtext("\n");
+//			
 			
 			
 			
@@ -128,8 +132,8 @@ void define_uart_weight(void){
 			time_changed=0;
 			sprintf(uart_weight_ch, "%.2f", uart_weight_f);
 			uart_weight_f_last = uart_weight_f;
-			segtext(uart_weight_ch);
-			segtext("\n");
+//			segtext(uart_weight_ch);
+//			segtext("\n");
 			
 			beginPacket();
 		lora_write(uart_weight_ch, strlen(uart_weight_ch));

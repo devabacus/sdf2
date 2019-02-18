@@ -77,6 +77,13 @@ void update_seq(void)
 
 void correct(uint32_t value, uint32_t value1, uint32_t value2)
 	{
+		if(value == 0 && value1 == 0 && value2 == 0)
+		{
+			interface_evt_t interface_enum = INTERFACE_CORRECTION_DEACTIVATE; 
+			beginPacket();
+			lora_write(&interface_enum, sizeof(interface_evt_t));
+			endPacket();
+		}
 		seq_value.channel_0 = TOP_VALUE - value;
 		seq_value.channel_1 = TOP_VALUE - value1;
 		seq_value.channel_2 = TOP_VALUE - value2;
@@ -115,8 +122,16 @@ void corr_perc(uint32_t value)
 
 void correct_value(uint32_t value)
 {
-	if((activate_status >= DEMO)&&(!exp_subsriber))
+	if(true)//(activate_status >= DEMO)&&(!exp_subsriber))
 	{
+		if(value != 0){
+			interface_evt_t interface_enum = INTERFACE_CORRECTION_ACTIVATE; 
+		beginPacket();
+		lora_write(&interface_enum, sizeof(interface_evt_t));
+		endPacket();
+		}
+		
+		
 		if(0 < value && value <= 1000) // minus correct
 		{
 			//correct(0, value, 0); 
