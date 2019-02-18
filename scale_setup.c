@@ -46,6 +46,27 @@ uint32_t current_life_counter = 0;
 
 
 
+//if(correct_mode == COR_MANUAL)
+//								{
+//									correct_mode = COR_AUTO;
+//									lora_write_byte(REMOTE_MODE_CHANGE);
+//									lora_write_byte(0);
+//									rgb_set(50,0,0,2,1000);
+//									
+//									
+//								}
+//								else if (correct_mode == COR_AUTO)
+//									{
+//										correct_mode = COR_MANUAL;
+//										lora_write_byte(REMOTE_MODE_CHANGE);
+//										lora_write_byte(1);
+//										rgb_set(0,50,0,2,1000);
+//										
+//									}
+//									
+
+
+
 void change_correct_mode()
 					{
 										SEGGER_RTT_printf(0, "COR_AUTO_MODE\r\n");
@@ -265,7 +286,7 @@ void check_pass(void){
 														if(activate_attempts > ACTIVATE_ATTEMPTS_MAX){
 															rgb_set(50,0,0,5,500);
 														} else{
-															uint32_t ret;
+															//uint32_t ret;
 															activate_status = test_activate_status;
 															if(fds_remote_type == PHONE_ONLY || fds_remote_type == REMOTE_PHONE){
 																ble_comm_send_handler("n7/1");

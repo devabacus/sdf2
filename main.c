@@ -1031,85 +1031,39 @@ void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 {
 	switch (event)
 		{
-		case RX_DONE:
-			{
-						correction_t correction;
-						correction_t *p_correction = &correction;
-						p_correction = (correction_t*)(_p_arr+1);
-				
-				switch(*_p_arr)
-				{
-						case REMOTE_CORRECTION_SELECT: correct_handle(p_correction->v_type, p_correction->value);
-								break;
-						case REMOTE_CORRECTION_CANCEL: correct(0,0,0);
-							break;
-						case REMOTE_CORRECTION_EDIT: correct_handle(p_correction->v_type, p_correction->value);
-								break;
-						case REMOTE_MODE_CHANGE:
+				case RX_DONE:
+					{
+									correction_t correction;
+									correction_t *p_correction = &correction;
+									p_correction = (correction_t*)(_p_arr+1);
 							
-						//change_correct_mode();
-						if(correct_mode == COR_MANUAL)
-								{
-									correct_mode = COR_AUTO;
-									uint8_t interface_enum = REMOTE_MODE_CHANGE; 
-									uint8_t mode_state = 0;
-									beginPacket();
-									lora_write(&interface_enum, 1);
-									lora_write(&mode_state, 1);
-									endPacket();
-									rgb_set(50,0,0,2,1000);
-									
-									
-								}
-								else if (correct_mode == COR_AUTO)
-									{
-										correct_mode = COR_MANUAL;
-										uint8_t interface_enum = REMOTE_MODE_CHANGE; 
-										uint8_t mode_state = 1;
-										beginPacket();
-										lora_write(&interface_enum, 1);
-										lora_write(&mode_state, 1);
-										endPacket();
-										rgb_set(0,50,0,2,1000);
-										
-									}
-															 
-			  break;
-						
-					 case REMOTE_INIT:
-						 
-							if(correct_mode == COR_MANUAL)
-								{
-									
-									uint8_t interface_enum = REMOTE_MODE_CHANGE; 
-									uint8_t mode_state = 0;
-									beginPacket();
-									lora_write(&interface_enum, 1);
-									lora_write(&mode_state, 1);
-									endPacket();
-								}
-								else if (correct_mode == COR_AUTO)
-									{
-										uint8_t interface_enum = REMOTE_MODE_CHANGE; 
-										uint8_t mode_state = 1;
-										beginPacket();
-										lora_write(&interface_enum, 1);
-										lora_write(&mode_state, 1);
-										endPacket();
-									}
-						}
-				
-				lora_recive();
-				
+							switch(*_p_arr)
+							{
+									case REMOTE_CORRECTION_SELECT: correct_handle(p_correction->v_type, p_correction->value);
+											break;
+									case REMOTE_CORRECTION_CANCEL: correct(0,0,0);
+										break;
+									case REMOTE_CORRECTION_EDIT: correct_handle(p_correction->v_type, p_correction->value);
+											break;
+									case REMOTE_MODE_CHANGE: change_correct_mode();
+											break;
+									case REMOTE_INIT:
+										if(correct_mode == COR_MANUAL) lora_write_flag_1byte(REMOTE_MODE_CHANGE, 1);
+										else if (correct_mode == COR_AUTO) lora_write_flag_1byte(REMOTE_MODE_CHANGE, 0);
+							}
+								lora_recive();
 				break;
-			}
-		case TX_DONE:
-			{
-				NRF_LOG_INFO("lora_recive");
-				lora_recive();
-				break;
-			}
+					}
+				case TX_DONE: lora_recive();
 		}
+}
+
+
+static void lora_initialize(){
+#ifdef LORA_USE
+		lora_init(spi_lora, 433E6, &lora_handler);
+		lora_recive();
+#endif
 }
 
 /**@brief Function for application main entry.
@@ -1157,9 +1111,7 @@ int main(void)
 		
 		APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 		
-		//simple init lora
-		lora_init(spi_lora, 433E6, &lora_handler);
-		lora_recive();
+		lora_initialize();
 
     advertising_start(erase_bonds);
 		sd_ble_gap_addr_get(&mac_address);

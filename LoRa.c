@@ -239,6 +239,40 @@ void lora_write(const uint8_t *buffer, uint16_t size)
 	writeRegister(REG_PAYLOAD_LENGTH, currentLength + size);
 }
 
+void lora_write1(const uint8_t *buffer, uint16_t size)
+{
+	beginPacket();
+	uint16_t currentLength = readRegister(REG_PAYLOAD_LENGTH);
+
+	for (size_t i = 0; i < size; i++) {
+    writeRegister(REG_FIFO, *(buffer+i));
+		//SEGGER_RTT_printf(0, "%d\r\n", *(buffer+i));
+  }
+	writeRegister(REG_PAYLOAD_LENGTH, currentLength + size);
+	endPacket();
+}
+
+
+void lora_write_byte(uint8_t flag)
+{
+		beginPacket();
+		writeRegister(REG_FIFO, flag);
+		writeRegister(REG_PAYLOAD_LENGTH, readRegister(REG_PAYLOAD_LENGTH) + 1);
+		endPacket();
+}
+
+void lora_write_flag_1byte(uint8_t flag, uint8_t value){
+	  beginPacket();
+		writeRegister(REG_FIFO, flag);
+		writeRegister(REG_PAYLOAD_LENGTH, readRegister(REG_PAYLOAD_LENGTH) + 1);
+		writeRegister(REG_FIFO, value);
+		writeRegister(REG_PAYLOAD_LENGTH, readRegister(REG_PAYLOAD_LENGTH) + 1);
+		endPacket();
+}
+
+
+
+
 
 void endPacket()
 {

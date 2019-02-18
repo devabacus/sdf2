@@ -78,8 +78,8 @@ void print_array_float(float* array, uint8_t size)
 {
 		for(int i = 0; i<size; i++)
 			{
-					sprintf(str, "%.2f\n", array[i]);
-					SEGGER_RTT_printf(0, str);
+					sprintf((char*)str, "%.2f\n", array[i]);
+					SEGGER_RTT_printf(0, (char*)str);
 					nrf_delay_ms(50);
 			}
 }
@@ -129,7 +129,12 @@ void find_average_adc(void)
 							// сортируем их
 							sort_array(adc_array, AVERAGE_ADC_TIMES);
 							find_average_in_array(adc_array, AVERAGE_ADC_TIMES);
-							
+							uint8_t cal_adc_pref[] = "s5/1/";
+							uint8_t cal_adc_pref2[] = "s5/2/";
+							uint8_t cal_adc_pref3[] = "s5/3/";
+							uint16_t length;
+							uint16_t length2;
+							uint16_t length3;
 							switch(start_average_adc)
 							{
 								case 1:
@@ -137,9 +142,8 @@ void find_average_adc(void)
 									cal_zero_value = average_adc;
 									fds_update_value(&cal_zero_value, file_id, fds_rk_cal_zero);
 								
-									uint8_t cal_adc_pref[] = "s5/1/";
 									sprintf((char*)ble_string_put1, "%d", cal_zero_value);
-									uint16_t length = strlen((char*)ble_string_put1);
+									length = strlen((char*)ble_string_put1);
 									memcpy(cal_adc_pref+5, ble_string_put1, length);
 									ble_comm_send_handler(cal_adc_pref);
 									segtext(cal_adc_pref);
@@ -165,7 +169,7 @@ void find_average_adc(void)
 											 // adc value for one discrete //10 
 											
 										cal_coef_float = (cal_load_value - cal_zero_value)/(float)num_of_discrete_for_cal; 
-										sprintf(str, "cal_coef = %.4f\n", cal_coef_float);
+										sprintf((char*)str, "cal_coef = %.4f\n", cal_coef_float);
 										segtext(str);
 											
 											SEGGER_RTT_printf(0, "cal_coef - %d\n\r", cal_coef);
@@ -176,12 +180,12 @@ void find_average_adc(void)
 										//discrete+=1000;
 										sprintf(discrete_char1, "%.2f", discrete);
 										SEGGER_RTT_printf(0, "maxWeight = %d\n", maxWeight);
-										uint8_t cal_adc_pref2[] = "s5/2/";
+										
 										sprintf((char*)ble_string_put1, "%d", cal_coef);
-										uint16_t length2 = strlen((char*)ble_string_put1);
+										length2 = strlen((char*)ble_string_put1);
 										memcpy(cal_adc_pref2+5, ble_string_put1, length2);
 										ble_comm_send_handler(cal_adc_pref2);
-										segtext((char*)cal_adc_pref2);
+										segtext(cal_adc_pref2);
 										ble_settings.showADC = 1;
 								break;
 								
@@ -189,21 +193,21 @@ void find_average_adc(void)
 									cal_turn_on = average_adc;
 									fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
 									SEGGER_RTT_printf(0, "turn_on - %d\n\r", cal_turn_on);
-									uint8_t cal_adc_pref3[] = "s5/3/";
+									
 									sprintf((char*)ble_string_put1, "%d", cal_turn_on);
-									uint16_t length3 = strlen((char*)ble_string_put1);
+									length3 = strlen((char*)ble_string_put1);
 									memcpy(cal_adc_pref3+5, ble_string_put1, length3);
 									ble_comm_send_handler(cal_adc_pref3);
-									segtext((char*)cal_adc_pref3);
+									segtext(cal_adc_pref3);
 								break;
 								
 								case 4:
-								}
 								count_average_adc = 0;
 								start_average_adc = 0;
 								average_adc = 0;
 								stop_timer_02s();
 								rgb_set(0,0,0,0,0);
+							}
 						}
 }
 
@@ -258,11 +262,11 @@ void weight_define(void){
 
 
 
-			else if (discrete == 0.1)
+			else if (discrete == 0.10)
 			{
-				weight = ((int)(weight*10 + 0.5))/10.0;
+				weight = (((double)weight*10 + 0.5))/10.00;
 		  	sprintf(weight_char, "weight = %.1f\n", weight);
-			} else if (discrete == 0.2)
+			} else if (discrete == 0.20)
 					{
 				
 					//weight = ((int)(weight*10 + 0.5))/10.0;
@@ -299,7 +303,7 @@ void weight_define(void){
 					
 			 else if (discrete == 1)
 			{
-				weight = ((int)(weight + 0.5))/1.0;
+				weight = ((int)((double)weight + 0.5))/1.0;
 			//	SEGGER_RTT_printf(0, "(%d + (5 - %d))/10.0 = %d;\n", weight_10, weight_10, (weight_10 + (5 - weight_10))/10.0);
 		   	sprintf(weight_char, "weight = %.1f\n", weight);
 				
@@ -381,7 +385,7 @@ void weight_define(void){
 									}
 									segtext(str);
 									segtext("\n");
-									segtext(weight_char);
+									segtext((uint8_t*)weight_char);
 									// handler of this timer in remote.c and ther we call find_average_adc that above
 										if(start_stable_find){
 											weight_stable_arr[weight_stable_count] = weight;
