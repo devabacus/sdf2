@@ -1131,6 +1131,9 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 									lora_write(&interface_enum, sizeof(interface_evt_t));
 									lora_write(&mode_state, sizeof(interface_evt_t));
 									endPacket();
+									rgb_set(50,0,0,2,1000);
+									
+									
 								}
 								else if (correct_mode == COR_AUTO)
 									{
@@ -1141,6 +1144,8 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 										lora_write(&interface_enum, sizeof(interface_evt_t));
 										lora_write(&mode_state, sizeof(interface_evt_t));
 										endPacket();
+										rgb_set(0,50,0,2,1000);
+										
 									}
 															 
 			  break;
