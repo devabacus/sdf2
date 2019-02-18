@@ -1072,10 +1072,6 @@ int main(void)
 //		interface.interface_evnt_handler = interface_evnt_handler;
 		interface.use_grams = false;
 	
-		
-	
-	
-	
     bool erase_bonds;
 		uint32_t err_code;
     // Initialize.

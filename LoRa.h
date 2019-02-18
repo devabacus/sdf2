@@ -106,6 +106,7 @@ void lora_write_flag_1byte(uint8_t flag, uint8_t value);
 void endPacket(void);
 uint8_t lora_init(nrf_drv_spi_t, long, p_lora_hendler_t);
 int rssi(void);
+void lora_write_with_flag(uint8_t flag, const uint8_t *buffer, uint16_t size);
 
 #endif
 

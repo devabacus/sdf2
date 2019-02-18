@@ -46,18 +46,9 @@ void flushIndexOfArray(uint8_t *buffer, uint8_t ind){
 
 void weight_ble_msg(void){
 		uint8_t weight_pref[] = "wt";
-		//uint8_t weight_pref[] = "";
-		//weight_pref[0] = 'w';
 		uint16_t length = strlen((char*)uart_weight_ch);
 		memcpy(weight_pref+2, uart_weight_ch, length);
 		ble_comm_send_handler(weight_pref);
-		//segtext("i");
-		//segtext(weight_pref);
-		//segtext("ivan\n");
-	
-		//segtext(weight_pref);
-		//segnum1(time_changed);
-		//	segtext("\n");
 }
 
 void send_uart_msg(void){
@@ -94,18 +85,6 @@ void define_uart_weight(void){
 //				SEGGER_RTT_printf(0, "uart_weight_max = %d\n", uart_weight_max);
 				uart_weight_max = 0;
 			}
-			
-		uint8_t interface_enum = REMOTE_WEIGHT; 
-		beginPacket();
-			lora_write(&interface_enum, 1);
-		lora_write((uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
-		endPacket();
-//		segtext(uart_weight_ch);
-//		segtext("\n");
-//			
-			
-			
-			
 		//ble_comm_send_handler((uint8_t*)uart_weight_ch);
 			weight_ble_msg();
 		} else {
@@ -158,17 +137,11 @@ void define_uart_weight(void){
 		if(!uart_weight_f) uart_weight_f = uart_weight_f_last;
 		
 	}
-	
-	
+#ifdef LORA_USE
+	lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
+#endif
 }
 
-/**@brief   Function for handling app_uart events.
- *
- * @details This function will receive a single character from the app_uart module and append it to
- *          a string. The string will be be sent over BLE when the last character received was a
- *          'new line' '\n' (hex 0x0A) or if the string has reached the maximum data length.
- */
-/**@snippet [Handling the data received over UART] */
 void uart_event_handle(app_uart_evt_t * p_event)
 {
     static uint8_t index = 0;
@@ -202,13 +175,7 @@ void uart_event_handle(app_uart_evt_t * p_event)
 							index++;
 							if (data_array[index - 1] == '\n'){
 									define_uart_weight();
-									
-									//segnum1(uart_weight);
-								//send directly from uart to ble without changings
 									send_uart_msg();
-									//SEGGER_RTT_printf(0, "%f\n", uart_weight_f);
-									//ble_comm_send_num_handler(uart_weight);
-									
 									for(uint8_t i = 0; i < 20; i++){
 												data_array[i] = 0;
 									}
@@ -216,23 +183,9 @@ void uart_event_handle(app_uart_evt_t * p_event)
 									 app_uart_flush();
 									 index = 0;
 								} 
-						
-				break;
-//          case APP_UART_COMMUNICATION_ERROR:
-//            APP_ERROR_HANDLER(p_event->data.error_communication);
-//            break;
-
-//        case APP_UART_FIFO_ERROR:
-//            APP_ERROR_HANDLER(p_event->data.error_code);
-//            break;
-        default:
-            break;
     }
 }
-/**@snippet [Handling the data received over UART] */
-/**@brief  Function for initializing the UART module.
- */
-/**@snippet [UART Initialization] */
+
 void uart_init(void)
 {
     uint32_t                     err_code;
