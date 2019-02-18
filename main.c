@@ -632,16 +632,11 @@ static void services_init(void)
     APP_ERROR_CHECK(err_code);
 #endif
 	
-	
-	
-		
 		ble_nus_init_t nus_init;
     memset(&nus_init, 0, sizeof(nus_init));
     nus_init.data_handler = nus_data_handler;
     err_code = ble_nus_init(&m_nus, &nus_init);
     APP_ERROR_CHECK(err_code);
-				
-
 }
 
 
@@ -1024,7 +1019,8 @@ static void correct_handle(uint8_t type, uint16_t value){
 			case PERCENT: add_number = 2000;
 				break;
 		}
-		correct_value(add_number + value);
+		current_correct = add_number + value;
+		buttons_handle();
 }
 
 void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
@@ -1033,11 +1029,8 @@ void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 		{
 				case RX_DONE:
 					{
-									correction_t correction;
-									correction_t *p_correction = &correction;
-									p_correction = (correction_t*)(_p_arr+1);
-							
-							switch(*_p_arr)
+						correction_t *p_correction  = (correction_t*) (_p_arr+1);
+						switch(*_p_arr)
 							{
 									case REMOTE_CORRECTION_SELECT: correct_handle(p_correction->v_type, p_correction->value);
 											break;
@@ -1070,7 +1063,6 @@ static void lora_initialize(){
  */
 int main(void)
 {
-		
 		interface_t interface;
 	
 		_interface = &interface;

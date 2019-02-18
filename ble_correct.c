@@ -136,7 +136,7 @@ void ble_correct(uint8_t * ble_buffer)
 											//SEGGER_RTT_printf(0, "phone_cor_counter = %d\n", phone_cor_counter);
 											
 											remote_mode = WORK_MODE;	
-											current_but = cor_button_ble;
+											current_but = (current_but_t) cor_button_ble;
 											//SEGGER_RTT_printf(0, "cor_button_ble = %d\n", cor_button_ble);
 											correct(0,0,0);
 											

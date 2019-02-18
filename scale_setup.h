@@ -54,7 +54,7 @@ uint32_t demo_passes(uint32_t demo_test, uint8_t num_st, uint8_t num_end);
 
 void check_pass(void);
 void check_option_pass(void);
-
+void change_correct_mode(void);
 //void change_correct_mode();
 
 void scale_setup(void);

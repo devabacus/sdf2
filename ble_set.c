@@ -121,7 +121,7 @@ void set_send_cor_mode(uint8_t set_value){
 
 void ble_set(uint8_t *ble_set_buffer){
 	
-			segtext((char*)ble_set_buffer);
+			segtext(ble_set_buffer);
 			segtext("\n");
 			uint8_t set_number = atoi((char*) ble_set_buffer+1);
 			

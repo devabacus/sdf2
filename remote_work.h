@@ -14,6 +14,7 @@
 #define NUM_ADC_CHANGE_FOR_DIRECT 2
 
 extern uint32_t cor_value_auto;
+extern uint32_t current_correct;
 extern uint32_t cur_comp_cor;
 extern uint32_t correct_mode;
 extern uint8_t cor_set;

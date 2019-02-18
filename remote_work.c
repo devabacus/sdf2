@@ -396,10 +396,11 @@ void buttons_handle(void)
 		//	#ifndef DEBUG_MODE
 				test_expired();
 		//	#endif
-					
+				
+		//correct_activate(current_correct);
 		if((fds_remote_type != PHONE_ONLY) || admin)
 		{
-			
+				
 						
 			if(correct_mode == COR_MANUAL)
 			{
@@ -409,7 +410,7 @@ void buttons_handle(void)
 				//	SEGGER_RTT_printf(0, "manual %d\n\r", current_correct);
 			}
 			
-		else if (correct_mode == COR_AUTO)	
+		  else if (correct_mode == COR_AUTO)	
 			{
 						cor_value_auto = current_correct;
 						

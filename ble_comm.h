@@ -30,4 +30,6 @@ int findIdexOfArray(uint8_t *buf, int startIndex, char character);
 extern void ble_comm_send_handler(uint8_t * buf);
 void ble_comm_send_num_handler(uint32_t num);
 
+void generate_option_pass(void);
+
 #endif

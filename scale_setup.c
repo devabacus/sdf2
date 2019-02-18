@@ -44,35 +44,13 @@ uint32_t current_life_counter = 0;
 
 //APP_TIMER_DEF(m_util_timer_id);
 
-
-
-//if(correct_mode == COR_MANUAL)
-//								{
-//									correct_mode = COR_AUTO;
-//									lora_write_byte(REMOTE_MODE_CHANGE);
-//									lora_write_byte(0);
-//									rgb_set(50,0,0,2,1000);
-//									
-//									
-//								}
-//								else if (correct_mode == COR_AUTO)
-//									{
-//										correct_mode = COR_MANUAL;
-//										lora_write_byte(REMOTE_MODE_CHANGE);
-//										lora_write_byte(1);
-//										rgb_set(0,50,0,2,1000);
-//										
-//									}
-//									
-
-
-
 void change_correct_mode()
 					{
 										SEGGER_RTT_printf(0, "COR_AUTO_MODE\r\n");
 							if(correct_mode == COR_MANUAL)
 								{
-									
+																			
+									lora_write_flag_1byte(REMOTE_MODE_CHANGE, 1);
 									correct_mode = COR_AUTO;
 									time_to_sleep = TIME_TO_SLEEP;
 									rgb_set(0,50,0,2,1000);
@@ -84,6 +62,7 @@ void change_correct_mode()
 								}
 								else if (correct_mode == COR_AUTO)
 									{
+										lora_write_flag_1byte(REMOTE_MODE_CHANGE, 0);
 										adc_value = 0;
 										rgb_set(50,0,0,2,1000);
 										time_to_sleep = 0;
