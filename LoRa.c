@@ -243,7 +243,6 @@ void lora_write1(const uint8_t *buffer, uint16_t size)
 {
 	beginPacket();
 	uint16_t currentLength = readRegister(REG_PAYLOAD_LENGTH);
-
 	for (size_t i = 0; i < size; i++) {
     writeRegister(REG_FIFO, *(buffer+i));
   }

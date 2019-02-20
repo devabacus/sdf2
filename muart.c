@@ -68,7 +68,6 @@ void send_uart_msg(void){
 
 
 void define_uart_weight(void){
-	
 	// если отправили s8/2 через телефон то weight_float = 1
 	if(!weight_float){
 		flushIndexOfArray(data_array, endWeightIndex);
@@ -94,6 +93,11 @@ void define_uart_weight(void){
 			//uart_weight_last = uart_weight;
 			//это тестовый комментарий
 			weight_ble_msg();
+				#ifdef LORA_USE
+			lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
+			#endif
+				
+				
 		}
 	}
 		if(!uart_weight) uart_weight = uart_weight_last;
@@ -102,26 +106,10 @@ void define_uart_weight(void){
 		flushIndexOfArray(data_array, endWeightIndex);
 		uart_weight_f = atof((char*)data_array+startWeightIndex);	
 		if(uart_weight_f != uart_weight_f_last){
-			//clock_counter_last = clock_counter;
-//			if(clock_counter != clock_counter_last){
-//				clock_counter_last = clock_counter;
-//			  time_changed++;
-//			}
-			
 			time_changed=0;
 			sprintf(uart_weight_ch, "%.2f", uart_weight_f);
 			uart_weight_f_last = uart_weight_f;
-//			segtext(uart_weight_ch);
-//			segtext("\n");
-			
-			beginPacket();
-		lora_write((uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
-		endPacket();
-			
 			//ble_comm_send_handler((uint8_t*)uart_weight_ch);
-			
-			
-			
 			
 			weight_ble_msg();
 		} else {
@@ -137,9 +125,7 @@ void define_uart_weight(void){
 		if(!uart_weight_f) uart_weight_f = uart_weight_f_last;
 		
 	}
-#ifdef LORA_USE
-	lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
-#endif
+
 }
 
 void uart_event_handle(app_uart_evt_t * p_event)
@@ -156,13 +142,11 @@ void uart_event_handle(app_uart_evt_t * p_event)
 								if(uart_weight > 0){
 									
 									if(counter_uart_blink == 100){
-									//	segtextn("blink toggle");
 										nrf_gpio_pin_toggle(17);
 										counter_uart_blink = 0;
 									}
 									
 									counter_uart_blink++;
-								//	SEGGER_RTT_printf(0, "counter_uart_blink = %d\n", counter_uart_blink);
 								}
 								else if(uart_weight == 0)
 								{

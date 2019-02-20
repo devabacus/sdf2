@@ -100,7 +100,6 @@ void reset_counters(uint8_t ch_num){
 void set_send_cor_mode(uint8_t set_value){
 		correct_mode = set_value;
 		uint8_t mode_state;
-		uint8_t interface_enum = REMOTE_MODE_CHANGE; 
 		if(set_value == 1){
 			 ble_comm_send_handler("n3/1");
 				mode_state = 1;
@@ -112,10 +111,7 @@ void set_send_cor_mode(uint8_t set_value){
 		else if (set_value == 3){
 			 ble_comm_send_handler ("n3/3");
 		}
-		beginPacket();
-		lora_write(&interface_enum, 1);
-		lora_write(&mode_state, 1);
-		endPacket();
+		lora_write_flag_1byte(REMOTE_MODE_CHANGE, mode_state);
 	  
 }
 

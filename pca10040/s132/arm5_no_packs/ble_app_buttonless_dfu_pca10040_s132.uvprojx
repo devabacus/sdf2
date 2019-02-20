@@ -496,11 +496,6 @@
               <FilePath>..\..\..\LoRa.c</FilePath>
             </File>
             <File>
-              <FileName>Buttons.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>\\DESKTOP-C3P8B0J\nRF5_SDK_15.2.0_9412b96\examples\ble_peripheral\ble_app_Lora_Oled\Buttons.c</FilePath>
-            </File>
-            <File>
               <FileName>mem_manager.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\components\libraries\mem_manager\mem_manager.c</FilePath>
@@ -4457,11 +4452,6 @@
               <FileName>LoRa.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\LoRa.c</FilePath>
-            </File>
-            <File>
-              <FileName>Buttons.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>\\DESKTOP-C3P8B0J\nRF5_SDK_15.2.0_9412b96\examples\ble_peripheral\ble_app_Lora_Oled\Buttons.c</FilePath>
             </File>
             <File>
               <FileName>mem_manager.c</FileName>

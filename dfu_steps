@@ -2,14 +2,40 @@ nrfutil keys generate private.pem
 nrfutil keys display --key pk --format code private_key.pem --out_file out_file.c
 
 nrfutil settings generate --family NRF52 --application nrf52832_xxaa.hex --application-version 3 --bootloader-version 2 --bl-settings-version 1 sett.hex
+nrfutil settings generate --family NRF52 --application nrf52840_xxaa.hex --application-version 3 --bootloader-version 2 --bl-settings-version 1 sett.hex
+
+nrfutil settings generate --family NRF52840 --application nrf52840_xxaa.hex --application-version 3 --bootloader-version 2 --bl-settings-version 1 sett.hex
+
+
 mergehex -m nrf52832_xxaa_s132.hex sett.hex -o output_file.hex
+mergehex -m nrf52840_xxaa_s140.hex sett.hex -o output_file.hex
+
+
+nrfjprog --eraseall
+nrfjprog --program softdevice_s140.hex
+nrfjprog -f NRF52 --program bootloader_secure_ble_debug_without_bonds_s140.hex --reset
+
+nrfjprog --program softdevice_s132.hex
+nrfjprog -f NRF52 --program bootloader_secure_ble_debug_without_bonds_s132.hex --reset
+nrfjprog -f NRF52 --program ble_app_buttonless_dfu_with_bonds_s132_with_setting_page.hex --reset
+
+nrfjprog -f NRF52 --program sd_s140_bootloader_buttonless_with_setting_page_dfu_secure_ble_debug_without_bonds.hex --reset
+ble_app_buttonless_dfu_with_bonds_s132_with_setting_page.hex
 
 
 nrfjprog -f NRF52 --program output_file.hex --reset
+nrfjprog -f NRF52840 --program output_file.hex --reset
+
+nrfjprog --programm s140_nrf52_6.1.1_softdevice.hex
+
+nrfjprog -f NRF52 --program sd_s132_bootloader_buttonless_with_setting_page_dfu_secure_ble_debug_without_bonds.hex --reset
+
+nrfjprog -f NRF52 --program sd_s140_bootloader_buttonless_with_setting_page_dfu_secure_ble_debug_without_bonds.hex --reset
 
 nrfutil pkg generate --hw-version 52 --sd-req 0x99 --application-version 4 --application f:\Projects\nrf52832\sdk_13\examples\ble_peripheral\experimental_ble_app_buttonless_dfu\pca10040\s132\arm5_no_packs\_build\nrf52832_xxaa.hex --key-file f:\Projects\nrf52832\private.pem buttonless_dfu.zip
 nrfutil pkg generate --hw-version 52 --sd-req 0x99 --application-version 4 --application f:\Projects\nrf52832\sdk_13\examples\ble_peripheral\ble_app_template\pca10040\s132\arm5_no_packs\_build\nrf52832_xxaa.hex --key-file f:\Projects\nrf52832\private.pem ble_package.zip
 nrfutil pkg generate --hw-version 52 --sd-req 0x99 --application-version 4 --application f:\Projects\nrf52832\sdk_13\examples\peripheral\uart_pwm_simple\pca10040\blank\arm5_no_packs\_build\nrf52832_xxaa.hex --key-file f:\Projects\nrf52832\private.pem uart_pwm_simple.zip
 
 
+nrfutil pkg generate --hw-version 52 --sd-req 0xA5 --application-version 4 --application f:\NRF14.2\examples\ble_peripheral\sdr\pca10040\s132\arm5_no_packs\_build\nrf52832_xxaa.hex --key-file f:\Projects\nrf52832\private.pem sdr.zip
 nrfutil pkg generate --hw-version 52 --sd-req 0xA5 --application-version 4 --application f:\NRF14.2\examples\ble_peripheral\sdr\pca10040\s132\arm5_no_packs\_build\nrf52832_xxaa.hex --key-file f:\Projects\nrf52832\private.pem sdr.zip

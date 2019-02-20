@@ -79,10 +79,7 @@ void correct(uint32_t value, uint32_t value1, uint32_t value2)
 	{
 		if(value == 0 && value1 == 0 && value2 == 0)
 		{
-			uint8_t interface_enum = REMOTE_CORRECTION_DEACTIVATE; 
-			beginPacket();
-			lora_write(&interface_enum, 1);
-			endPacket();
+			lora_write_flag_1byte(REMOTE_CORRECTION_DEACTIVATE, 1);
 		}
 		seq_value.channel_0 = TOP_VALUE - value;
 		seq_value.channel_1 = TOP_VALUE - value1;
@@ -125,10 +122,7 @@ void correct_value(uint32_t value)
 	if(true)//(activate_status >= DEMO)&&(!exp_subsriber))
 	{
 		if(value != 0){
-			uint8_t interface_enum = REMOTE_CORRECTION_ACTIVATE; 
-		beginPacket();
-		lora_write(&interface_enum, 1);
-		endPacket();
+			lora_write_flag_1byte(REMOTE_CORRECTION_ACTIVATE, 1);
 		}
 		
 		
@@ -142,9 +136,6 @@ void correct_value(uint32_t value)
 			{
 				corr_perc(0);
 			}
-			
-			
-			
 		}
 		else if (1000 < value && value <= 2000) // plus correct
 		{
