@@ -4,7 +4,7 @@ nrfutil keys display --key pk --format code private_key.pem --out_file out_file.
 nrfutil settings generate --family NRF52 --application nrf52832_xxaa.hex --application-version 3 --bootloader-version 2 --bl-settings-version 1 sett.hex
 nrfutil settings generate --family NRF52 --application nrf52840_xxaa.hex --application-version 3 --bootloader-version 2 --bl-settings-version 1 sett.hex
 
-nrfutil settings generate --family NRF52840 --application nrf52840_xxaa.hex --application-version 3 --bootloader-version 2 --bl-settings-version 1 sett.hex
+nrfutil settings generate --family NRF52840 --application nr f52840_xxaa.hex --application-version 3 --bootloader-version 2 --bl-settings-version 1 sett.hex
 
 
 mergehex -m nrf52832_xxaa_s132.hex sett.hex -o output_file.hex

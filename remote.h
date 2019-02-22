@@ -12,19 +12,6 @@
 #include "scale_setup.h"
 #include "weight.h"
 
-
-//#define WORK_MODE 								0
-//#define CORR_BUT_MODE 	  				1
-//#define CALL_MODE 								2
-//#define CHECK_SUB_DATA						3
-//#define CHANGE_SUB_DATA						4
-//#define FEEDBACK_SET_MODE 				5
-//#define CORR_SETUP_MODE	  				6  // auto correct setup
-//#define FACTORY_MODE							7
-//#define STATUS_DEFINE       			8
-//#define CORR_OFFSET_KG			 			9
-//#define RESET_COUNTERS						10
-
 enum SETUP_MODE{
 	WORK_MODE,
 	CORR_BUT_MODE,

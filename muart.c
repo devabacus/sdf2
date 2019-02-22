@@ -17,7 +17,6 @@ uint32_t uart_ble_mode 		 = 1;
 uint16_t clock_counter_last = 0;
 uint16_t time_changed = 0;
 
-
 float uart_weight_f = 0;
 int uart_weight 	 = 0;
 char uart_weight_ch[10];
@@ -94,6 +93,7 @@ void define_uart_weight(void){
 			//это тестовый комментарий
 			weight_ble_msg();
 				#ifdef LORA_USE
+				segtext("lora send\n");
 			lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
 			#endif
 				
