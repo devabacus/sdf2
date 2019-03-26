@@ -56,7 +56,6 @@ void send_uart_msg(void){
 		segtext(data_array);
 		ble_comm_send_handler(data_array);
 		
-		
 	} else if (uart_ble_mode == 2){
 		segtext(data_array + startWeightIndex);
 		segtext("\n");
@@ -93,8 +92,9 @@ void define_uart_weight(void){
 			//это тестовый комментарий
 			weight_ble_msg();
 				#ifdef LORA_USE
-				segtext("lora send\n");
-			lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
+				//segtext("lora send\n");
+				SEGGER_RTT_printf(0, "%s\n", (uint8_t*)uart_weight_ch);
+			//lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
 			#endif
 				
 				
@@ -163,7 +163,6 @@ void uart_event_handle(app_uart_evt_t * p_event)
 									for(uint8_t i = 0; i < 20; i++){
 												data_array[i] = 0;
 									}
-									 
 									 app_uart_flush();
 									 index = 0;
 								} 
@@ -176,7 +175,6 @@ void uart_init(void)
     app_uart_comm_params_t const comm_params =
     {
         .rx_pin_no    = 26,
-        .tx_pin_no    = 25,
         .rts_pin_no   = RTS_PIN_NUMBER,
         .cts_pin_no   = CTS_PIN_NUMBER,
         .flow_control = APP_UART_FLOW_CONTROL_DISABLED,

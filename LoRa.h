@@ -69,7 +69,7 @@
 
 
 #define LORA_DEFAULT_RESET_PIN 31
-#define LORA_DEFAULT_DIO0_PIN 6 
+#define LORA_DEFAULT_DIO0_PIN 25 
 
 #define MAP_DIO0_LORA_RXDONE   0x00  // 00------
 #define MAP_DIO0_LORA_TXDONE   0x40  // 01------

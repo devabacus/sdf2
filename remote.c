@@ -1,11 +1,9 @@
 #include "remote.h"
 
-
 APP_TIMER_DEF(m_timer_remote);
 APP_TIMER_DEF(m_timer_remote02);
 APP_TIMER_DEF(m_timer_remote05);
 APP_TIMER_DEF(m_timer_adc);
-
 
 uint8_t exp_subsriber = 0;
 
@@ -72,46 +70,46 @@ void reset_activate()
 
 void test_expired(void)
 {
-	if(activate_status <= DEMO)
-	{
-		if(corr_counter >= CORRECT_COUNT_MAX_DEMO)
-		{
-			reset_activate();
-			SEGGER_RTT_printf(0, "correct_demo_exp\r\n");
-		}
-		else if (life_counter > WORK_HOURS_MAX_DEMO*60)    
-		{
-			reset_activate();
-			SEGGER_RTT_printf(0, "hours_demo_exp\r\n");
-		}
-		else if (power_down_count >= RESET_MAX_DEMO)
-		{
-			reset_activate();
-			SEGGER_RTT_printf(0, "reset_demo_exp\r\n");
-		}
-	}
-	
-	else if(activate_status > DEMO)
-	{
-		if(corr_counter >= cur_cor_max)
-		{
-			exp_subsriber = 1;
-		}
-		else if (power_down_count >= cur_res_max)
-		{
-			//because of there was fail with activate reset max. (50). So we turn checking off
-			exp_subsriber = 2;
-		}
-		else if (life_counter >= cur_hr_max*60)
-		{
-			exp_subsriber = 3;
-		}
-		
-		if(exp_subsriber)
-		{
-			SEGGER_RTT_printf(0, "exp_subsriber = %d, activate_status = %d\r\n", exp_subsriber, activate_status);	
-		}
-	}
+//	if(activate_status <= DEMO)
+//	{
+//		if(corr_counter >= CORRECT_COUNT_MAX_DEMO)
+//		{
+//			reset_activate();
+//			SEGGER_RTT_printf(0, "correct_demo_exp\r\n");
+//		}
+//		else if (life_counter > WORK_HOURS_MAX_DEMO*60)    
+//		{
+//			reset_activate();
+//			SEGGER_RTT_printf(0, "hours_demo_exp\r\n");
+//		}
+//		else if (power_down_count >= RESET_MAX_DEMO)
+//		{
+//			reset_activate();
+//			SEGGER_RTT_printf(0, "reset_demo_exp\r\n");
+//		}
+//	}
+//	
+//	else if(activate_status > DEMO)
+//	{
+//		if(corr_counter >= cur_cor_max)
+//		{
+//			exp_subsriber = 1;
+//		}
+//		else if (power_down_count >= cur_res_max)
+//		{
+//			//because of there was fail with activate reset max. (50). So we turn checking off
+//			exp_subsriber = 2;
+//		}
+//		else if (life_counter >= cur_hr_max*60)
+//		{
+//			exp_subsriber = 3;
+//		}
+//		
+//		if(exp_subsriber)
+//		{
+//			SEGGER_RTT_printf(0, "exp_subsriber = %d, activate_status = %d\r\n", exp_subsriber, activate_status);	
+//		}
+//	}
 }
 
 void reset_long_press_flags(void)

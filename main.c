@@ -961,7 +961,6 @@ static void log_init(void)
 {
     uint32_t err_code = NRF_LOG_INIT(NULL);
     APP_ERROR_CHECK(err_code);
-
     NRF_LOG_DEFAULT_BACKENDS_INIT();
 }
 
@@ -1120,7 +1119,9 @@ int main(void)
 		SEGGER_RTT_printf(0, "fds_uart_automode = %d, cal_turn_on = %d\n", fds_uart_automode, cal_turn_on);
 		segtext("fds_option_status = ");
 		segnum1(fds_option_status);
-							
+		//rgb_set(0, 50, 0, 2, 500);
+		
+		
     for (;;)
     {
 			

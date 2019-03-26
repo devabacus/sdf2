@@ -11,26 +11,6 @@ void spi_event_handler(nrf_drv_spi_evt_t const * p_event,
 
 uint8_t singleTransfer(uint8_t address, uint8_t value)
 {
-	
- nrf_drv_spi_config_t spi_config = 
-		{                                                          
-//			.sck_pin      = SPI_SCK_PIN,                
-//			.mosi_pin     = SPI_MOSI_PIN,                
-//			.miso_pin     = SPI_MISO_PIN,                
-//			.ss_pin       = SPI_SS_PIN,  
-			.sck_pin      = 19,                
-			.mosi_pin     = 16,                
-			.miso_pin     = 20,                
-			.ss_pin       = 18,  			
-			.irq_priority = SPI_DEFAULT_CONFIG_IRQ_PRIORITY,         
-			.orc          = 0x00,                                    
-			.frequency    = NRF_DRV_SPI_FREQ_8M,                     
-			.mode         = NRF_DRV_SPI_MODE_0,                      
-			.bit_order    = NRF_DRV_SPI_BIT_ORDER_MSB_FIRST,         
-		};
-		
-	APP_ERROR_CHECK(nrf_drv_spi_init(&_spi, &spi_config, spi_event_handler, NULL));	
-	
 	rx_buf[1] = 0;
 	tx_buf[0] = address;
 	tx_buf[1] = value;
@@ -47,7 +27,7 @@ uint8_t singleTransfer(uint8_t address, uint8_t value)
             UNUSED_RETURN_VALUE(NRF_LOG_PROCESS());
         }
 		
-	nrf_drv_spi_uninit(&_spi);
+	//nrf_drv_spi_uninit(&_spi);
 	return rx_buf[1];
 	
 }
@@ -138,8 +118,8 @@ uint8_t lora_init(nrf_drv_spi_t spi, long frequency, p_lora_hendler_t p_lora_hen
 
 		nrf_gpio_cfg_output(LORA_DEFAULT_RESET_PIN);
 	
-		//err_code = nrf_drv_gpiote_init();
-    //APP_ERROR_CHECK(err_code);
+//		err_code = nrf_drv_gpiote_init();
+//    APP_ERROR_CHECK(err_code);
 		
 		 nrf_drv_gpiote_in_config_t config =   {       
         .is_watcher = false,                    
@@ -147,6 +127,28 @@ uint8_t lora_init(nrf_drv_spi_t spi, long frequency, p_lora_hendler_t p_lora_hen
         .pull = NRF_GPIO_PIN_PULLDOWN,            
         .sense = NRF_GPIOTE_POLARITY_LOTOHI,    
     };
+		 
+		 nrf_drv_spi_config_t spi_config = 
+		{                                                          
+//			.sck_pin      = SPI_SCK_PIN,                
+//			.mosi_pin     = SPI_MOSI_PIN,                
+//			.miso_pin     = SPI_MISO_PIN,                
+//			.ss_pin       = SPI_SS_PIN,  
+			.sck_pin      = 19,                
+			.mosi_pin     = 18,                
+			.miso_pin     = 16,                
+			.ss_pin       = 15,  			
+			.irq_priority = SPI_DEFAULT_CONFIG_IRQ_PRIORITY,         
+			.orc          = 0x00,                                    
+			.frequency    = NRF_DRV_SPI_FREQ_8M,                     
+			.mode         = NRF_DRV_SPI_MODE_0,                      
+			.bit_order    = NRF_DRV_SPI_BIT_ORDER_MSB_FIRST,         
+		};
+		
+		
+		APP_ERROR_CHECK(nrf_drv_spi_init(&_spi, &spi_config, spi_event_handler, NULL));	
+		
+		
 		irq_flag = false;
 		APP_ERROR_CHECK(nrf_drv_gpiote_in_init(LORA_DEFAULT_DIO0_PIN, &config, dio));
 		if(err_code != NRF_SUCCESS)
@@ -272,9 +274,6 @@ void lora_write_byte(uint8_t flag)
 		writeRegister(REG_PAYLOAD_LENGTH, readRegister(REG_PAYLOAD_LENGTH) + 1);
 		endPacket();
 }
-
-
-
 
 
 void lora_write_flag_1byte(uint8_t flag, uint8_t value){
