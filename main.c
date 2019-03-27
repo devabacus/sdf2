@@ -1121,10 +1121,8 @@ int main(void)
 		segnum1(fds_option_status);
 		//rgb_set(0, 50, 0, 2, 500);
 		
-		
     for (;;)
     {
-			
 			app_sched_execute();
 					if(correct_mode == COR_AUTO)
 	
