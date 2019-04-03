@@ -1011,6 +1011,7 @@ static void power_manage(void)
 
 
 static void correct_handle(uint8_t type, uint16_t value){
+		
 		uint16_t add_number = 0;
 		switch(type){
 			case PLUS: add_number = 1000;
@@ -1029,13 +1030,15 @@ void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 				case RX_DONE:
 					{
 						correction_t *p_correction  = (correction_t*) (_p_arr+1);
+						//SEGGER_RTT_printf(0, "lora event =%d, type = %d, value %d\n", event, p_correction->v_type, p_correction->value);
+						uint8_t cor_type = (uint8_t) p_correction->v_type;
 						switch(*_p_arr)
 							{
-									case REMOTE_CORRECTION_SELECT: correct_handle(p_correction->v_type, p_correction->value);
+									case REMOTE_CORRECTION_SELECT: correct_handle(cor_type, p_correction->value);
 											break;
 									case REMOTE_CORRECTION_CANCEL: correct(0,0,0);
 										break;
-									case REMOTE_CORRECTION_EDIT: correct_handle(p_correction->v_type, p_correction->value);
+									case REMOTE_CORRECTION_EDIT: correct_handle(cor_type, p_correction->value);
 											break;
 									case REMOTE_MODE_CHANGE: change_correct_mode();
 											break;

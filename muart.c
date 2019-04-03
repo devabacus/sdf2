@@ -13,7 +13,8 @@ uint32_t weight_float = 0;
 uint8_t data_array[20];
 uint32_t startWeightIndex = 2;
 uint32_t endWeightIndex 	 = 11;
-uint32_t uart_ble_mode 		 = 1;
+// send rs-232 message
+uint32_t uart_ble_mode 		 = 0;
 uint16_t clock_counter_last = 0;
 uint16_t time_changed = 0;
 
@@ -93,7 +94,7 @@ void define_uart_weight(void){
 			weight_ble_msg();
 				#ifdef LORA_USE
 				//segtext("lora send\n");
-				SEGGER_RTT_printf(0, "%s\n", (uint8_t*)uart_weight_ch);
+				//SEGGER_RTT_printf(0, "%s\n", (uint8_t*)uart_weight_ch);
 			//lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
 			#endif
 				
