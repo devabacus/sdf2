@@ -84,10 +84,6 @@ void print_array_float(float* array, uint8_t size)
 			}
 }
 
-
-
-
-
 void find_average_in_array(uint32_t* array, uint8_t size)
 {
 				uint8_t start_id = NUM_EXCEED_MEMBERS/2;

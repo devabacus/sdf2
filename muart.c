@@ -65,7 +65,6 @@ void send_uart_msg(void){
 										
 }
 
-
 void define_uart_weight(void){
 	// если отправили s8/2 через телефон то weight_float = 1
 	if(!weight_float){
