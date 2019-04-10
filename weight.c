@@ -121,7 +121,7 @@ void find_average_adc(void)
 	// если мы набрали нужное количество значений ацп в массив
 				if(count_average_adc == AVERAGE_ADC_TIMES)
 						{
-						//	print_array(adc_array, AVERAGE_ADC_TIMES);
+					   	//	print_array(adc_array, AVERAGE_ADC_TIMES);
 							// сортируем их
 							sort_array(adc_array, AVERAGE_ADC_TIMES);
 							find_average_in_array(adc_array, AVERAGE_ADC_TIMES);
@@ -167,7 +167,6 @@ void find_average_adc(void)
 										cal_coef_float = (cal_load_value - cal_zero_value)/(float)num_of_discrete_for_cal; 
 										sprintf((char*)str, "cal_coef = %.4f\n", cal_coef_float);
 										segtext(str);
-											
 											SEGGER_RTT_printf(0, "cal_coef - %d\n\r", cal_coef);
 										}
 										fds_update_value(&cal_coef, file_id, fds_rk_cal_zero+1);
@@ -184,7 +183,7 @@ void find_average_adc(void)
 										segtext(cal_adc_pref2);
 										ble_settings.showADC = 1;
 								break;
-								
+										
 								case 3:
 									cal_turn_on = average_adc;
 									fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
