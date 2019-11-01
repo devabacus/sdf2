@@ -30,11 +30,10 @@ enum REMOTE_EVENT
 
 typedef enum COR_VALUE_TYPE
 {
-	PERCENT,
-	MINUS,
-	PLUS
+	MINUS = 0x1,
+	PLUS = 0x2,
+	PERCENT = 0x4,
 }v_type_t;
-
 
 typedef enum
 {

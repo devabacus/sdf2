@@ -77,8 +77,8 @@
 //#define PA_OUTPUT_RFO_PIN      17 
 //#define PA_OUTPUT_PA_BOOST_PIN 18
 
-//#define MAX_POWER //uncoment to set max power mode
-#define SUPER_MAX_POWER //DANGER
+#define MAX_POWER //uncoment to set max power mode
+//#define SUPER_MAX_POWER //DANGER
 
 typedef enum
 {

@@ -374,7 +374,6 @@ ret_code_t fds_read_value (uint32_t* data, uint16_t file_id, uint16_t rec_key)
 		SEGGER_RTT_printf(0,"data = \r\n", *data);
 		err_code = fds_record_close(&record_desc);
 		APP_ERROR_CHECK(err_code);
-		
 		return NRF_SUCCESS;
 }
 

@@ -1,0 +1,11 @@
+weight_rem = weight_10 % 5;
+								
+									if(weight_rem < 3)
+										{
+											weight = (weight_10 - weight_rem)/10.0;
+										}
+									else 
+									{
+										  weight = (weight_10 + (5 - weight_rem))/10.0;
+									}
+								sprintf(weight_char, "weight = %.1f\n", weight);

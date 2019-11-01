@@ -35,6 +35,7 @@ void time_check(void){
 			if(clock_counter != clock_counter_last){
 				clock_counter_last = clock_counter;
 			  time_changed++;
+				segnum1(time_changed);
 			}
 }
 
@@ -94,7 +95,7 @@ void define_uart_weight(void){
 				#ifdef LORA_USE
 				//segtext("lora send\n");
 				//SEGGER_RTT_printf(0, "%s\n", (uint8_t*)uart_weight_ch);
-			//lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
+		//	lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
 			#endif
 				
 				
