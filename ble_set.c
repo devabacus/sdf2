@@ -12,15 +12,11 @@ ble_type_sett_t sett_type = SHOWADC;
 void remote_but_update(uint8_t but_num);
 int findIdexOfArray(uint8_t *buf, int startIndex, char character);
 
-
-
-
 void ble_set_init(){
 	ble_settings.adcBitForCut = 7;
 	ble_settings.showADC = 0;
 	ble_settings.workADC = 1;
 }
-
 
 void change_max_counters(uint8_t param, uint16_t value){
 	
@@ -91,11 +87,9 @@ void reset_counters(uint8_t ch_num){
 			   	ble_comm_send_handler("demo res");
 				break;
 
-			}
-										
+			}									
 }
 }
-
 
 void set_send_cor_mode(uint8_t set_value){
 		correct_mode = set_value;
@@ -247,9 +241,6 @@ void ble_set(uint8_t *ble_set_buffer){
 
 									//SEGGER_RTT_printf(0, "fds_volume_counter = %d\n", fds_volume_counter);
 					}
-
-
-
 					else if (set_value == 2){
 						fds_archive_counter++;
 								if((fds_archive_counter > ARCHIVE_DEMO_COUNTER_MAX) && (!(fds_option_status & (OPTION_ARCHIVE_Msk)))){
@@ -260,10 +251,8 @@ void ble_set(uint8_t *ble_set_buffer){
 								fds_update_value(&fds_archive_counter, file_id_c, fds_rk_archive_counter);
 								SEGGER_RTT_printf(0, "fds_archive_counter = %d\n", fds_archive_counter);
 								}
-				}
-					
-				break;
-				
+				}					
+				break;				
 				case CAL_MAX_WEIGHT:
 					maxWeight = atoi((char*) ble_set_buffer + slashIndex);
 				

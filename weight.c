@@ -152,9 +152,10 @@ void find_average_adc(void)
 									num_of_discrete_for_cal = cal_weight/(float)discrete;
 									SEGGER_RTT_printf(0, "num_of_discrete_for_cal = %d\n", num_of_discrete_for_cal);
 									//we have stopped it by phone before zero calibrating, now start again	
-									ble_settings.showADC = 1;
-								 //	ble_comm_send_handler(ble_string_put);
-								//	SEGGER_RTT_printf(0, "zero - %d\n\r", cal_zero_value);
+									//ble_settings.showADC = 1;
+								 	ble_comm_send_handler(ble_string_put);
+									SEGGER_RTT_printf(0, ble_string_put1);
+									SEGGER_RTT_printf(0, "zero - %d\n\r", cal_zero_value);
 								break;
 								
 								case 2:
@@ -181,7 +182,7 @@ void find_average_adc(void)
 										memcpy(cal_adc_pref2+5, ble_string_put1, length2);
 										ble_comm_send_handler(cal_adc_pref2);
 										segtext(cal_adc_pref2);
-										ble_settings.showADC = 1;
+										//ble_settings.showADC = 1;
 								break;
 										
 								case 3:
@@ -220,10 +221,7 @@ void weight_define(void){
 			//выделяем целую часть
 			//	sprintf(str, "weight = %.4f\n", weight);
 			//segtext(str);
-			
-			
-			
-			
+
 			if(discrete == 0.01){
 				sprintf(weight_char, "weight = %.2f\n", weight);
 			} 
@@ -408,7 +406,7 @@ void cal_unload(void)
 		// handler of this timer in remote.c and ther we call find_average_adc that above
 	  start_timer_02s();
 		segtext("cal_unload\n");
-	}
+}
 
 void cal_load(void) // define adc_value for 10 discretes 
 {
@@ -427,16 +425,12 @@ void define_corr_on(void)
 
 void define_corr_on_uart(void)
 {
-	if(uart_weight > 0)
-	{
 		cal_turn_on = uart_weight;
 		fds_uart_automode = 1;
 		fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
 		fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
 		SEGGER_RTT_printf(0, "uart turn_on = %d\n\r", cal_turn_on);
 		rgb_set(0, 50, 0, 5, 500);
-	}
-	
 }
 
 

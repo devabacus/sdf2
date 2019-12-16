@@ -119,9 +119,11 @@ void corr_perc(uint32_t value)
 
 void correct_value(uint32_t value)
 {
-	if(true)//(activate_status >= DEMO)&&(!exp_subsriber))
+	SEGGER_RTT_printf(0, "activate_status = %d, exp_subscriber = %d\n" ,activate_status, exp_subsriber);
+	SEGGER_RTT_printf(0, "corr_counter = %d\n", corr_counter);
+	if((activate_status >= DEMO)&&(!exp_subsriber))
 	{
-		if(value != 0){
+		if((value != 0) && (remote_mode == WORK_MODE)){
 			lora_write_flag_1byte(REMOTE_CORRECTION_ACTIVATE, 1);
 		}
 		
@@ -137,7 +139,7 @@ void correct_value(uint32_t value)
 				corr_perc(0);
 			}
 		}
-		else if (1000 < value && value <= 2000) // plus correct
+		else if (1000 < value && value < 2000) // plus correct
 		{
 			value = value - 1000;
 			//SEGGER_RTT_printf(0, "value in correct_value = %d\r\n", value);
@@ -151,7 +153,7 @@ void correct_value(uint32_t value)
 		}
 		
 		//It needs to change this function for offset kg mode
-		else if (value > 2000)  // percent correct
+		else if (value >= 2000)  // percent correct
 		{
 			if(value > 3000) value = 3000;
 			value = value - 2000;

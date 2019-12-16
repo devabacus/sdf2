@@ -25,14 +25,13 @@ enum REMOTE_EVENT
 	REMOTE_MODE_CHANGE,
 };
 
-
-
-
 typedef enum COR_VALUE_TYPE
 {
 	MINUS = 0x1,
 	PLUS = 0x2,
 	PERCENT = 0x4,
+	PERCENT_MINUS = 0x5,
+	PERCENT_PLUS = 0x6,
 }v_type_t;
 
 typedef enum
@@ -42,33 +41,38 @@ typedef enum
 	MENU,
 }interface_state_t;
 
+//typedef struct
+//{
+//	bool 	active;
+//	uint8_t corr_n;
+//	char 	* name;
+//	uint16_t value;
+//	v_type_t  v_type;
+//	uint16_t compensation;
+//}correction_t;
+
 typedef struct
 {
-	bool 		active;
-	uint8_t corr_n;
-	char 	* name;
+	v_type_t  v_type:4;
 	uint16_t value;
-	v_type_t  v_type;
-	uint16_t compensation;
+	
 }correction_t;
+
+static uint16_t lora_comp;
 
 typedef struct
 {
 	bool			use_grams;
 	bool			edit_name;
 	bool			mode;
-	
 	float			weight;
-	
 	uint8_t   rssi;
 	char 		  bat;
-	
-	uint8_t		menu_counter;
-		
-	correction_t 					 * current_corr;           
-	uint8_t			 					 * p_arr;
+	uint8_t		     menu_counter;
+	correction_t 	* current_corr;           
+	uint8_t			* p_arr;
 	interface_evnt_handler_t interface_evnt_handler;
-	uint8_t 				 interface_evt;
+	uint8_t 		interface_evt;
 	
 	interface_state_t 	interface_state;
 	

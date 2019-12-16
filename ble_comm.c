@@ -13,9 +13,6 @@ void ble_comm_send_num_handler(uint32_t num){
 			sprintf((char*)ble_string_put, "%d", num);
 			ble_comm_send_handler(ble_string_put);
 }
-
-
-
 void zero(uint8_t times, uint16_t delay){
 			
 			for(uint8_t i = 0; i < times; i++){
@@ -23,13 +20,8 @@ void zero(uint8_t times, uint16_t delay){
 					nrf_delay_ms(delay);
 					nrf_gpio_pin_clear(15);
 					nrf_delay_ms(delay);
-			}
-			
+			}			
 }
-
-
-
-
 int findIdexOfArray(uint8_t *buf, int startIndex, char character){
 		for(uint8_t i = startIndex; i<strlen((char*)buf); i++ )
 		{
@@ -40,10 +32,7 @@ int findIdexOfArray(uint8_t *buf, int startIndex, char character){
 		return 0;
 }
 
-void option_notif(){
-	
-	
-	
+void option_notif(){	
 		if((fds_archive_counter < ARCHIVE_DEMO_COUNTER_MAX) && (!(fds_option_status & (OPTION_ARCHIVE_Msk)))){
 			ble_comm_send_handler("o1/1");
 			segtext("o1/1\n");
@@ -71,7 +60,7 @@ void option_notif(){
 
 void ble_comm(uint8_t * ble_buffer)
 	{
-		
+		SEGGER_RTT_printf(0, "rx = %s\n", ble_buffer);
 					switch(ble_buffer[0]){
 							
 						case '$':
@@ -136,15 +125,13 @@ void ble_comm(uint8_t * ble_buffer)
 								app_uart_put(ble_buffer[1]);
 								SEGGER_RTT_printf(0, "get %c\n", ble_buffer[1]);
 						break;
-						
-						
 						case 'z':
 								segtext("zero");
-								zero(2, 150);
-								
+								zero(2, 150);								
 								//ble_comm_send_handler("zero");
 							break;
-						
+						default:
+							SEGGER_RTT_printf(0, "ble_buffer");
 		}
 	}
 		

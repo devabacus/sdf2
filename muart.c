@@ -7,6 +7,8 @@
 #include "LoRa.h"
 #include "m_interface.h"
 
+
+
 #define UART_TIME_SEND 1
 
 uint32_t weight_float = 0;
@@ -18,9 +20,11 @@ uint32_t uart_ble_mode 		 = 0;
 uint16_t clock_counter_last = 0;
 uint16_t time_changed = 0;
 
+//uint8_t ble_connection = 0;
+
 float uart_weight_f = 0;
 int uart_weight 	 = 0;
-char uart_weight_ch[10];
+char uart_weight_ch[5];
 float uart_weight_f_last = 0; 
 int uart_weight_last	 = 0;
 int uart_weight_max = 0;
@@ -35,7 +39,7 @@ void time_check(void){
 			if(clock_counter != clock_counter_last){
 				clock_counter_last = clock_counter;
 			  time_changed++;
-				segnum1(time_changed);
+				//segnum1(time_changed);
 			}
 }
 
@@ -72,35 +76,51 @@ void define_uart_weight(void){
 		flushIndexOfArray(data_array, endWeightIndex);
 		uart_weight = atoi((char*)(data_array+startWeightIndex));		
 		
-		if(uart_weight != uart_weight_last){
-			time_changed=0;
-			sprintf(uart_weight_ch, "%d", uart_weight);
-			uart_weight_last = uart_weight;
-			if(uart_weight_last > uart_weight_max){
-				uart_weight_max = uart_weight;
-			}
-			if(!uart_weight_last){
-//				SEGGER_RTT_printf(0, "uart_weight_max = %d\n", uart_weight_max);
-				uart_weight_max = 0;
-			}
-		//ble_comm_send_handler((uint8_t*)uart_weight_ch);
-			weight_ble_msg();
+		if(ble_active){
+		
+					if(uart_weight != uart_weight_last){
+					time_changed=0;
+					sprintf(uart_weight_ch, "%d", uart_weight);
+					uart_weight_last = uart_weight;
+					if(uart_weight_last > uart_weight_max){
+						uart_weight_max = uart_weight;
+					}
+					if(!uart_weight_last){
+		//			SEGGER_RTT_printf(0, "uart_weight_max = %d\n", uart_weight_max);
+						uart_weight_max = 0;
+					}
+				//ble_comm_send_handler((uint8_t*)uart_weight_ch);
+					weight_ble_msg();
+				} else {
+					if(time_changed <= UART_TIME_SEND){
+					time_check();
+					sprintf(uart_weight_ch, "%d", uart_weight);
+					//uart_weight_last = uart_weight;
+					weight_ble_msg();						
+		}
+		}
+		
 		} else {
-			if(time_changed <= UART_TIME_SEND){
-			time_check();
-			sprintf(uart_weight_ch, "%d", uart_weight);
-			//uart_weight_last = uart_weight;
-			//это тестовый комментарий
-			weight_ble_msg();
 				#ifdef LORA_USE
-				//segtext("lora send\n");
-				//SEGGER_RTT_printf(0, "%s\n", (uint8_t*)uart_weight_ch);
-		//	lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
-			#endif
-				
+				if(abs(uart_weight - uart_weight_last)>200){
+					sprintf(uart_weight_ch, "%d", uart_weight);
+					uart_weight_last = uart_weight;
+						//segtext("lora send\n");
+						SEGGER_RTT_printf(0, "%s\n", (uint8_t*)uart_weight_ch);
+				//	lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
+					time_changed = 0;
+				} 
+				else {
+					time_check();
+					if(time_changed == 1){
+				//		lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));
+						time_changed = 0;
+					}
+				}
+			#endif		
 				
 		}
-	}
+		
 		if(!uart_weight) uart_weight = uart_weight_last;
 	}
 	else {

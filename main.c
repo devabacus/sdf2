@@ -115,7 +115,7 @@ static const nrf_drv_spi_t spi_lora = NRF_DRV_SPI_INSTANCE(LORA_SPI_INSTANCE);  
 interface_t * _interface;
 
 
-static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                            /**< Handle of the current connection. */
+uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                            /**< Handle of the current connection. */
 static void advertising_start(bool erase_bonds);                                    /**< Forward declaration of advertising start function */
 
 uint8_t ble_string_get[20] = "";
@@ -777,7 +777,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
             APP_ERROR_CHECK(err_code);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
-						
+						ble_active = 1;
             break;
 
 #ifndef S140
@@ -1020,7 +1020,8 @@ static void correct_handle(uint8_t type, uint16_t value){
 				break;
 		}
 		current_correct = add_number + value;
-		buttons_handle();
+		if(remote_mode == WORK_MODE) buttons_handle();
+		else correct_value(current_correct);
 }
 
 void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
@@ -1029,17 +1030,35 @@ void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 		{
 				case RX_DONE:
 					{
-						correction_t *p_correction  = (correction_t*) (_p_arr+1);
+						static correction_t correction;
+						
+						correction.v_type  = *(v_type_t*) (_p_arr+1);
+						correction.value = *(uint16_t*)(_p_arr+2);
+						if(correction.v_type >= 5)
+						{
+							lora_comp = *(uint16_t*)(_p_arr+4);
+							percent_cor_mode = COR_OFFSET_KG;
+						}
+						else
+						{
+							lora_comp = 0;
+							percent_cor_mode = COR_SIMPLE;
+						}
 						//SEGGER_RTT_printf(0, "lora received\n");
-						SEGGER_RTT_printf(0, "lora event =%d, type = %d, value %d\n", event, p_correction->v_type, p_correction->value);
-						uint8_t cor_type = (uint8_t) p_correction->v_type;
+						SEGGER_RTT_printf(0, "lora event =%d, type = %d, value %d  comp = %d size = %d\n", event, correction.v_type, correction.value, lora_comp, size);
+						uint8_t cor_type = (uint8_t) correction.v_type;
+						SEGGER_RTT_printf(0, "_p_arr = %d\n", *_p_arr);
 						switch(*_p_arr)
 							{
-									case REMOTE_CORRECTION_SELECT: correct_handle(cor_type, p_correction->value);
+									case REMOTE_CORRECTION_SELECT: 
+										remote_mode == WORK_MODE;
+										correct_handle(cor_type, correction.value);
 											break;
 									case REMOTE_CORRECTION_CANCEL: correct(0,0,0);
 										break;
-									case REMOTE_CORRECTION_EDIT: correct_handle(cor_type, p_correction->value);
+									case REMOTE_CORRECTION_EDIT: 
+										remote_mode = CORR_BUT_MODE;
+										correct_handle(cor_type, correction.value);
 											break;
 									case REMOTE_MODE_CHANGE: change_correct_mode();
 											break;
@@ -1053,7 +1072,6 @@ void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 				case TX_DONE: lora_recive();
 		}
 }
-
 
 static void lora_initialize(){
 #ifdef LORA_USE
@@ -1099,14 +1117,10 @@ int main(void)
     conn_params_init();
 		//test one more comment
     application_timers_start();
-		
 		APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
-		
 		lora_initialize();
-
     advertising_start(erase_bonds);
 		sd_ble_gap_addr_get(&mac_address);
-			
 		err_code = fds_test_init();
 		APP_ERROR_CHECK(err_code);
 		while(init_flag == 0);

@@ -574,12 +574,13 @@ void scale_setup(void)
 					else if (pin_in3_long_press){
 						if(uart_weight > 0)
 						{
-							cal_turn_on = uart_weight;
-							fds_uart_automode = 1;
-							fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
-							fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
-							SEGGER_RTT_printf(0, "uart turn_on = %d\n\r", cal_turn_on);
-							rgb_set(0, 50, 0, 5, 500);
+							define_corr_on_uart();
+//							cal_turn_on = uart_weight;
+//							fds_uart_automode = 1;
+//							fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
+//							fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
+//							SEGGER_RTT_printf(0, "uart turn_on = %d\n\r", cal_turn_on);
+//							rgb_set(0, 50, 0, 5, 500);
 						}
 						else {
 							rgb_set(50, 0, 0, 5, 500);

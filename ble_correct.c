@@ -96,8 +96,7 @@ void ble_correct(uint8_t * ble_buffer)
 							first_time_open_set = 0;
 							//return;
 						}
-		
-					
+						
 					// work_mode
 					if (isButton){
 						if((fds_remote_type != REMOTE_ONLY) || admin || (phone_cor_counter < PHONE_COR_COUNTER_MAX_DEMO)){
@@ -194,7 +193,7 @@ void ble_correct(uint8_t * ble_buffer)
 							uint8_t compIndex = findIdexOfArray(ble_buffer, 3, 'c')+1;  // index = 
 							cor_value = atoi((char*)(ble_buffer+percIndex));;
 							comp_value = atoi((char*)(ble_buffer+compIndex));
-						
+							//SEGGER_RTT_printf(0, "----------------comp_value = %d", comp_value);
 							if(comp_value > 0){
 								comp_value += 1000;
 							} else {

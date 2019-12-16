@@ -103,7 +103,7 @@ uint32_t fds_soft_version 				= 0;
 uint32_t fds_archive_counter			= 0;
 uint32_t fds_volume_counter 			= 0;
 uint32_t fds_option_status				= 0;
-uint32_t fds_pcb_config						= NEWBIE_CONFIG;
+uint32_t fds_pcb_config						= EXPERT_CONFIG;
 uint32_t fds_uart_automode 				= 0;
 
 void fds_evt_handler(fds_evt_t const * const p_fds_evt)

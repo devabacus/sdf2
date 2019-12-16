@@ -43,8 +43,6 @@ void init_corr_values(void)
 void cor_auto_handle(void)
 {
 	//если кнопки находятся в рабочем режиме, установлен порог и нажата кнопка корректировки
-	
-	
 	if((remote_mode == WORK_MODE)&&(cal_turn_on > 0)&&(cor_value_auto))
 	{
 		//SEGGER_RTT_printf(0, "adc_value = %d\n", adc_value);
@@ -62,8 +60,6 @@ void cor_auto_handle(void)
 							adc_change_counter = 0;
 							adc_direct = 1;	
 						}
-						
-						
 					}
 			// если ацп уменьшается
 				else 
@@ -71,10 +67,8 @@ void cor_auto_handle(void)
 						//а до этого увеличивалось или это первое изменение
 						if(adc_direct == 1 || !adc_direct){
 							adc_change_counter = 0;
-							
 							adc_direct = 2;	
 						}
-						
 							if(cor_set)
 								{
 									if(!adc_value_lowest){
@@ -108,16 +102,8 @@ void cor_auto_handle(void)
 //								
 //								}
 //				  }
-					
-					
 					adc_value_last = adc_value;
-					
-					
 			  }
-			
-				
-				
-			
 				if(adc_value_lowest)
 				{
 						if((adc_value > (adc_value_lowest*10)) && cor_set)
@@ -125,12 +111,6 @@ void cor_auto_handle(void)
 							adc_over++;
 						}
 				}
-				
-			
-			
-			
-		
-		
 		// ацп меняется в одном направлении
 		if(1)//adc_change_counter > 0)
 			
@@ -170,7 +150,7 @@ void cor_auto_handle(void)
 							correct(0,0,0);
 							cor_set = 0;
 							SEGGER_RTT_printf(0, "uart_weight = %d, corr %d set\n\r", uart_weight, cor_value_auto);
-						
+					
 					}
 				
 				}
@@ -399,9 +379,8 @@ void buttons_handle(void)
 				
 		//correct_activate(current_correct);
 		if((fds_remote_type != PHONE_ONLY) || admin)
-		{
-				
-						
+	//	if((true) || admin)
+		{										
 			if(correct_mode == COR_MANUAL)
 			{
 				//if((fds_pcb_config == NEWBIE_CONFIG)&&())
@@ -418,11 +397,9 @@ void buttons_handle(void)
 						
 						if(feedback == 1)
 						{
-								
 								correct_value(cor_feedback);
 								stop_timer();
 								start_timer(time_feedback);
-							
 						}
 						
 						else if (feedback == 2)
