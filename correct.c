@@ -119,8 +119,8 @@ void corr_perc(uint32_t value)
 
 void correct_value(uint32_t value)
 {
-	SEGGER_RTT_printf(0, "activate_status = %d, exp_subscriber = %d\n" ,activate_status, exp_subsriber);
-	SEGGER_RTT_printf(0, "corr_counter = %d\n", corr_counter);
+	//SEGGER_RTT_printf(0, "activate_status = %d, exp_subscriber = %d\n" ,activate_status, exp_subsriber);
+	//SEGGER_RTT_printf(0, "corr_counter = %d\n", corr_counter);
 	if((activate_status >= DEMO)&&(!exp_subsriber))
 	{
 		if((value != 0) && (remote_mode == WORK_MODE)){
