@@ -79,6 +79,8 @@ void correct(uint32_t value, uint32_t value1, uint32_t value2)
 	{
 		if(value == 0 && value1 == 0 && value2 == 0)
 		{
+			if(remote_mode == WORK_MODE)
+			SEGGER_RTT_printf(0, "DEACTIVATE\n");
 			lora_write_flag_1byte(REMOTE_CORRECTION_DEACTIVATE, 1);
 		}
 		seq_value.channel_0 = TOP_VALUE - value;
@@ -123,8 +125,13 @@ void correct_value(uint32_t value)
 	//SEGGER_RTT_printf(0, "corr_counter = %d\n", corr_counter);
 	if((activate_status >= DEMO)&&(!exp_subsriber))
 	{
+		SEGGER_RTT_printf(0, "remote_mode = %d\n", remote_mode);
+		
 		if((value != 0) && (remote_mode == WORK_MODE)){
+			SEGGER_RTT_printf(0, "ACTIVATE\n");
 			lora_write_flag_1byte(REMOTE_CORRECTION_ACTIVATE, 1);
+			//lora_write_with_flag(REMOTE_CORRECTION_ACTIVATE, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));	
+			
 		}
 		
 		

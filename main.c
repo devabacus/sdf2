@@ -1050,13 +1050,17 @@ void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 						SEGGER_RTT_printf(0, "_p_arr = %d\n", *_p_arr);
 						switch(*_p_arr)
 							{
-									case REMOTE_CORRECTION_SELECT: 
-										remote_mode == WORK_MODE;
-										correct_handle(cor_type, correction.value);
+									case REMOTE_CORRECTION_SELECT:
+											remote_mode == WORK_MODE;
+											SEGGER_RTT_printf(0, "REMOTE_CORRECTION_SELECT\n");
+											correct_handle(cor_type, correction.value);
 											break;
-									case REMOTE_CORRECTION_CANCEL: correct(0,0,0);
+									case REMOTE_CORRECTION_CANCEL: 
+										correct(0,0,0);
+										SEGGER_RTT_printf(0, "CANCEL\n");
 										break;
 									case REMOTE_CORRECTION_EDIT: 
+										SEGGER_RTT_printf(0, "REMOTE_CORRECTION_EDIT\n");
 										remote_mode = CORR_BUT_MODE;
 										correct_handle(cor_type, correction.value);
 											break;
@@ -1119,7 +1123,7 @@ int main(void)
     application_timers_start();
 		APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 		lora_initialize();
-    //advertising_start(erase_bonds);
+    advertising_start(erase_bonds);
 		sd_ble_gap_addr_get(&mac_address);
 		err_code = fds_test_init();
 		APP_ERROR_CHECK(err_code);

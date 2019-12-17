@@ -115,6 +115,8 @@ void weight_handle()
 											sent_stable_weight = 1;
 										}
 								}
+								sprintf(uart_weight_ch, "%d", uart_weight);
+											lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));	
 					}
 			uart_weight_last = uart_weight;
 	}
