@@ -208,7 +208,6 @@ void ble_correct(uint8_t * ble_buffer)
 								
 							} else if(correct_mode == COR_AUTO){
 								cor_value_auto = cor_value;
-								
 								cur_comp_cor = comp_value;
 							}
 							ble_correct_active = 1;

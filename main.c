@@ -1119,7 +1119,7 @@ int main(void)
     application_timers_start();
 		APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 		lora_initialize();
-    advertising_start(erase_bonds);
+    //advertising_start(erase_bonds);
 		sd_ble_gap_addr_get(&mac_address);
 		err_code = fds_test_init();
 		APP_ERROR_CHECK(err_code);

@@ -580,7 +580,7 @@ void scale_setup(void)
 //							fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
 //							fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
 //							SEGGER_RTT_printf(0, "uart turn_on = %d\n\r", cal_turn_on);
-//							rgb_set(0, 50, 0, 5, 500);
+	//						rgb_set(0, 50, 0, 5, 500);
 						}
 						else {
 							rgb_set(50, 0, 0, 5, 500);

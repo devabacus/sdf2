@@ -137,24 +137,20 @@ void cor_auto_handle(void)
 				if(fds_uart_automode)
 
 				{
-					if((uart_weight > cal_turn_on) && (!cor_set || (last_cor_value_auto != cor_value_auto)))
+					if((uart_weight > cal_turn_on) && !cor_set && (uart_weight > 0))
 					{
 							cor_set = 1;
 							last_cor_value_auto = cor_value_auto;
 							correct_value(cor_value_auto);
-							//SEGGER_RTT_printf(0, "uart_weight = %d, corr %d set\n\r", uart_weight, cor_value_auto);
+							SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d set\n\r", uart_weight, cor_value_auto, cal_turn_on);
 					}
-					
-					else if ((uart_weight < cal_turn_on) && uart_weight)
+					else if ((uart_weight < cal_turn_on) &&  cor_set)
 					{
 							correct(0,0,0);
 							cor_set = 0;
-							SEGGER_RTT_printf(0, "uart_weight = %d, corr %d set\n\r", uart_weight, cor_value_auto);
-					
+							SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d reset\n\r", uart_weight, cor_value_auto, cal_turn_on);
 					}
-				
 				}
-				
 				else 
 				{
 								if((adc_monoton_change) && (adc_value > cal_turn_on) && ((!cor_set)|| (last_cor_value_auto != cor_value_auto)))
