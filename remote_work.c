@@ -20,7 +20,12 @@ uint8_t adc_direct = 0;
 uint8_t adc_over = 0;
 uint32_t adc_value_lowest = 0;
 uint8_t adc_monoton_change = 0;
-
+uint8_t cor_activate_time = 0;
+uint32_t freeze_auto_cor = 0;
+uint8_t uart_unload_detect = 0;
+uint32_t uart_change_counter = 0;
+uint8_t uart_direct = 0;
+int uart_last = 0;
 
 current_but_t current_but;
 
@@ -35,9 +40,7 @@ void init_corr_values(void)
 		fds_get_data(&corr_3_1, file_id, fds_rk_cor1+6);
 		fds_get_data(&corr_3_2, file_id, fds_rk_cor1+7);
 		fds_get_data(&corr_3_3, file_id, fds_rk_cor1+8);
-		
 }
-
 
 // вызываем постоянно в цикле в main, если активен авторежим COR_AUTO = COR_AUTO
 void cor_auto_handle(void)
@@ -50,8 +53,7 @@ void cor_auto_handle(void)
 		//и пишем в adc_change_counter. При смене направления счетчик сбрасывается
 				
 		if(adc_value != adc_value_last)
-			{
-			
+			{			
 			// если ацп увеличивается
 				if(adc_value > adc_value_last)
 					{
@@ -62,7 +64,7 @@ void cor_auto_handle(void)
 						}
 					}
 			// если ацп уменьшается
-				else 
+			else 
 					{
 						//а до этого увеличивалось или это первое изменение
 						if(adc_direct == 1 || !adc_direct){
@@ -134,23 +136,66 @@ void cor_auto_handle(void)
 //					
 //					}
 				//если авторежим работает с порта
-				if(fds_uart_automode)
-
+				
+				
+				
+				
+				if(fds_uart_automode && uart_active)
 				{
-					if((uart_weight > cal_turn_on) && !cor_set && (uart_weight > 0))
+					if(uart_weight > uart_last){
+						uart_last = uart_weight;
+						if(uart_direct == 2){
+							uart_change_counter = 0;
+							uart_direct = 0;
+						}
+						uart_change_counter++;
+						if(uart_change_counter >= 5){
+							uart_direct = 1;
+							
+							
+						}
+					} else if (uart_weight < uart_last){
+						uart_last = uart_weight;
+						uart_change_counter++;
+						if(uart_direct == 1){
+							uart_change_counter = 0;
+							uart_direct = 0;
+						}
+						if(uart_change_counter >= 5){
+							uart_direct = 2;
+							uart_change_counter = 0;
+						}
+				}
+					//SEGGER_RTT_printf(0, "uart_direct = %d\n", uart_direct);							
+					if((uart_weight > cal_turn_on) && (!cor_set || (last_cor_value_auto != cor_value_auto)))
+					//if((uart_weight > cal_turn_on) && !cor_set && (uart_weight > 0))
 					{
-							cor_set = 1;
-							last_cor_value_auto = cor_value_auto;
-							correct_value(cor_value_auto);
-							SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d set\n\r", uart_weight, cor_value_auto, cal_turn_on);
+//						uint8_t uart_unload_detect = 0;
+//						uint32_t uart_change_counter = 0;
+//						uint8_t uart_direct = 0;
+						//SEGGER_RTT_printf(0, "freeze_auto_cor= %d\n", freeze_auto_cor);							
+						if(abs(freeze_auto_cor - clock_counter) > 2){
+								cor_set = 1;
+								last_cor_value_auto = cor_value_auto;
+								SEGGER_RTT_printf(0, "clock_counter = %d, freeze_auto_cor = %d\n", clock_counter, freeze_auto_cor);							
+								correct_value(cor_value_auto);
+								segtext("activate\n");
+								SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d set\n\r", uart_weight, cor_value_auto, cal_turn_on);
+						}
+							
 					}
 					else if ((uart_weight < cal_turn_on) &&  cor_set)
+					//else if (((uart_weight < cal_turn_on) || (uart_direct == 2)) && uart_weight && cor_set)
 					{
 							correct(0,0,0);
+							//if(uart_direct == 2) rgb_set(50,50,50, 2, 500);
 							cor_set = 0;
 							SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d reset\n\r", uart_weight, cor_value_auto, cal_turn_on);
+							freeze_auto_cor = clock_counter;
 					}
 				}
+				
+				// если авторежим работает через ацп
 				else 
 				{
 								if((adc_monoton_change) && (adc_value > cal_turn_on) && ((!cor_set)|| (last_cor_value_auto != cor_value_auto)))
@@ -190,6 +235,7 @@ void cor_auto_handle(void)
 									{
 										SEGGER_RTT_printf(0, "-----------------OFF-------------------\n");
 										SEGGER_RTT_printf(0, "adc_value = %d, cal_turn_off = %d, adc_over = %d, adc_change_counter = %d, direct = %d\n", adc_value, cal_turn_on, adc_over, adc_change_counter, adc_direct);		
+										if (adc_value > 0 && ble_active) ble_comm_send_handler("n1/0");
 									//SEGGER_RTT_printf(0, "adc_over = %d, adc_value_lowest = %d, adc_value = %d, direct = %d, counter = %d\n", adc_over, adc_value_lowest, adc_value, adc_direct, adc_change_counter);
 						//			if(current_adc_value >= adc_value)
 						//			{
@@ -348,9 +394,7 @@ void buttons_handle(void)
 					current_but = BUT_3_1;
 					SEGGER_RTT_printf(0, "cur_but = %d\n\r", current_but);
 				SEGGER_RTT_printf(0, "adc_value_but = %d\n\r", adc_vals_ar[current_but-1]);
-				
 			}
-			
 		}
 		else if (pin_in4_is_release )
 		{
@@ -360,6 +404,7 @@ void buttons_handle(void)
 			rgb_set(50, 50, 50, 1, 500);
 			if(ble_active) ble_comm_send_handler("n1/0");
 			correct(0,0,0);
+			freeze_auto_cor = 0;
 			cor_value_auto = 0;
 			current_correct = 0;
 			adc_value_max = 0;

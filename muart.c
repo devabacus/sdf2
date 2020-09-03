@@ -11,8 +11,8 @@
 
 uint32_t weight_float = 0;
 uint8_t data_array[20];
-uint32_t startWeightIndex = 2;
-uint32_t endWeightIndex 	 = 11;
+uint32_t startWeightIndex = 7;
+uint32_t endWeightIndex 	 = 15;
 // send rs-232 message
 uint32_t uart_ble_mode 		 = 0;
 uint16_t clock_counter_last = 0;
@@ -22,12 +22,13 @@ uint8_t weight_change_dir = 0;
 uint8_t weight_monoton_counter = 0;
 uint8_t try_stable = 0;
 uint8_t sent_stable_weight = 0;
+uint8_t uart_active = 0;
 //uint8_t discrete = 10;
 
 //uint8_t ble_connection = 0;
 
 float uart_weight_f = 0;
-int uart_weight 	 = 0;
+int uart_weight 	 = -1;
 char uart_weight_ch[5];
 float uart_weight_f_last = 0; 
 int uart_weight_last	 = 0;
@@ -83,8 +84,7 @@ void weight_handle()
 								{
 									if(weight_change_dir == DECREASE)
 										{
-											weight_monoton_counter++;
-									
+											weight_monoton_counter++;							
 										}
 									else if (weight_change_dir == INCREASE || !weight_change_dir)
 										{
@@ -99,7 +99,7 @@ void weight_handle()
 								}
 							if(weight_monoton_counter >= 3)
 								{
-										SEGGER_RTT_printf(0, "weight = %d, dir = %d, diff = %d, mon_counter = %d\n", uart_weight, weight_change_dir, weight_diff, weight_monoton_counter);
+										//SEGGER_RTT_printf(0, "weight = %d, dir = %d, diff = %d, mon_counter = %d\n", uart_weight, weight_change_dir, weight_diff, weight_monoton_counter);
 										sprintf(uart_weight_ch, "%d", uart_weight);
 										lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));	
 										sent_stable_weight = 0;
@@ -109,14 +109,14 @@ void weight_handle()
 								{
 									if(!sent_stable_weight && time_changed >=2)
 										{
-											SEGGER_RTT_printf(0, "weight = %d, time_changed = %d\n", uart_weight, time_changed);
+											//SEGGER_RTT_printf(0, "weight = %d, time_changed = %d\n", uart_weight, time_changed);
 											sprintf(uart_weight_ch, "%d", uart_weight);
 											lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));	
 											sent_stable_weight = 1;
 										}
 								}
 								sprintf(uart_weight_ch, "%d", uart_weight);
-											lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));	
+								lora_write_with_flag(REMOTE_WEIGHT, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));	
 					}
 			uart_weight_last = uart_weight;
 	}
@@ -131,15 +131,14 @@ void weight_ble_msg(void){
 void send_uart_msg(void){
 	
 	if(uart_ble_mode == 1){
-		segtext(data_array);
+		//segtext(data_array);
 		ble_comm_send_handler(data_array);
 		
 	} else if (uart_ble_mode == 2){
-		segtext(data_array + startWeightIndex);
-		segtext("\n");
+		//segtext(data_array + startWeightIndex);
+		//segtext("\n");
 		ble_comm_send_handler(data_array + startWeightIndex);
 	}
-										
 }
 
 void define_uart_weight(void){
@@ -155,7 +154,7 @@ void define_uart_weight(void){
 					time_changed=0;
 					sprintf(uart_weight_ch, "%d", uart_weight);
 					uart_weight_last = uart_weight;
-					SEGGER_RTT_printf(0, "%d\n", uart_weight);
+					//SEGGER_RTT_printf(0, "%d\n", uart_weight);
 					if(uart_weight_last > uart_weight_max){
 						uart_weight_max = uart_weight;
 					}
@@ -175,7 +174,8 @@ void define_uart_weight(void){
 		}
 		if(!uart_weight) uart_weight = uart_weight_last;
 		} else {
-			weight_handle();
+			// if need to send weight by lora
+			//weight_handle();
 		}
 ////		else {
 //				#ifdef LORA_USE
@@ -235,14 +235,16 @@ void uart_event_handle(app_uart_evt_t * p_event)
 			
         case APP_UART_DATA_READY:
 							//blink by led when data is receiving
+							//uart_active = 1;
 							if(uart_ble_mode) {
+									//nrf_gpio_pin_toggle(17);
+								
 								if(uart_weight > 0){
 									
 									if(counter_uart_blink == 100){
 										nrf_gpio_pin_toggle(17);
 										counter_uart_blink = 0;
 									}
-									
 									counter_uart_blink++;
 								}
 								else if(uart_weight == 0)
@@ -253,9 +255,17 @@ void uart_event_handle(app_uart_evt_t * p_event)
 							}
 							//nrf_delay_ms(100);
 							app_uart_get((uint8_t*)&data_array[index]);
+							
 							index++;
+//							if(index == 10) {
+//								SEGGER_RTT_printf(0, "%s\n", data_array);
+//							}
 							if (data_array[index - 1] == '\n'){
+									//SEGGER_RTT_printf(0, "%s\n", data_array);
+								
+									uart_active = 1;
 									define_uart_weight();
+									nrf_gpio_pin_toggle(17);
 									send_uart_msg();
 									for(uint8_t i = 0; i < 20; i++){
 												data_array[i] = 0;

@@ -84,6 +84,7 @@ void ble_correct(uint8_t * ble_buffer)
 					
 						if(ble_buffer[1] == 'r')
 						{
+							freeze_auto_cor = 0;
 							correct(0,0,0);
 							cor_value_auto = 0;
 							cor_value = 0;
@@ -147,19 +148,13 @@ void ble_correct(uint8_t * ble_buffer)
 //											#else
 //												uint8_t allowed_corr  			= 1;
 //											#endif
-											
-											
-
 											allowed_corr = 0;
-											
 										} 
 										
 										else {
 											// the button forbidden for such config
 											rgb_set(50, 0, 0, 3, 500);
 										}
-										
-						
 						} else {
 									phone_cor_counter++;
 									rgb_set(50, 0, 0, 2, 500);
@@ -167,8 +162,6 @@ void ble_correct(uint8_t * ble_buffer)
 									segtext("phone not allowed\n");
 									ble_comm_send_handler("n7/0");
 						}
-						
-						
 					}
 					//corr_mode_button
 					else if (ble_buffer[1] != 'r'){
@@ -207,7 +200,7 @@ void ble_correct(uint8_t * ble_buffer)
 								correct_value(comp_value);
 								
 							} else if(correct_mode == COR_AUTO){
-								cor_value_auto = cor_value;
+								cor_value_auto = cor_value + 2000;
 								cur_comp_cor = comp_value;
 							}
 							ble_correct_active = 1;

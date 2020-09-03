@@ -14,7 +14,6 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 #include "SEGGER_RTT.h"
-
 #include "app_scheduler.h"
 
 
@@ -26,6 +25,7 @@
 #define REG_FRF_LSB              0x08
 #define REG_PA_CONFIG            0x09
 #define REG_LNA                  0x0c
+#define REG_OCP 								 0x0b
 #define REG_FIFO_ADDR_PTR        0x0d
 #define REG_FIFO_TX_BASE_ADDR    0x0e
 #define REG_FIFO_RX_BASE_ADDR    0x0f
@@ -68,6 +68,7 @@
 #define MAX_PKT_LENGTH           255
 
 
+
 #define LORA_DEFAULT_RESET_PIN 31
 #define LORA_DEFAULT_DIO0_PIN 25 
 
@@ -92,6 +93,7 @@ static uint8_t rx_buf[2];
 static uint8_t tx_buf[2];
 static long _frequency;
 static bool irq_flag;
+static uint8_t lora_init_success;
 
 static nrf_drv_spi_t _spi;
 static volatile bool spi_xfer_done;  /**< Flag used to indicate that SPI instance completed the transfer. */

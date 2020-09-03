@@ -9,7 +9,6 @@ nrf_pwm_sequence_t seq_corr;
 uint8_t CORR_KG_PLUS  = 13; 
 uint8_t CORR_KG_MINUS = 12;
 uint8_t CORR_PERCENT  = 14;			
-			    
 
 uint32_t corr_1_1 = COR_MINUS_1; 
 uint32_t corr_1_2 = COR_MINUS_2; 
@@ -20,8 +19,6 @@ uint32_t corr_2_3 = COR_PLUS_3;
 uint32_t corr_3_1 = COR_PERC_1;
 uint32_t corr_3_2 = COR_PERC_2;
 uint32_t corr_3_3 = COR_PERC_3;
-
-
 
 uint32_t corr_counter = 0;
 uint8_t reset_by_change_but_level = 0;
@@ -88,8 +85,7 @@ void correct(uint32_t value, uint32_t value1, uint32_t value2)
 		seq_value.channel_2 = TOP_VALUE - value2;
 		seq_corr.values.p_individual = &seq_value;
 		seq_corr.length = NRF_PWM_VALUES_LENGTH(seq_value);
-		nrf_drv_pwm_simple_playback(&m_pwm_cor, &seq_corr, 0, NRF_DRV_PWM_FLAG_LOOP);
-		
+		nrf_drv_pwm_simple_playback(&m_pwm_cor, &seq_corr, 0, NRF_DRV_PWM_FLAG_LOOP);		
 }
 	
 void corr_plus(uint32_t value)
@@ -117,8 +113,6 @@ void corr_perc(uint32_t value)
 	if (value > 0 && ble_active) ble_comm_send_handler("n1/3");
 }
 
-	
-
 void correct_value(uint32_t value)
 {
 	//SEGGER_RTT_printf(0, "activate_status = %d, exp_subscriber = %d\n" ,activate_status, exp_subsriber);
@@ -128,7 +122,6 @@ void correct_value(uint32_t value)
 		SEGGER_RTT_printf(0, "remote_mode = %d\n", remote_mode);
 		
 		if((value != 0) && (remote_mode == WORK_MODE)){
-			SEGGER_RTT_printf(0, "ACTIVATE\n");
 			lora_write_flag_1byte(REMOTE_CORRECTION_ACTIVATE, 1);
 			//lora_write_with_flag(REMOTE_CORRECTION_ACTIVATE, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));	
 			
@@ -146,7 +139,7 @@ void correct_value(uint32_t value)
 				corr_perc(0);
 			}
 		}
-		else if (1000 < value && value < 2000) // plus correct
+		else if (1000 < value && value <= 2000) // plus correct
 		{
 			value = value - 1000;
 			//SEGGER_RTT_printf(0, "value in correct_value = %d\r\n", value);
@@ -160,7 +153,7 @@ void correct_value(uint32_t value)
 		}
 		
 		//It needs to change this function for offset kg mode
-		else if (value >= 2000)  // percent correct
+		else if (value > 2000)  // percent correct
 		{
 			if(value > 3000) value = 3000;
 			value = value - 2000;
@@ -198,12 +191,10 @@ void correct_value(uint32_t value)
 		
 	}
 	else if (exp_subsriber){
-		rgb_set(0,0,50, exp_subsriber, 500);
+		rgb_set(0, 0, 50, exp_subsriber, 500);
 	}
 	else if (activate_attempts > ACTIVATE_ATTEMPTS_MAX)
 	{
 		rgb_set(0, 50, 0, 3, 500);
 	}
-	
-		
 }

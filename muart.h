@@ -31,7 +31,7 @@ extern uint8_t ble_connection;
 extern float uart_weight_f;
 extern int uart_weight;
 void uart_init(void);
-
+extern uint8_t uart_active;
 
 
 

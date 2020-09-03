@@ -70,46 +70,46 @@ void reset_activate()
 
 void test_expired(void)
 {
-//	if(activate_status <= DEMO)
-//	{
-//		if(corr_counter >= CORRECT_COUNT_MAX_DEMO)
-//		{
-//			reset_activate();
-//			SEGGER_RTT_printf(0, "correct_demo_exp\r\n");
-//		}
-//		else if (life_counter > WORK_HOURS_MAX_DEMO*60)    
-//		{
-//			reset_activate();
-//			SEGGER_RTT_printf(0, "hours_demo_exp\r\n");
-//		}
-//		else if (power_down_count >= RESET_MAX_DEMO)
-//		{
-//			reset_activate();
-//			SEGGER_RTT_printf(0, "reset_demo_exp\r\n");
-//		}
-//	}
-//	
-//	else if(activate_status > DEMO)
-//	{
-//		if(corr_counter >= cur_cor_max)
-//		{
-//			exp_subsriber = 1;
-//		}
-//		else if (power_down_count >= cur_res_max)
-//		{
-//			//because of there was fail with activate reset max. (50). So we turn checking off
-//			exp_subsriber = 2;
-//		}
-//		else if (life_counter >= cur_hr_max*60)
-//		{
-//			exp_subsriber = 3;
-//		}
-//		
-//		if(exp_subsriber)
-//		{
-//			SEGGER_RTT_printf(0, "exp_subsriber = %d, activate_status = %d\r\n", exp_subsriber, activate_status);	
-//		}
-//	}
+	if(activate_status <= DEMO)
+	{
+		if(corr_counter >= CORRECT_COUNT_MAX_DEMO)
+		{
+			reset_activate();
+			SEGGER_RTT_printf(0, "correct_demo_exp\r\n");
+		}
+		else if (life_counter > WORK_HOURS_MAX_DEMO*60)    
+		{
+			reset_activate();
+			SEGGER_RTT_printf(0, "hours_demo_exp\r\n");
+		}
+		else if (power_down_count >= RESET_MAX_DEMO)
+		{
+			reset_activate();
+			SEGGER_RTT_printf(0, "reset_demo_exp\r\n");
+		}
+	}
+	
+	else if(activate_status > DEMO)
+	{
+		if(corr_counter >= cur_cor_max)
+		{
+			exp_subsriber = 1;
+		}
+		else if (power_down_count >= cur_res_max)
+		{
+			//because of there was fail with activate reset max. (50). So we turn checking off
+			exp_subsriber = 2;
+		}
+		else if (life_counter >= cur_hr_max*60)
+		{
+			exp_subsriber = 3;
+		}
+		
+		if(exp_subsriber)
+		{
+			SEGGER_RTT_printf(0, "exp_subsriber = %d, activate_status = %d\r\n", exp_subsriber, activate_status);	
+		}
+	}
 }
 
 void reset_long_press_flags(void)
@@ -248,6 +248,11 @@ void timer_2s_handler(void *p_context)
 	 {
 		 correct(0,0,0);
 	 }
+	 	 
+//	 freeze_auto_cor = 0;
+//	 //stop_timer_2s();
+//	 segtext("timer fire\n");
+//	 SEGGER_RTT_printf(0, "freeze_auto_cor= %d\n", freeze_auto_cor);
 	
 }
 
@@ -371,6 +376,13 @@ void start_timer_2s(void)
 {
 	app_timer_start(m_timer_remote, APP_TIMER_TICKS(2000), NULL);
 }
+
+void stop_timer_2s(void)
+{
+	app_timer_stop(m_timer_remote);
+}
+
+
 
 void start_timer(uint16_t num)
 	{
@@ -504,12 +516,9 @@ void in_pin_handler3(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 
 void in_pin_handler4(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 { 
-
-		
+	
 		if(nrf_drv_gpiote_in_is_set(PIN_IN_4))
 		{
-			
-
 			 pin_in4_is_set = 1;
 			 start_timer_2s();
 			 reset_long_press_flags();
@@ -553,29 +562,23 @@ void in_pin_handler5(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action){
 }
 
 void nrf_define_test_pin(void){
-		nrf_drv_gpiote_init();
-		
+		nrf_drv_gpiote_init();		
 		nrf_drv_gpiote_in_config_t in_config = GPIOTE_CONFIG_IN_SENSE_TOGGLE(true);
 		in_config.pull = NRF_GPIO_PIN_PULLUP;
 		nrf_drv_gpiote_in_init(8, &in_config, in_pin_handler4);
 		nrf_drv_gpiote_in_event_enable(8, true);	
 }
 
-
-
 void nrf_gpiote(void)
 	{
 	//	nrf_drv_gpiote_init();
-		
 		nrf_drv_gpiote_in_config_t in_config = GPIOTE_CONFIG_IN_SENSE_TOGGLE(true);
-		in_config.pull = NRF_GPIO_PIN_PULLDOWN;
-		
+		in_config.pull = NRF_GPIO_PIN_PULLUP;		
 		
 		nrf_drv_gpiote_in_init(PIN_IN_1, &in_config, in_pin_handler1);
 		nrf_drv_gpiote_in_init(PIN_IN_2, &in_config, in_pin_handler2);
 		nrf_drv_gpiote_in_init(PIN_IN_3, &in_config, in_pin_handler3);
-		nrf_drv_gpiote_in_init(PIN_IN_4, &in_config, in_pin_handler4);
-		
+		nrf_drv_gpiote_in_init(PIN_IN_4, &in_config, in_pin_handler4);		
 		
 		nrf_drv_gpiote_in_event_enable(PIN_IN_1, true);	
 		nrf_drv_gpiote_in_event_enable(PIN_IN_2, true);	
@@ -595,11 +598,8 @@ void define_pins(void){
 				
 					CORR_KG_PLUS = 9; 
           CORR_KG_MINUS = 7;
-          CORR_PERCENT = 10;
-				
+          CORR_PERCENT = 10;				
 		} 
-		
-		
 		
 }
 	

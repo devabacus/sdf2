@@ -6,8 +6,6 @@
 #define COR_AUTO_PORT 3
 #define COR_MODE
 
-
-
 #include "remote.h"
 #include "ble_comm.h"
 
@@ -26,7 +24,7 @@ void buttons_handle(void);
 void init_corr_values(void);
 
 void cor_auto_handle(void);
-
+static uint32_t freeze_auto_cor;
 typedef enum 
 {
 	BUT_1_1 = 1,

@@ -73,9 +73,6 @@ void change_correct_mode()
 									 set_send_cor_mode(correct_mode);
 						}
 
-
-
-
 void fail_attempt(void)
 {
 		
@@ -129,7 +126,9 @@ void check_config_pass(void){
 						}
 						else if (test_activate_code == config_pass3){
 							ble_comm_send_handler("newbie activated");
+							//ble_comm_send_handler("expert activated");
 							fds_pcb_config = NEWBIE_CONFIG;
+							//fds_pcb_config = EXPERT_CONFIG;
 						//	ble_comm_send_handler("c1/3");
 						}
 						else{
@@ -437,14 +436,8 @@ void number_indicate(uint32_t number)
 		if(ones)
 		{
 			rgb_set(50,50,50, ones,1500);
-		}
-		
-	
+		}		
 }
-
-
-
-
 
 //void print_array(uint32_t* array){
 //	uint8_t i = 0;
@@ -548,8 +541,7 @@ void scale_setup(void)
 					{
 						if(adc_value>0){
 						cal_load();
-						rgb_set(0, 50, 0, 1, 1000);
-						
+						rgb_set(0, 50, 0, 1, 1000);						
 						}
 						//delete_fds();
 						//delete_fds_c();
@@ -575,12 +567,12 @@ void scale_setup(void)
 						if(uart_weight > 0)
 						{
 							define_corr_on_uart();
-//							cal_turn_on = uart_weight;
-//							fds_uart_automode = 1;
-//							fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
-//							fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
-//							SEGGER_RTT_printf(0, "uart turn_on = %d\n\r", cal_turn_on);
-	//						rgb_set(0, 50, 0, 5, 500);
+//		  			cal_turn_on = uart_weight;
+//						fds_uart_automode = 1;
+//						fds_update_value(&cal_turn_on, file_id, fds_rk_cal_zero+2);
+//						fds_update_value(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
+//						SEGGER_RTT_printf(0, "uart turn_on = %d\n\r", cal_turn_on);
+	//					rgb_set(0, 50, 0, 5, 500);
 						}
 						else {
 							rgb_set(50, 0, 0, 5, 500);
@@ -647,8 +639,6 @@ void scale_setup(void)
 					{
 						number_indicate(life_counter/60);
 					}
-					
-
 
 					else if (pin_in4_long_press)
 					

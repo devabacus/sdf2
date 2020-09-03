@@ -93,6 +93,7 @@ void reset_counters(uint8_t ch_num){
 
 void set_send_cor_mode(uint8_t set_value){
 		correct_mode = set_value;
+		
 		uint8_t mode_state;
 		if(set_value == 1){
 			 ble_comm_send_handler("n3/1");
@@ -105,6 +106,9 @@ void set_send_cor_mode(uint8_t set_value){
 		else if (set_value == 3){
 			 ble_comm_send_handler ("n3/3");
 		}
+		
+		fds_update_value(&correct_mode, file_id, fds_rk_corr_mode);
+
 		lora_write_flag_1byte(REMOTE_MODE_CHANGE, mode_state);
 	  
 }
@@ -180,8 +184,6 @@ void ble_set(uint8_t *ble_set_buffer){
 						SEGGER_RTT_printf(0, "uart_ble_mode = %d\n", set_value);
 						fds_update_value(&uart_ble_mode, file_id, fds_rk_uart_ble_mode);
 				break;
-				
-				
 				
 				case SAVEBUT:
 					//but_ble = set_value;

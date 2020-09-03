@@ -886,7 +886,6 @@ static void peer_manager_init()
     APP_ERROR_CHECK(err_code);
 
     memset(&sec_param, 0, sizeof(ble_gap_sec_params_t));
-
     // Security parameters to be used for all security procedures.
     sec_param.bond           = SEC_PARAM_BOND;
     sec_param.mitm           = SEC_PARAM_MITM;
@@ -916,16 +915,9 @@ static void delete_bonds(void)
     ret_code_t err_code;
 
     NRF_LOG_INFO("Erase bonds!");
-
     err_code = pm_peers_delete();
     APP_ERROR_CHECK(err_code);
 }
-
-
-
-
-
-
 
 /**@brief Function for initializing the Advertising functionality.
  */
@@ -952,8 +944,6 @@ static void advertising_init(void)
 
     ble_advertising_conn_cfg_tag_set(&m_advertising, APP_BLE_CONN_CFG_TAG);
 }
-
-
 
 /**@brief Function for the Power manager.
  */
@@ -1019,8 +1009,8 @@ static void correct_handle(uint8_t type, uint16_t value){
 			case PERCENT: add_number = 2000;
 				break;
 		}
-		current_correct = add_number + value;
-		if(remote_mode == WORK_MODE) buttons_handle();
+		current_correct = add_number + value;		
+		if(correct_mode == COR_AUTO) buttons_handle();
 		else correct_value(current_correct);
 }
 
@@ -1029,7 +1019,8 @@ void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 	switch (event)
 		{
 				case RX_DONE:
-					{
+					{						
+						SEGGER_RTT_printf(0, "rssi = %d\n", rssi());
 						static correction_t correction;
 						
 						correction.v_type  = *(v_type_t*) (_p_arr+1);
@@ -1051,24 +1042,37 @@ void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 						switch(*_p_arr)
 							{
 									case REMOTE_CORRECTION_SELECT:
-											remote_mode == WORK_MODE;
-											SEGGER_RTT_printf(0, "REMOTE_CORRECTION_SELECT\n");
+											remote_mode = WORK_MODE;
 											correct_handle(cor_type, correction.value);
 											break;
 									case REMOTE_CORRECTION_CANCEL: 
 										correct(0,0,0);
-										SEGGER_RTT_printf(0, "CANCEL\n");
+										current_correct = 0;
+ 										cor_value_auto = 0;
 										break;
 									case REMOTE_CORRECTION_EDIT: 
-										SEGGER_RTT_printf(0, "REMOTE_CORRECTION_EDIT\n");
 										remote_mode = CORR_BUT_MODE;
 										correct_handle(cor_type, correction.value);
 											break;
 									case REMOTE_MODE_CHANGE: change_correct_mode();
 											break;
 									case REMOTE_INIT:
-										if(correct_mode == COR_MANUAL) lora_write_flag_1byte(REMOTE_MODE_CHANGE, 1);
-										else if (correct_mode == COR_AUTO) lora_write_flag_1byte(REMOTE_MODE_CHANGE, 0);
+										if(correct_mode == COR_MANUAL) lora_write_flag_1byte(REMOTE_MODE_CHANGE, 0);
+										else if (correct_mode == COR_AUTO) lora_write_flag_1byte(REMOTE_MODE_CHANGE, 1);
+									   break;
+									case REMOTE_CALIBRATION:										
+									if(*(_p_arr + 1) == 1) cal_unload();
+									else if (*(_p_arr + 1) == 3) 
+											{
+												if(uart_weight > 0)
+												{
+													define_corr_on_uart();
+												}
+												else 
+												{
+													define_corr_on();
+												}
+											}									
 							}
 								lora_recive();
 				break;
@@ -1079,36 +1083,35 @@ void lora_handler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 
 static void lora_initialize(){
 #ifdef LORA_USE
-		lora_init(spi_lora, 433E6, &lora_handler);
+		lora_init(spi_lora, 433.0 , &lora_handler);
 		lora_recive();
 #endif
 }
 
 /**@brief Function for application main entry.
  */
+
 int main(void)
 {
 		interface_t interface;
-	
-		_interface = &interface;
-	
-		interface.p_arr = nrf_calloc(7, sizeof(correction_t));
+			_interface = &interface;
+			interface.p_arr = nrf_calloc(7, sizeof(correction_t));
 	
 //		interface.interface_evnt_handler = interface_evnt_handler;
 		interface.use_grams = false;
-	
+		//pullup_remote_pins();
     bool erase_bonds;
 		uint32_t err_code;
     // Initialize.
     log_init();
 		ble_stack_init();
+		nrf_gpio_cfg_input(20, NRF_GPIO_PIN_PULLUP);
     timers_init();
     power_management_init();
     gpio_init();
 		ble_set_init();
 		nrf_define_test_pin();
-  	define_pins();
-		nrf_gpiote();
+		nrf_gpiote();			
 		pwm_init_corr();
 		pwm_init_rgb();
 		HX711_init();
@@ -1131,7 +1134,6 @@ int main(void)
 		segtext("app started\n");
 		fds_init_values();
 	  fds_get_init_data();
-		
 		test_expired();
 	  start_led();
 		if(uart_work || uart_ble_mode) uart_init();
@@ -1142,6 +1144,7 @@ int main(void)
 		segtext("fds_option_status = ");
 		segnum1(fds_option_status);
 		//rgb_set(0, 50, 0, 2, 500);
+		nrf_gpio_pin_set(17);
 		
     for (;;)
     {

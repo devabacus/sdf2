@@ -1,5 +1,6 @@
 #include "LoRa.h"
 
+uint8_t lora_init_success = 0;
 p_lora_hendler_t _p_lora_hendler;
 void spi_event_handler(nrf_drv_spi_evt_t const * p_event,
                        void *                    p_context)
@@ -50,23 +51,29 @@ void setFrequency(long frequency)
 	_frequency = frequency;
 	NRF_LOG_DEBUG("Frequency = %d", frequency);
   	
-	union{
-		uint64_t freg64;
-		struct{
-			uint8_t lsb;
-			uint8_t	mid;
-			uint8_t	msb;
-		}byte;
-	}freg;
-	
-	freg.freg64 = ((uint64_t)frequency << 19) / 32000000;
+//	union{
+//		uint64_t freg64;
+//		struct{
+//			uint8_t lsb;
+//			uint8_t	mid;
+//			uint8_t	msb;
+//		}byte;
+//	}freg;
+//	
+//	freg.freg64 = (frequency << 19) / 32000000;
 
-	NRF_LOG_DEBUG("Frequency MSB = %x", (freg.byte.msb));
-  writeRegister(REG_FRF_MSB, freg.byte.msb);
-	NRF_LOG_DEBUG("Frequency MID = %x", (freg.byte.mid));
-  writeRegister(REG_FRF_MID, freg.byte.mid);
-	NRF_LOG_DEBUG("Frequency LSB = %x", (freg.byte.lsb));
-  writeRegister(REG_FRF_LSB, freg.byte.lsb);
+//	NRF_LOG_DEBUG("Frequency MSB = %x", (freg.byte.msb));
+//  writeRegister(REG_FRF_MSB, freg.byte.msb);
+//	NRF_LOG_DEBUG("Frequency MID = %x", (freg.byte.mid));
+//  writeRegister(REG_FRF_MID, freg.byte.mid);
+//	NRF_LOG_DEBUG("Frequency LSB = %x", (freg.byte.lsb));
+//  writeRegister(REG_FRF_LSB, freg.byte.lsb);
+	uint32_t FRF = (frequency * (1 << 19))/32.0;
+
+  // write registers
+  writeRegister(REG_FRF_MSB, (FRF & 0xFF0000) >> 16);
+  writeRegister(REG_FRF_MID, (FRF & 0x00FF00) >> 8);
+  writeRegister(REG_FRF_LSB, FRF & 0x0000FF);
 }
 
 static void serial_scheduled_ex (void * p_event_data, uint16_t event_size)
@@ -86,8 +93,8 @@ static void serial_scheduled_ex (void * p_event_data, uint16_t event_size)
 			writeRegister(REG_FIFO_ADDR_PTR, adr);
 			
 			writeRegister(REG_OP_MODE, MODE_LONG_RANGE_MODE | MODE_STDBY);
-			
-			arr = malloc(packetLength);
+						
+			uint8_t arr[packetLength];
 			
 			for(uint32_t i = 0; i <= packetLength-1; i++)
 			{
@@ -123,7 +130,7 @@ uint8_t lora_init(nrf_drv_spi_t spi, long frequency, p_lora_hendler_t p_lora_hen
 		
 		 nrf_drv_gpiote_in_config_t config =   {       
         .is_watcher = false,                    
-        .hi_accuracy = false,                 
+        .hi_accuracy = true,                 
         .pull = NRF_GPIO_PIN_PULLDOWN,            
         .sense = NRF_GPIOTE_POLARITY_LOTOHI,    
     };
@@ -172,9 +179,11 @@ uint8_t lora_init(nrf_drv_spi_t spi, long frequency, p_lora_hendler_t p_lora_hen
 	version = readRegister(REG_VERSION);
   if (version == 0x00) {
 		NRF_LOG_ERROR("NO CONNECTION");
-		APP_ERROR_CHECK(NRF_ERROR_NOT_FOUND);
+		SEGGER_RTT_printf(0, "lora_init_success = %d\n", lora_init_success);
+		//APP_ERROR_CHECK(NRF_ERROR_NOT_FOUND);
     return 0;
   }
+	lora_init_success = 1;
 	
 	NRF_LOG_INFO("LoRa version OK");
 	
@@ -191,8 +200,26 @@ uint8_t lora_init(nrf_drv_spi_t spi, long frequency, p_lora_hendler_t p_lora_hen
 	NRF_LOG_DEBUG("Set boost on, 150%% LNA current");
 	writeRegister(REG_LNA, 0x20 | 0x03);
 	
+	writeRegister(REG_OCP, 0x1F);
+	
+	
+	writeRegister(REG_DETECTION_OPTIMIZE, readRegister(REG_DETECTION_OPTIMIZE) & 0xEF);
+  writeRegister(0x2F, 0x40);
+  writeRegister(0x30, 0x00);
+	
+	NRF_LOG_INFO("REG_DETECTION_OPTIMIZE = %x", readRegister(REG_DETECTION_OPTIMIZE));
+
+	writeRegister(REG_MODEM_CONFIG_2, 0xC0);
+	
+	NRF_LOG_INFO("REG_MODEM_CONFIG_2 = %x", readRegister(REG_MODEM_CONFIG_2));
+
 	NRF_LOG_DEBUG("Set automatic gain control");
 	writeRegister(REG_MODEM_CONFIG_3, 0x04);
+	
+	uint32_t preambleLength = 8;
+	
+	writeRegister(REG_PREAMBLE_MSB, (uint8_t)((preambleLength >> 8) & 0xFF));
+  writeRegister(REG_PREAMBLE_LSB, (uint8_t)(preambleLength & 0xFF));
 
 	#ifndef MAX_POWER
 	NRF_LOG_INFO("Set MaxPower 15dbm OutputPower = 7.6dbm"); 
@@ -223,7 +250,8 @@ void beginPacket()
 	//writeRegister(REG_MODEM_CONFIG_1, 0x72);
 	
 //	SEGGER_RTT_printf(0, "Pacet begin\r\nSet Signal bandwidth: 7.8 kHz\r\nError coding rate = 4/5\r\nExplicit header mode\r\n");
-	writeRegister(REG_MODEM_CONFIG_1, 0x72);
+	writeRegister(REG_MODEM_CONFIG_1, 0x78);
+
 	
 	//SEGGER_RTT_printf(0, "Reset FIFO address and paload length\r\n");
   writeRegister(REG_FIFO_ADDR_PTR, 0);
@@ -232,6 +260,7 @@ void beginPacket()
 
 void lora_write(const uint8_t *buffer, uint16_t size)
 {
+	if(!lora_init_success) return;
 	uint16_t currentLength = readRegister(REG_PAYLOAD_LENGTH);
 
 	for (size_t i = 0; i < size; i++) {
@@ -243,6 +272,7 @@ void lora_write(const uint8_t *buffer, uint16_t size)
 
 void lora_write1(const uint8_t *buffer, uint16_t size)
 {
+	if(!lora_init_success) return;
 	beginPacket();
 	uint16_t currentLength = readRegister(REG_PAYLOAD_LENGTH);
 	for (size_t i = 0; i < size; i++) {
@@ -254,6 +284,7 @@ void lora_write1(const uint8_t *buffer, uint16_t size)
 
 void lora_write_with_flag(uint8_t flag, const uint8_t *buffer, uint16_t size)
 {
+	if(!lora_init_success) return;
 	beginPacket();
 	writeRegister(REG_FIFO, flag);
 	writeRegister(REG_PAYLOAD_LENGTH, readRegister(REG_PAYLOAD_LENGTH) + 1);
@@ -269,6 +300,7 @@ void lora_write_with_flag(uint8_t flag, const uint8_t *buffer, uint16_t size)
 
 void lora_write_byte(uint8_t flag)
 {
+		if(!lora_init_success) return;
 		beginPacket();
 		writeRegister(REG_FIFO, flag);
 		writeRegister(REG_PAYLOAD_LENGTH, readRegister(REG_PAYLOAD_LENGTH) + 1);
@@ -277,6 +309,7 @@ void lora_write_byte(uint8_t flag)
 
 
 void lora_write_flag_1byte(uint8_t flag, uint8_t value){
+		if(!lora_init_success) return;
 	  beginPacket();
 		writeRegister(REG_FIFO, flag);
 		writeRegister(REG_PAYLOAD_LENGTH, readRegister(REG_PAYLOAD_LENGTH) + 1);
@@ -293,13 +326,15 @@ void endPacket()
 }
 void lora_recive()
 {
-writeRegister(REG_MODEM_CONFIG_1, 0x72);
-NRF_LOG_DEBUG("%x\r\n", readRegister(REG_MODEM_CONFIG_1));
-writeRegister(REG_DIO_MAPPING_1, MAP_DIO0_LORA_RXDONE);
-writeRegister(REG_FIFO_ADDR_PTR, 0);
-writeRegister(REG_OP_MODE, MODE_LONG_RANGE_MODE | MODE_RX_CONTINUOUS);
-
+	if(!lora_init_success) return;
+	writeRegister(REG_MODEM_CONFIG_1, 0x78);
+	NRF_LOG_DEBUG("%x\r\n", readRegister(REG_MODEM_CONFIG_1));
+	writeRegister(REG_DIO_MAPPING_1, MAP_DIO0_LORA_RXDONE);
+	writeRegister(REG_FIFO_ADDR_PTR, 0);
+	writeRegister(REG_OP_MODE, MODE_LONG_RANGE_MODE | MODE_RX_CONTINUOUS);
 }
+
+
 
 int rssi()
 {

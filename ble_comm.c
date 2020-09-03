@@ -83,7 +83,6 @@ void ble_comm(uint8_t * ble_buffer)
 								set_send_cor_mode(correct_mode);
 								nrf_delay_ms(50);
 								option_notif();
-								
 								//ble_comm_send_handler("opt2/1");
 								break;
 						case 'p':
@@ -91,7 +90,6 @@ void ble_comm(uint8_t * ble_buffer)
 								current_life_counter = life_counter;
 								generate_admin_pass1();
 								generate_option_pass();
-								
 								ble_comm_send_handler("wait pass");
 								segtext("wait pass");
 								break;
