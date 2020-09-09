@@ -122,7 +122,7 @@ void correct_value(uint32_t value)
 		SEGGER_RTT_printf(0, "remote_mode = %d\n", remote_mode);
 		
 		if((value != 0) && (remote_mode == WORK_MODE)){
-			lora_write_flag_1byte(REMOTE_CORRECTION_ACTIVATE, 1);
+			//lora_write_flag_1byte(REMOTE_CORRECTION_ACTIVATE, 1);
 			//lora_write_with_flag(REMOTE_CORRECTION_ACTIVATE, (uint8_t*)uart_weight_ch, strlen(uart_weight_ch));	
 			
 		}
