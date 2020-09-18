@@ -80,6 +80,7 @@ void ble_comm(uint8_t * ble_buffer)
 						// demand init parameter
 						case 'i':
 								ble_active = 1;
+								if(correct_mode > 3) correct_mode = 2; //some time correct_mode has unpredictable values 1250,226
 								set_send_cor_mode(correct_mode);
 								nrf_delay_ms(50);
 								option_notif();

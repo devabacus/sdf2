@@ -97,6 +97,10 @@ void ble_debug(uint8_t * ble_buffer)
 							case 16:
 								send_num = fds_pcb_config;
 							break;
+							
+							case 17:
+								send_num = correct_mode;
+							break;
 						}
 						
 						if(send_num > 0)

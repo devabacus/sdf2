@@ -93,7 +93,7 @@ void reset_counters(uint8_t ch_num){
 
 void set_send_cor_mode(uint8_t set_value){
 		correct_mode = set_value;
-		
+		SEGGER_RTT_printf(0, "set_value = %d\n", set_value);
 		uint8_t mode_state;
 		if(set_value == 1){
 			 ble_comm_send_handler("n3/1");
@@ -108,7 +108,6 @@ void set_send_cor_mode(uint8_t set_value){
 		}
 		
 		fds_update_value(&correct_mode, file_id, fds_rk_corr_mode);
-
 		lora_write_flag_1byte(REMOTE_MODE_CHANGE, mode_state);
 	  
 }
@@ -124,7 +123,7 @@ void ble_set(uint8_t *ble_set_buffer){
 			uint8_t slashIndex2 = findIdexOfArray(ble_set_buffer, 4, '/')+1;
 			
 			uint8_t set_value = atoi((char*) ble_set_buffer + slashIndex);
-	
+				
 			uint16_t set_value2 = atoi((char*) ble_set_buffer + slashIndex2);
 	
 			switch (set_number){

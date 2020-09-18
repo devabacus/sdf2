@@ -1145,6 +1145,7 @@ int main(void)
 		segnum1(fds_option_status);
 		//rgb_set(0, 50, 0, 2, 500);
 		nrf_gpio_pin_set(17);
+		SEGGER_RTT_printf(0, "correct_mode = %d\n", correct_mode);
 		
     for (;;)
     {
