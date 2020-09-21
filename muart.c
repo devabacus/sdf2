@@ -255,8 +255,9 @@ void uart_event_handle(app_uart_evt_t * p_event)
 							}
 							//nrf_delay_ms(100);
 							app_uart_get((uint8_t*)&data_array[index]);
+							//remove spaces for gs7516
 							
-							index++;
+							if(data_array[index] != ' ') index++;
 //							if(index == 10) {
 //								SEGGER_RTT_printf(0, "%s\n", data_array);
 //							}

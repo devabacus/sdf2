@@ -46,7 +46,7 @@ void init_corr_values(void)
 void cor_auto_handle(void)
 {
 	//если кнопки находятся в рабочем режиме, установлен порог и нажата кнопка корректировки
-	if((remote_mode == WORK_MODE)&&(cal_turn_on > 0)&&(cor_value_auto))
+	if((remote_mode == WORK_MODE)&&(cor_value_auto))
 	{
 		//SEGGER_RTT_printf(0, "adc_value = %d\n", adc_value);
 		//если ацп изменяется в одну сторону то считаем сколько раз
@@ -136,10 +136,6 @@ void cor_auto_handle(void)
 //					
 //					}
 				//если авторежим работает с порта
-				
-				
-				
-				
 				if(fds_uart_automode && uart_active)
 				{
 					if(uart_weight > uart_last){
@@ -167,31 +163,32 @@ void cor_auto_handle(void)
 						}
 				}
 					//SEGGER_RTT_printf(0, "uart_direct = %d\n", uart_direct);							
-					if((uart_weight > cal_turn_on) && (!cor_set || (last_cor_value_auto != cor_value_auto)))
+					if((uart_weight > (int)cal_turn_on) && (!cor_set || (last_cor_value_auto != cor_value_auto)))
 					//if((uart_weight > cal_turn_on) && !cor_set && (uart_weight > 0))
 					{
 //						uint8_t uart_unload_detect = 0;
 //						uint32_t uart_change_counter = 0;
 //						uint8_t uart_direct = 0;
 						//SEGGER_RTT_printf(0, "freeze_auto_cor= %d\n", freeze_auto_cor);							
-						if(abs(freeze_auto_cor - clock_counter) > 2){
+						//if(abs(freeze_auto_cor - clock_counter) > 2){
 								cor_set = 1;
 								last_cor_value_auto = cor_value_auto;
 								SEGGER_RTT_printf(0, "clock_counter = %d, freeze_auto_cor = %d\n", clock_counter, freeze_auto_cor);							
 								correct_value(cor_value_auto);
 								segtext("activate\n");
 								SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d set\n\r", uart_weight, cor_value_auto, cal_turn_on);
-						}
-							
+						//}							
 					}
-					else if ((uart_weight < cal_turn_on) &&  cor_set)
+					else if ((uart_weight < (int)cal_turn_on) &&  cor_set)
 					//else if (((uart_weight < cal_turn_on) || (uart_direct == 2)) && uart_weight && cor_set)
 					{
+							//SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d reset\n\r", cal_tu);
 							correct(0,0,0);
 							//if(uart_direct == 2) rgb_set(50,50,50, 2, 500);
 							cor_set = 0;
 							SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d reset\n\r", uart_weight, cor_value_auto, cal_turn_on);
 							freeze_auto_cor = clock_counter;
+							if(ble_active) ble_comm_send_handler("n1/0");
 					}
 				}
 				

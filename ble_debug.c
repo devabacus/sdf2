@@ -101,6 +101,9 @@ void ble_debug(uint8_t * ble_buffer)
 							case 17:
 								send_num = correct_mode;
 							break;
+							case 18:
+								send_num = uart_weight;
+							break;
 						}
 						
 						if(send_num > 0)

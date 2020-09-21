@@ -10,16 +10,16 @@
 
 //Для прошивки рабочей версии строка ниже должна быть зеленой
 
-//#define DEBUG_MODE
+#define DEBUG_MODE
 #define LORA_USE
 //#define CHECK_CONFIG 1
 ////////////////////////////////////////////////////////
 #ifndef DEBUG_MODE
-#define DEVICE_NAME                     "sdr_5.5.5_3"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                     "sdr_5.5.5_5"                         /**< Name of device. Will be included in the advertising data. */
 #endif
 
 #ifdef DEBUG_MODE
-#define DEVICE_NAME											"debug_5.5.5_3"
+#define DEVICE_NAME											"debug_5.5.5_5"
 #endif
 
 //728123108
