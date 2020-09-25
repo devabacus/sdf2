@@ -11,7 +11,7 @@
 
 uint32_t weight_float = 0;
 uint8_t data_array[20];
-uint32_t startWeightIndex = 7;
+uint32_t startWeightIndex = 6;
 uint32_t endWeightIndex 	 = 15;
 // send rs-232 message
 uint32_t uart_ble_mode 		 = 0;
@@ -125,7 +125,7 @@ void weight_ble_msg(void){
 		uint8_t weight_pref[] = "wt";
 		uint16_t length = strlen((char*)uart_weight_ch);
 		memcpy(weight_pref+2, uart_weight_ch, length);
-		ble_comm_send_handler(weight_pref);
+		//ble_comm_send_handler(weight_pref);
 }
 
 void send_uart_msg(void){

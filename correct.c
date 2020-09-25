@@ -78,7 +78,7 @@ void correct(uint32_t value, uint32_t value1, uint32_t value2)
 		{
 			if(remote_mode == WORK_MODE)
 			SEGGER_RTT_printf(0, "DEACTIVATE\n");
-			lora_write_flag_1byte(REMOTE_CORRECTION_DEACTIVATE, 1);
+			//lora_write_flag_1byte(REMOTE_CORRECTION_DEACTIVATE, 1);
 		}
 		seq_value.channel_0 = TOP_VALUE - value;
 		seq_value.channel_1 = TOP_VALUE - value1;
