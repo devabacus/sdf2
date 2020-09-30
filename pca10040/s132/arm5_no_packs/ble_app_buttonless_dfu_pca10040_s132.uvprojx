@@ -336,7 +336,7 @@
               <MiscControls>--reduce_paths</MiscControls>
               <Define>DEBUG BL_SETTINGS_ACCESS_ONLY BOARD_PCA10040 CONFIG_GPIO_AS_PINRESET CONFIG_NFCT_PINS_AS_GPIOS FLOAT_ABI_HARD NRF52 NRF52832_XXAA NRF52_PAN_74 NRF_DFU_SVCI_ENABLED NRF_SD_BLE_API_VERSION=5 S132 SOFTDEVICE_PRESENT SWI_DISABLE0</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\config;..\..\..\..\..\..\components;..\..\..\..\..\..\components\ble\ble_advertising;..\..\..\..\..\..\components\ble\ble_services\ble_dfu;..\..\..\..\..\..\components\ble\common;..\..\..\..\..\..\components\ble\nrf_ble_gatt;..\..\..\..\..\..\components\ble\peer_manager;..\..\..\..\..\..\components\boards;..\..\..\..\..\..\components\drivers_nrf\clock;..\..\..\..\..\..\components\drivers_nrf\common;..\..\..\..\..\..\components\drivers_nrf\delay;..\..\..\..\..\..\components\drivers_nrf\gpiote;..\..\..\..\..\..\components\drivers_nrf\hal;..\..\..\..\..\..\components\drivers_nrf\uart;..\..\..\..\..\..\components\libraries\atomic;..\..\..\..\..\..\components\libraries\atomic_fifo;..\..\..\..\..\..\components\libraries\balloc;..\..\..\..\..\..\components\libraries\bootloader\dfu;..\..\..\..\..\..\components\libraries\bsp;..\..\..\..\..\..\components\libraries\button;..\..\..\..\..\..\components\libraries\crc16;..\..\..\..\..\..\components\libraries\experimental_log;..\..\..\..\..\..\components\libraries\experimental_log\src;..\..\..\..\..\..\components\libraries\experimental_memobj;..\..\..\..\..\..\components\libraries\experimental_section_vars;..\..\..\..\..\..\components\libraries\fds;..\..\..\..\..\..\components\libraries\fstorage;..\..\..\..\..\..\components\libraries\mutex;..\..\..\..\..\..\components\libraries\pwr_mgmt;..\..\..\..\..\..\components\libraries\scheduler;..\..\..\..\..\..\components\libraries\strerror;..\..\..\..\..\..\components\libraries\svc;..\..\..\..\..\..\components\libraries\timer;..\..\..\..\..\..\components\libraries\util;..\..\..\..\..\..\components\softdevice\common;..\..\..\..\..\..\components\softdevice\s132\headers;..\..\..\..\..\..\components\softdevice\s132\headers\nrf52;..\..\..\..\..\..\components\toolchain;..\..\..\..\..\..\external\fprintf;..\..\..\..\..\..\external\segger_rtt;..\config;..\..\..\..\..\..\components\ble\ble_services\ble_nus;..\..\..\..\..\..\components\drivers_nrf\ppi;..\..\..\..\..\..\components\drivers_nrf\pwm;..\..\..\..\..\..\components\drivers_nrf\timer;..\..\..\..\..\..\components\libraries\pwm;..\..\..\..\sdr_1;..\..\..\..\..\..\components\libraries\fifo;..\..\..\..\..\..\components\libraries\uart;..\..\..\..\..\..\components\drivers_nrf\uart;..\..\..\..\..\..\components\drivers_nrf\spi_master;..\..\..\..\..\..\components\libraries\mem_manager</IncludePath>
+              <IncludePath>..\..\..\config;..\..\..\..\..\..\components;..\..\..\..\..\..\components\ble\ble_advertising;..\..\..\..\..\..\components\ble\ble_services\ble_dfu;..\..\..\..\..\..\components\ble\common;..\..\..\..\..\..\components\ble\nrf_ble_gatt;..\..\..\..\..\..\components\ble\peer_manager;..\..\..\..\..\..\components\boards;..\..\..\..\..\..\components\drivers_nrf\clock;..\..\..\..\..\..\components\drivers_nrf\common;..\..\..\..\..\..\components\drivers_nrf\delay;..\..\..\..\..\..\components\drivers_nrf\gpiote;..\..\..\..\..\..\components\drivers_nrf\hal;..\..\..\..\..\..\components\drivers_nrf\uart;..\..\..\..\..\..\components\libraries\atomic;..\..\..\..\..\..\components\libraries\atomic_fifo;..\..\..\..\..\..\components\libraries\balloc;..\..\..\..\..\..\components\libraries\bootloader\dfu;..\..\..\..\..\..\components\libraries\bsp;..\..\..\..\..\..\components\libraries\button;..\..\..\..\..\..\components\libraries\crc16;..\..\..\..\..\..\components\libraries\experimental_log;..\..\..\..\..\..\components\libraries\experimental_log\src;..\..\..\..\..\..\components\libraries\experimental_memobj;..\..\..\..\..\..\components\libraries\experimental_section_vars;..\..\..\..\..\..\components\libraries\fds;..\..\..\..\..\..\components\libraries\fstorage;..\..\..\..\..\..\components\libraries\mutex;..\..\..\..\..\..\components\libraries\pwr_mgmt;..\..\..\..\..\..\components\libraries\scheduler;..\..\..\..\..\..\components\libraries\strerror;..\..\..\..\..\..\components\libraries\svc;..\..\..\..\..\..\components\libraries\timer;..\..\..\..\..\..\components\libraries\util;..\..\..\..\..\..\components\softdevice\common;..\..\..\..\..\..\components\softdevice\s132\headers;..\..\..\..\..\..\components\softdevice\s132\headers\nrf52;..\..\..\..\..\..\components\toolchain;..\..\..\..\..\..\external\fprintf;..\..\..\..\..\..\external\segger_rtt;..\config;..\..\..\..\..\..\components\ble\ble_services\ble_nus;..\..\..\..\..\..\components\drivers_nrf\ppi;..\..\..\..\..\..\components\drivers_nrf\pwm;..\..\..\..\..\..\components\drivers_nrf\timer;..\..\..\..\..\..\components\libraries\pwm;..\..\..\..\sdr_1;..\..\..\..\..\..\components\libraries\fifo;..\..\..\..\..\..\components\libraries\uart;..\..\..\..\..\..\components\drivers_nrf\uart;..\..\..\..\..\..\components\drivers_nrf\spi_master;..\..\..\..\..\..\components\libraries\mem_manager;..\..\..\..\..\..\components\drivers_nrf\saadc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -2089,6 +2089,66 @@
               <FileName>nrf_drv_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\components\drivers_nrf\spi_master\nrf_drv_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_drv_saadc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\components\drivers_nrf\saadc\nrf_drv_saadc.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>nrf_saadc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\components\drivers_nrf\hal\nrf_saadc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6047,6 +6107,16 @@
               <FileName>nrf_drv_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\components\drivers_nrf\spi_master\nrf_drv_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_drv_saadc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\components\drivers_nrf\saadc\nrf_drv_saadc.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_saadc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\components\drivers_nrf\hal\nrf_saadc.c</FilePath>
             </File>
           </Files>
         </Group>

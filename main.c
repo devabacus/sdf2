@@ -1104,6 +1104,8 @@ int main(void)
 		uint32_t err_code;
     // Initialize.
     log_init();
+		pwm_init_corr();
+		pwm_init_rgb();
 		ble_stack_init();
 		nrf_gpio_cfg_input(20, NRF_GPIO_PIN_PULLUP);
     timers_init();
@@ -1112,8 +1114,7 @@ int main(void)
 		ble_set_init();
 		nrf_define_test_pin();
 		nrf_gpiote();			
-		pwm_init_corr();
-		pwm_init_rgb();
+		
 		HX711_init();
 		m_clock_timer_init();
 		peer_manager_init();

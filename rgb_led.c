@@ -4,21 +4,27 @@ nrf_drv_pwm_t m_pwm_rgb = NRF_DRV_PWM_INSTANCE(1);
 nrf_pwm_values_individual_t seq_value_rgb[2];
 nrf_pwm_sequence_t seq_rgb;
 
+
+void detect_rgv_ver(){
+
+}
+
+
+void saadc_callback(nrf_drv_saadc_evt_t const * p_event){
+
+	NRF_LOG_INFO("saadc_callback");
+}
+
+
 void pwm_init_rgb()
 
 {
-	nrf_gpio_cfg_output(RGB_GND);
-	nrf_gpio_pin_set(RGB_GND);
-  //uint32_t err_code;
-	nrf_drv_pwm_config_t const config0 =
+	
+	nrf_saadc_value_t value;
+	ret_code_t err_code;
+		
+	nrf_drv_pwm_config_t config0 =
 	{
-			.output_pins =
-			{
-					RED_PIN | NRF_DRV_PWM_PIN_INVERTED, // channel 0
-					GREEN_PIN | NRF_DRV_PWM_PIN_INVERTED, // channel 1
-					BLUE_PIN | NRF_DRV_PWM_PIN_INVERTED, // channel 2
-					NRF_DRV_PWM_PIN_NOT_USED, // channel 3
-			},
 			.irq_priority = APP_IRQ_PRIORITY_LOW,
 			.base_clock   = NRF_PWM_CLK_1MHz,
 			.count_mode   = NRF_PWM_MODE_UP,
@@ -26,6 +32,57 @@ void pwm_init_rgb()
 			.load_mode    = NRF_PWM_LOAD_INDIVIDUAL,
 			.step_mode    = NRF_PWM_STEP_AUTO
 	};
+	
+	nrf_gpio_cfg_output(RGB_GND);
+	nrf_gpio_pin_set(RGB_GND);
+			
+	nrf_saadc_channel_config_t channel_config =
+			NRF_DRV_SAADC_DEFAULT_CHANNEL_CONFIG_SE(NRF_SAADC_INPUT_AIN3);
+	channel_config.gain 			= NRF_SAADC_GAIN1_2;
+	channel_config.reference 	= NRF_SAADC_REFERENCE_INTERNAL;
+	channel_config.acq_time 	= NRF_SAADC_ACQTIME_20US;
+	channel_config.burst 			= NRF_SAADC_BURST_ENABLED;
+	channel_config.resistor_p = NRF_SAADC_RESISTOR_PULLDOWN;
+	
+	nrf_drv_saadc_config_t saadc_config = NRF_DRV_SAADC_DEFAULT_CONFIG;
+	saadc_config.resolution 		= NRF_SAADC_RESOLUTION_8BIT;
+	saadc_config.oversample 		= NRF_SAADC_OVERSAMPLE_32X;
+	saadc_config.low_power_mode = true;
+
+	err_code = nrf_drv_saadc_init(&saadc_config, saadc_callback);
+	APP_ERROR_CHECK(err_code);
+
+	err_code = nrf_drv_saadc_channel_init(0, &channel_config);
+	APP_ERROR_CHECK(err_code);	
+	
+	err_code = nrf_drv_saadc_sample_convert(0, &value);
+	APP_ERROR_CHECK(err_code);
+	
+	nrf_drv_saadc_uninit();
+	
+	if(value > 90){
+		nrf_gpio_cfg_default(BLUE_PIN);
+		
+		config0.output_pins[0] = RED_PIN | NRF_DRV_PWM_PIN_INVERTED;
+		config0.output_pins[1] = GREEN_PIN | NRF_DRV_PWM_PIN_INVERTED;
+		config0.output_pins[2] = BLUE_PIN | NRF_DRV_PWM_PIN_INVERTED;
+		config0.output_pins[3] = NRF_DRV_PWM_PIN_NOT_USED;
+		
+	}else{
+		nrf_gpio_cfg_default(BLUE_PIN);
+		nrf_gpio_cfg_default(RGB_GND);
+	
+		
+		nrf_gpio_cfg_output(GREEN_PIN);
+		nrf_gpio_pin_set(GREEN_PIN);
+		
+		config0.output_pins[0] = BLUE_PIN | NRF_DRV_PWM_PIN_INVERTED;
+		config0.output_pins[1] = RGB_GND | NRF_DRV_PWM_PIN_INVERTED;
+		config0.output_pins[2] = RED_PIN | NRF_DRV_PWM_PIN_INVERTED;
+		config0.output_pins[3] = NRF_DRV_PWM_PIN_NOT_USED;
+		
+	}
+	
 	
 	nrf_drv_pwm_init(&m_pwm_rgb, &config0, NULL);
 	

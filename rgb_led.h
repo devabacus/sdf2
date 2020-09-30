@@ -16,6 +16,7 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
+#include "nrf_drv_saadc.h"
 //#include "device_name.h"
 
 #define APP_TIMER_PRESCALER     0
@@ -33,6 +34,11 @@
 #define BLUE_FIRE  	4
 
 #define RGB_TOP 255
+
+//#define RGB_GND 5
+//#define RED_PIN 4
+//#define GREEN_PIN 3
+//#define BLUE_PIN 2
 
 #define RGB_GND 3
 #define RED_PIN 2
