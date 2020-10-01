@@ -202,8 +202,7 @@ void ble_set(uint8_t *ble_set_buffer){
 								{
 									define_corr_on();
 								}
-   					}
-					
+   					}					
 					
 					else if (set_value == 2) {
 						SEGGER_RTT_printf(0, "num_of_discrete = %d\n", set_value2);

@@ -92,9 +92,6 @@ void pwm_init_rgb()
 	seq_value_rgb[1].channel_1 = RGB_TOP - 0;
 	seq_value_rgb[0].channel_2 = RGB_TOP - 200;
 	seq_value_rgb[1].channel_2 = RGB_TOP - 0;
-	
-	
-	
 
 	seq_rgb.values.p_individual = seq_value_rgb;
 	seq_rgb.length = NRF_PWM_VALUES_LENGTH(seq_value_rgb);
