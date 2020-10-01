@@ -432,20 +432,20 @@ void buttons_handle(void)
 						cor_value_auto = current_correct;
 						
 				//notife phone that we are waiting of min weight value for activate correct
-						
-						if(feedback == 1)
-						{
-								correct_value(cor_feedback);
-								stop_timer();
-								start_timer(time_feedback);
-						}
-						
-						else if (feedback == 2)
-						{
-							correct_value(current_correct);
-							stop_timer();
-							start_timer(time_feedback);
-						}
+//						
+//						if(feedback == 1)
+//						{
+//								correct_value(cor_feedback);
+//								stop_timer();
+//								start_timer(time_feedback);
+//						}
+//						
+//						else if (feedback == 2)
+//						{
+//							correct_value(current_correct);
+//							stop_timer();
+//							start_timer(time_feedback);
+//						}
 					//SEGGER_RTT_printf(0, "auto %d\n\r", cor_value_auto);	
 			}
 		
