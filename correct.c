@@ -93,7 +93,11 @@ void corr_plus(uint32_t value)
 	SEGGER_RTT_printf(0, "plus %d\r\n", value);
 	seq_value.channel_0 = TOP_VALUE - value;
 	update_seq();
-	if (value > 0 && ble_active) ble_comm_send_handler("n1/1");
+	if (value > 0 && ble_active){
+	ble_comm_send_handler("n1/1");
+		ble_comm_send_handler("n1/1");
+		ble_comm_send_handler("n1/1");
+	} 
 	
 }
 
@@ -102,7 +106,11 @@ void corr_minus(uint32_t value)
 	SEGGER_RTT_printf(0, "min %d\r\n", value);
 	seq_value.channel_1 = TOP_VALUE - value;
 	update_seq();
-	if (value > 0 && ble_active) ble_comm_send_handler("n1/2");
+	if (value > 0 && ble_active){
+	 ble_comm_send_handler("n1/2");
+		 ble_comm_send_handler("n1/2");
+		 ble_comm_send_handler("n1/2");
+	}
 }
 
 void corr_perc(uint32_t value)
@@ -110,7 +118,11 @@ void corr_perc(uint32_t value)
 	SEGGER_RTT_printf(0, "perc %d\r\n", value);
 	seq_value.channel_2 = TOP_VALUE - value;
 	update_seq();
-	if (value > 0 && ble_active) ble_comm_send_handler("n1/3");
+	if (value > 0 && ble_active){
+	ble_comm_send_handler("n1/3");
+		ble_comm_send_handler("n1/3");
+		ble_comm_send_handler("n1/3");
+	} 
 }
 
 void correct_value(uint32_t value)

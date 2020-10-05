@@ -93,6 +93,8 @@ void ble_correct(uint8_t * ble_buffer)
 							
 							// send info that correct reset manually
 							ble_comm_send_handler("n1/0");
+							ble_comm_send_handler("n1/0");
+							ble_comm_send_handler("n1/0");
 							ble_correct_active = 0;
 							first_time_open_set = 0;
 							//return;
@@ -221,6 +223,8 @@ void ble_correct(uint8_t * ble_buffer)
 											ble_correct_active = 1;
 											SEGGER_RTT_printf(0, "adc_value_but = %d\n\r", adc_vals_ar[current_but-1]);
 											ble_comm_send_handler("n2/1");
+										//ble_comm_send_handler("n2/1");
+										//ble_comm_send_handler("n2/1");
 									}
 							}
 							ble_correct_active = 1;

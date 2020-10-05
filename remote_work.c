@@ -188,7 +188,11 @@ void cor_auto_handle(void)
 							cor_set = 0;
 							SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d reset\n\r", uart_weight, cor_value_auto, cal_turn_on);
 							freeze_auto_cor = clock_counter;
-							if(ble_active) ble_comm_send_handler("n1/0");
+							if(ble_active){
+							ble_comm_send_handler("n2/0");
+								ble_comm_send_handler("n2/0");
+								ble_comm_send_handler("n2/0");
+							} 
 					}
 				}
 				
@@ -232,7 +236,11 @@ void cor_auto_handle(void)
 									{
 										SEGGER_RTT_printf(0, "-----------------OFF-------------------\n");
 										SEGGER_RTT_printf(0, "adc_value = %d, cal_turn_off = %d, adc_over = %d, adc_change_counter = %d, direct = %d\n", adc_value, cal_turn_on, adc_over, adc_change_counter, adc_direct);		
-										if (adc_value > 0 && ble_active) ble_comm_send_handler("n1/0");
+										if (adc_value > 0 && ble_active) {
+										 ble_comm_send_handler("n2/0");
+											 ble_comm_send_handler("n2/0");
+											 ble_comm_send_handler("n2/0");
+										}
 									//SEGGER_RTT_printf(0, "adc_over = %d, adc_value_lowest = %d, adc_value = %d, direct = %d, counter = %d\n", adc_over, adc_value_lowest, adc_value, adc_direct, adc_change_counter);
 						//			if(current_adc_value >= adc_value)
 						//			{
@@ -262,6 +270,8 @@ void cor_auto_handle(void)
 									adc_value_max = 0;
 									SEGGER_RTT_printf(0, "adc_value = %d, corr %d reset\n\r", adc_value, cor_value_auto);
 									ble_comm_send_handler("n2/0");
+									ble_comm_send_handler("n2/0");
+									//ble_comm_send_handler("n2/0");
 									nrf_delay_ms(1000);
 									}
 				
@@ -399,7 +409,11 @@ void buttons_handle(void)
 				corr_counter_inc();
 			}
 			rgb_set(50, 50, 50, 1, 500);
-			if(ble_active) ble_comm_send_handler("n1/0");
+			if(ble_active) {
+				ble_comm_send_handler("n1/0");
+				ble_comm_send_handler("n1/0");
+				ble_comm_send_handler("n1/0");
+			} 
 			correct(0,0,0);
 			freeze_auto_cor = 0;
 			cor_value_auto = 0;
