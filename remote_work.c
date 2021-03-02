@@ -175,6 +175,10 @@ void cor_auto_handle(void)
 								last_cor_value_auto = cor_value_auto;
 								SEGGER_RTT_printf(0, "clock_counter = %d, freeze_auto_cor = %d\n", clock_counter, freeze_auto_cor);							
 								correct_value(cor_value_auto);
+								if(cur_comp_cor > 0 && cor_value_auto > 2000)
+										{
+											correct_value(cur_comp_cor);
+										}
 								segtext("activate\n");
 								SEGGER_RTT_printf(0, "uart_weight = %d, corr %d, turn_on = %d set\n\r", uart_weight, cor_value_auto, cal_turn_on);
 						//}							

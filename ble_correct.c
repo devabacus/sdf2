@@ -103,8 +103,10 @@ void ble_correct(uint8_t * ble_buffer)
 					// work_mode
 					if (isButton){
 						if((fds_remote_type != REMOTE_ONLY) || admin || (phone_cor_counter < PHONE_COR_COUNTER_MAX_DEMO)){
-										
+							
 										uint8_t cor_button_ble = atoi((char*)ble_buffer+1);
+							
+							//------------------проверяем можно ли в данной конфигурации нажимать такие кнопки---------------------------
 										//конфигурация новичок. Допускается работа с телефона только первых 2-х кнопок
 										if(fds_pcb_config == NEWBIE_CONFIG && (cor_button_ble == 1 || cor_button_ble == 4)){
 												defineCorDir(ble_buffer, 4);
@@ -130,7 +132,7 @@ void ble_correct(uint8_t * ble_buffer)
 												allowed_corr = 1;
 												//segtext("expert's allowed all of the buttons\n");		
 										}
-										
+										//-------------------------------------------------------------------------------------------------------
 										
 										if(allowed_corr){
 											phone_cor_counter++;
@@ -139,9 +141,10 @@ void ble_correct(uint8_t * ble_buffer)
 											
 											remote_mode = WORK_MODE;	
 											current_but = (current_but_t) cor_button_ble;
-											//SEGGER_RTT_printf(0, "cor_button_ble = %d\n", cor_button_ble);
+											SEGGER_RTT_printf(0, "cor_button_ble = %d\n", cor_button_ble);
 											correct(0,0,0);
-											
+											//это нужно только для определение значения по правильному индексу, если 10 то индекс на 1 больше
+											//определили направление, если + то прибавляем 1000, потому что должно быть 1000+CORVALUE
 											if(cor_button_ble < 10) defineCorDir(ble_buffer, 4);
 											else defineCorDir(ble_buffer, 5);
 											
@@ -188,14 +191,14 @@ void ble_correct(uint8_t * ble_buffer)
 							uint8_t compIndex = findIdexOfArray(ble_buffer, 3, 'c')+1;  // index = 
 							cor_value = atoi((char*)(ble_buffer+percIndex));;
 							comp_value = atoi((char*)(ble_buffer+compIndex));
-							//SEGGER_RTT_printf(0, "----------------comp_value = %d", comp_value);
+//							SEGGER_RTT_printf(0, "----------------comp_value = %d", comp_value);
 							if(comp_value > 0){
 								comp_value += 1000;
 							} else {
 								comp_value = -comp_value;
 							}
 							cur_comp_cor = comp_value;	
-							
+//							SEGGER_RTT_printf(0, "----------------cur_comp_value = %d", cur_comp_cor);
 							if(correct_mode == COR_MANUAL){
 								correct_value(cor_value + 2000);
 								//if(isButton) zero(15, 100);
@@ -204,6 +207,8 @@ void ble_correct(uint8_t * ble_buffer)
 							} else if(correct_mode == COR_AUTO){
 								cor_value_auto = cor_value + 2000;
 								cur_comp_cor = comp_value;
+								SEGGER_RTT_printf(0, "cur_comp_cor = %d\n", cur_comp_cor);
+								SEGGER_RTT_printf(0, "cor_value_auto = %d\n", cor_value_auto);
 							}
 							ble_correct_active = 1;
 							

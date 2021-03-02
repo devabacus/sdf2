@@ -12,6 +12,7 @@ void ble_comm_send_num_handler(uint32_t num){
 			
 			sprintf((char*)ble_string_put, "%d", num);
 			ble_comm_send_handler(ble_string_put);
+			
 }
 void zero(uint8_t times, uint16_t delay){
 			
