@@ -35,7 +35,9 @@ extern uint8_t uart_active;
 extern uint32_t protocol;
 enum {
 	GENERAL_PROTOCOL,
-	MIDDLE_MI_12_COMMAND_MODE
+	MIDDLE_MI_12_COMMAND_MODE,
+	MIDDLE_MI_12_COMMAND_MODE_1,
+	
 };
 
 #endif

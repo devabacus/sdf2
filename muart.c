@@ -243,6 +243,67 @@ void define_uart_weight(void){
 
 }
 
+void uart_data_handle(){
+				
+					switch (protocol){
+						case MIDDLE_MI_12_COMMAND_MODE:
+							if(index >= 17){
+										uart_weight = data_array[0] + data_array[1]*10 + data_array[2]*100 + data_array[3]*1000 + data_array[4]*10000 + data_array[5]*100000;			
+									SEGGER_RTT_printf(0, "%d\n", uart_weight);
+									nrf_gpio_pin_toggle(17);
+								//send uart string 
+									//send_uart_msg();
+									define_uart_weight();
+									for(uint8_t i = 0; i < 20; i++){
+												data_array[i] = 0;
+									}
+									 app_uart_flush();
+									 index = 0;															
+								} else {
+									index++;
+								}
+								break;
+						case MIDDLE_MI_12_COMMAND_MODE_1:
+							if(index >= 19){
+										uart_weight = data_array[0] + data_array[1]*10 + data_array[2]*100 + data_array[3]*1000 + data_array[4]*10000 + data_array[5]*100000;			
+									SEGGER_RTT_printf(0, "%d\n", uart_weight);
+									nrf_gpio_pin_toggle(17);
+								//send uart string 
+									//send_uart_msg();
+									define_uart_weight();
+									for(uint8_t i = 0; i < 20; i++){
+												data_array[i] = 0;
+									}
+									 app_uart_flush();
+									 index = 0;															
+								} else {
+									index++;
+								}
+								break;
+						case GENERAL_PROTOCOL:
+								if (data_array[index - 1] == '\n'){
+									SEGGER_RTT_printf(0, "%s\n", data_array);							
+									uart_active = 1;
+									define_uart_weight();
+									nrf_gpio_pin_toggle(17);
+								//send uart string 
+									send_uart_msg();
+									for(uint8_t i = 0; i < 20; i++){
+												data_array[i] = 0;
+									}
+									 app_uart_flush();
+									 index = 0;
+								} 
+								index++;
+						
+							break;
+					
+					}
+		
+//			
+}
+
+
 void uart_event_handle(app_uart_evt_t * p_event)
 {
     
@@ -283,35 +344,7 @@ void uart_event_handle(app_uart_evt_t * p_event)
 							
 							//if(protocol == MIDDLE_MI_12_COMMAND_MODE){
 							
-							if(protocol == 1){
-								if(index >= 17){
-										uart_weight = data_array[0] + data_array[1]*10 + data_array[2]*100 + data_array[3]*1000 + data_array[4]*10000 + data_array[5]*100000;			
-									SEGGER_RTT_printf(0, "%d\n", uart_weight);
-									nrf_gpio_pin_toggle(17);
-								//send uart string 
-									//send_uart_msg();
-									define_uart_weight();
-									for(uint8_t i = 0; i < 20; i++){
-												data_array[i] = 0;
-									}
-									 app_uart_flush();
-									 index = 0;															
-								} else {
-									index++;
-								}
-							}  else if (data_array[index - 1] == '\n'){
-									SEGGER_RTT_printf(0, "%s\n", data_array);							
-									uart_active = 1;
-									define_uart_weight();
-									nrf_gpio_pin_toggle(17);
-								//send uart string 
-									send_uart_msg();
-									for(uint8_t i = 0; i < 20; i++){
-												data_array[i] = 0;
-									}
-									 app_uart_flush();
-									 index = 0;
-								} 
+							uart_data_handle();
     }
 }
 

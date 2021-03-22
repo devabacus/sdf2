@@ -283,15 +283,24 @@ void ble_set(uint8_t *ble_set_buffer){
 //				//nrf_gpio_pin_toggle(17);
 //				break;
 				case PROTOCOL_TYPE:
-					if(set_value == GENERAL_PROTOCOL){
-						protocol = GENERAL_PROTOCOL;
-					} else if (set_value == MIDDLE_MI_12_COMMAND_MODE){
-						protocol = MIDDLE_MI_12_COMMAND_MODE;
+					switch(set_value){
+						case GENERAL_PROTOCOL:
+								protocol = GENERAL_PROTOCOL;
+						break;
+						case MIDDLE_MI_12_COMMAND_MODE:
+								protocol = MIDDLE_MI_12_COMMAND_MODE;
+						break;
+						case MIDDLE_MI_12_COMMAND_MODE_1:
+								protocol = MIDDLE_MI_12_COMMAND_MODE_1;
+						break;
 					}
+//					if(set_value == GENERAL_PROTOCOL){
+//						
+//					} else if (set_value == MIDDLE_MI_12_COMMAND_MODE){
+//						protocol = MIDDLE_MI_12_COMMAND_MODE;
+//					}
 					SEGGER_RTT_printf(0, "protocol = %d\n", protocol);
-					ble_comm_send_handler("protocol changed");	
-					
-					fds_update_value(&protocol, file_id_c, fds_rk_protocol);				
-					
+					ble_comm_send_handler("protocol changed");						
+					fds_update_value(&protocol, file_id_c, fds_rk_protocol);									
 }
 }
