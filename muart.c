@@ -26,7 +26,7 @@ uint8_t uart_active = 0;
 //uint8_t discrete = 10;
 
 //uint8_t ble_connection = 0;
-uint32_t protocol = GENERAL_PROTOCOL;
+uint32_t protocol = 0;
 
 float uart_weight_f = 0;
 int uart_weight 	 = -1;
@@ -160,7 +160,7 @@ void define_uart_weight(void){
 	// если отправили s8/2 через телефон то weight_float = 1
 //	weight_handle();
 	if(!weight_float){
-		if(protocol != MIDDLE_MI_12_COMMAND_MODE){
+		if(protocol == GENERAL_PROTOCOL){
 			flushIndexOfArray(data_array, endWeightIndex);
 			uart_weight = atoi((char*)(data_array+startWeightIndex));		
 		}
@@ -247,12 +247,16 @@ void uart_data_handle(){
 				
 					switch (protocol){
 						case MIDDLE_MI_12_COMMAND_MODE:
+							
 							if(index >= 17){
+								
 										uart_weight = data_array[0] + data_array[1]*10 + data_array[2]*100 + data_array[3]*1000 + data_array[4]*10000 + data_array[5]*100000;			
 									SEGGER_RTT_printf(0, "%d\n", uart_weight);
+									SEGGER_RTT_printf(0, "MIDDLE_MI_12_COMMAND_MODE\n", uart_weight);
 									nrf_gpio_pin_toggle(17);
 								//send uart string 
 									//send_uart_msg();
+								uart_active = 1;
 									define_uart_weight();
 									for(uint8_t i = 0; i < 20; i++){
 												data_array[i] = 0;
@@ -267,9 +271,11 @@ void uart_data_handle(){
 							if(index >= 19){
 										uart_weight = data_array[0] + data_array[1]*10 + data_array[2]*100 + data_array[3]*1000 + data_array[4]*10000 + data_array[5]*100000;			
 									SEGGER_RTT_printf(0, "%d\n", uart_weight);
+								SEGGER_RTT_printf(0, "MIDDLE_MI_12_COMMAND_MODE_1\n", uart_weight);
 									nrf_gpio_pin_toggle(17);
 								//send uart string 
 									//send_uart_msg();
+								uart_active = 1;
 									define_uart_weight();
 									for(uint8_t i = 0; i < 20; i++){
 												data_array[i] = 0;
@@ -282,7 +288,8 @@ void uart_data_handle(){
 								break;
 						case GENERAL_PROTOCOL:
 								if (data_array[index - 1] == '\n'){
-									SEGGER_RTT_printf(0, "%s\n", data_array);							
+									SEGGER_RTT_printf(0, "%s\n", data_array);
+									SEGGER_RTT_printf(0, "MIDDLE_MI_12_COMMAND_MODE_1\n", uart_weight);									
 									uart_active = 1;
 									define_uart_weight();
 									nrf_gpio_pin_toggle(17);

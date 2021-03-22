@@ -127,6 +127,10 @@ void ble_set(uint8_t *ble_set_buffer){
 				
 			uint16_t set_value2 = atoi((char*) ble_set_buffer + slashIndex2);
 	
+			uint8_t need_init = 0;
+	
+
+	
 			switch (set_number){
 				
 				case SHOWADC:
@@ -283,6 +287,10 @@ void ble_set(uint8_t *ble_set_buffer){
 //				//nrf_gpio_pin_toggle(17);
 //				break;
 				case PROTOCOL_TYPE:
+					
+					if(protocol == 0){
+						need_init = true;
+					}
 					switch(set_value){
 						case GENERAL_PROTOCOL:
 								protocol = GENERAL_PROTOCOL;
@@ -299,8 +307,15 @@ void ble_set(uint8_t *ble_set_buffer){
 //					} else if (set_value == MIDDLE_MI_12_COMMAND_MODE){
 //						protocol = MIDDLE_MI_12_COMMAND_MODE;
 //					}
-					SEGGER_RTT_printf(0, "protocol = %d\n", protocol);
+					
+//					SEGGER_RTT_printf(0, "protocol = %d\n", protocol);
+//					SEGGER_RTT_printf(0, "need_init = %d\n", need_init);
 					ble_comm_send_handler("protocol changed");						
-					fds_update_value(&protocol, file_id_c, fds_rk_protocol);									
+					//it's need if we update boards released before this future and we didn't initialize it.
+			
+						fds_update_value(&protocol, file_id_c, fds_rk_protocol);									
+ 						SEGGER_RTT_printf(0, "protocol update = %d\n", protocol);
+					
+					
 }
 }

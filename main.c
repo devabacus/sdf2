@@ -286,6 +286,10 @@ void fds_get_init_data()
 	autocor_adc_values_get();
 	SEGGER_RTT_printf(0, "protocol = %d\r\n", protocol);
 		//APP_ERROR_CHECK(err_code);
+				if(protocol == 0){
+			protocol = GENERAL_PROTOCOL;
+			fds_init_flash(&protocol, file_id_c, fds_rk_protocol);
+		}
 }
 
 static void m_clock_timer_init(void)
@@ -1153,7 +1157,7 @@ int main(void)
 		segnum1(fds_option_status);
 		//rgb_set(0, 50, 0, 2, 500);
 		nrf_gpio_pin_set(17);
-		SEGGER_RTT_printf(0, "correct_mode = %d\n", correct_mode);		
+		SEGGER_RTT_printf(0, "protocol = %d\n", protocol);		
     for (;;)
     {
 			app_sched_execute();

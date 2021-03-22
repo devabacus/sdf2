@@ -164,9 +164,15 @@ void fds_init_flash(uint32_t* value, uint16_t file_id, uint16_t rec_key)
 {
 	uint32_t err_code;
 	err_code = fds_write_value(value, file_id, rec_key);
-	APP_ERROR_CHECK(err_code);
+	if(err_code != 0){
+		SEGGER_RTT_printf(0, "fds_init_flash, rec_key = %d, err_code = %d\n", rec_key, err_code);
+	}
+	//APP_ERROR_CHECK(err_code);
+	
 	while(write_flag == 0);
+	
 	//SEGGER_RTT_printf(0, "into fds_init_flash\n\r");
+	//return err_code;
 	
 	
 }
@@ -214,10 +220,9 @@ void fds_init_values(void)
 	
 	//for those boards that already shipment
 	
-	
-	
 	if(fds_is_values_init != 1)
 	{
+		
 		//name_convert();
 		demo_define();
 		activate_status = 1;
@@ -273,7 +278,7 @@ void fds_init_values(void)
 		fds_init_flash(&fds_option_status, file_id_c, fds_rk_option_status);
 		fds_init_flash(&fds_pcb_config, file_id_c, fds_rk_pcb_config);
 		fds_init_flash(&fds_uart_automode, file_id_c, fds_rk_uart_automode);
-		fds_init_flash(&protocol, file_id_c, fds_rk_protocol);
+
 //		fds_init_flash(&fds_remote_type, file_id_c, fds_rk_remote_type);
 //		fds_init_flash(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
 //		fds_init_flash(&fds_soft_version, file_id_c, fds_rk_soft_version);

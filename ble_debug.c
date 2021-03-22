@@ -104,16 +104,19 @@ void ble_debug(uint8_t * ble_buffer)
 							case 18:
 								send_num = uart_weight;
 							break;
+							case 19:
+								send_num = protocol;
+							break;
 						}
 						
-						if(send_num > 0)
-						{
+//						if(send_num > 0)
+//						{
 							uint8_t ble_debug_string[20];
 							sprintf((char*)ble_debug_string, "%d", send_num);
 							ble_comm_send_handler(ble_debug_string);
-	
+							SEGGER_RTT_printf(0, "send_num = %d\n", send_num);
 						//	ble_debug_handler(ble_string_put2);
-						}
+						//}
 		}
 		
 		
