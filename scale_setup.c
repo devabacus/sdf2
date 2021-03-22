@@ -348,7 +348,7 @@ void generate_option_pass(void){
 	//config_pass1 = demo6+14431;
 	config_pass2 = demo6+15718;
 	config_pass3 = demo6+16097;
-	
+	SEGGER_RTT_printf(0, "archive_pass = demo6 + 12385 = %d, demo6 = %d\n", archive_pass, demo6);
 //	segnum1(archive_pass);
 //	segnum1(volume_pass);
 }

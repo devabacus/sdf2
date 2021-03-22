@@ -90,6 +90,8 @@ extern uint16_t fds_rk_option_status;
 extern uint16_t fds_rk_pcb_config;
 extern uint16_t fds_rk_uart_automode;
 
+extern uint16_t fds_rk_protocol;
+
 
 
 

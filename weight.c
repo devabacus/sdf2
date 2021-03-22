@@ -136,7 +136,7 @@ void find_average_adc(void)
 									uint16_t length = strlen((char*)ble_string_put1);
 									memcpy(cal_adc_pref+5, ble_string_put1, length);
 									ble_comm_send_handler(cal_adc_pref);
-									segtext((char*)cal_adc_pref);
+									segtext((uint8_t*)cal_adc_pref);
 								  segtext("\nstart_average_adc == 1\n");
 								// почему то записывается значение ацп в discrete_char1, поэтому повторно пишем туда дискрет
 									sprintf(discrete_char1, "%.2f", discrete);
@@ -375,9 +375,9 @@ void weight_define(void){
 						  	if(dif_weight > (discrete*stable_freeze_discretes)){
 									start_stable_find = 1;
 									}
-									segtext(str);
+									segtext((uint8_t*)str);
 									segtext("\n");
-									segtext(weight_char);
+									segtext((uint8_t*)weight_char);
 									// handler of this timer in remote.c and ther we call find_average_adc that above
 										if(start_stable_find){
 											weight_stable_arr[weight_stable_count] = weight;

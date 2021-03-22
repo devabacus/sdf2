@@ -33,6 +33,8 @@ void pwm_init_rgb()
 			.step_mode    = NRF_PWM_STEP_AUTO
 	};
 	
+	
+	
 	nrf_gpio_cfg_output(RGB_GND);
 	nrf_gpio_pin_set(RGB_GND);
 			

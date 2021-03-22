@@ -26,6 +26,7 @@ uint8_t uart_active = 0;
 //uint8_t discrete = 10;
 
 //uint8_t ble_connection = 0;
+uint32_t protocol = GENERAL_PROTOCOL;
 
 float uart_weight_f = 0;
 int uart_weight 	 = -1;
@@ -40,10 +41,20 @@ float uart_weigth_f_max = 0;
 float uart_weight1 = 0;
 //APP_TIMER_DEF(m_timer_muart);
 
+
+static uint8_t index = 0;
+
+
+
 enum {
 	INCREASE = 1,
 	DECREASE,
 };
+
+
+
+
+
 
 void time_check(void){
 			if(clock_counter != clock_counter_last){
@@ -130,6 +141,10 @@ void weight_ble_msg(void){
 
 void send_uart_msg(void){
 	
+	if(protocol == MIDDLE_MI_12_COMMAND_MODE){
+	
+	}
+	
 	if(uart_ble_mode == 1){
 		//segtext(data_array);
 		ble_comm_send_handler(data_array);
@@ -145,8 +160,11 @@ void define_uart_weight(void){
 	// если отправили s8/2 через телефон то weight_float = 1
 //	weight_handle();
 	if(!weight_float){
-		flushIndexOfArray(data_array, endWeightIndex);
-		uart_weight = atoi((char*)(data_array+startWeightIndex));		
+		if(protocol != MIDDLE_MI_12_COMMAND_MODE){
+			flushIndexOfArray(data_array, endWeightIndex);
+			uart_weight = atoi((char*)(data_array+startWeightIndex));		
+		}
+		
 		
 		if(ble_active){
 		
@@ -227,7 +245,7 @@ void define_uart_weight(void){
 
 void uart_event_handle(app_uart_evt_t * p_event)
 {
-    static uint8_t index = 0;
+    
    // uint32_t       err_code;
 
     switch (p_event->evt_type)
@@ -236,6 +254,7 @@ void uart_event_handle(app_uart_evt_t * p_event)
         case APP_UART_DATA_READY:
 							//blink by led when data is receiving
 							//uart_active = 1;
+							//SEGGER_RTT_printf(0, "get\n");
 							if(uart_ble_mode) {
 									//nrf_gpio_pin_toggle(17);
 								
@@ -251,19 +270,37 @@ void uart_event_handle(app_uart_evt_t * p_event)
 								{
 									nrf_gpio_pin_toggle(17);
 								}
-							 
 							}
 							//nrf_delay_ms(100);
 							app_uart_get((uint8_t*)&data_array[index]);
 							//remove spaces for gs7516
+							//if(
 							
-							if(data_array[index] != ' ') index++;
+							//if(data_array[index] != ' ') index++;
 //							if(index == 10) {
 //								SEGGER_RTT_printf(0, "%s\n", data_array);
 //							}
-							if (data_array[index - 1] == '\n'){
-									//SEGGER_RTT_printf(0, "%s\n", data_array);
-								
+							
+							//if(protocol == MIDDLE_MI_12_COMMAND_MODE){
+							
+							if(protocol == 1){
+								if(index >= 17){
+										uart_weight = data_array[0] + data_array[1]*10 + data_array[2]*100 + data_array[3]*1000 + data_array[4]*10000 + data_array[5]*100000;			
+									SEGGER_RTT_printf(0, "%d\n", uart_weight);
+									nrf_gpio_pin_toggle(17);
+								//send uart string 
+									//send_uart_msg();
+									define_uart_weight();
+									for(uint8_t i = 0; i < 20; i++){
+												data_array[i] = 0;
+									}
+									 app_uart_flush();
+									 index = 0;															
+								} else {
+									index++;
+								}
+							}  else if (data_array[index - 1] == '\n'){
+									SEGGER_RTT_printf(0, "%s\n", data_array);							
 									uart_active = 1;
 									define_uart_weight();
 									nrf_gpio_pin_toggle(17);
@@ -283,7 +320,8 @@ void uart_init(void)
     uint32_t                     err_code;
     app_uart_comm_params_t const comm_params =
     {
-        .rx_pin_no    = 26,
+        .rx_pin_no    = 27,
+   			//.tx_pin_no    = ,
         .rts_pin_no   = RTS_PIN_NUMBER,
         .cts_pin_no   = CTS_PIN_NUMBER,
         .flow_control = APP_UART_FLOW_CONTROL_DISABLED,

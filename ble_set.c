@@ -92,9 +92,10 @@ void reset_counters(uint8_t ch_num){
 }
 
 void set_send_cor_mode(uint8_t set_value){
-		correct_mode = set_value;
-		SEGGER_RTT_printf(0, "set_value = %d\n", set_value);
-		uint8_t mode_state;
+		correct_mode = (uint32_t)set_value;
+		SEGGER_RTT_printf(0, "correct_mode = %d\n", correct_mode);
+		
+	uint8_t mode_state;
 		if(set_value == 1){
 			 ble_comm_send_handler("n3/1");
 				mode_state = 1;
@@ -107,9 +108,9 @@ void set_send_cor_mode(uint8_t set_value){
 			 ble_comm_send_handler ("n3/3");
 		}
 		
-		fds_update_value(&correct_mode, file_id, fds_rk_corr_mode);
 		lora_write_flag_1byte(REMOTE_MODE_CHANGE, mode_state);
-	  
+		
+		APP_ERROR_CHECK(fds_update_value(&correct_mode, file_id, fds_rk_corr_mode));
 }
 
 void ble_set(uint8_t *ble_set_buffer){
@@ -270,16 +271,27 @@ void ble_set(uint8_t *ble_set_buffer){
 				case CAL_LOAD_WEIGHT:
 					cal_weight = atoi((char*) ble_set_buffer + slashIndex);
 				break;
-				case 17:
-					if(set_value == 0){
-						nrf_gpio_pin_clear(15);
-						nrf_gpio_pin_clear(17);
-					} else if (set_value == 1){
-						nrf_gpio_pin_set(15);
-						nrf_gpio_pin_set(17);
+//				case TEST_UNKNOWN:
+//					if(set_value == 0){
+//						nrf_gpio_pin_clear(15);
+//						nrf_gpio_pin_clear(17);
+//					} else if (set_value == 1){
+//						nrf_gpio_pin_set(15);
+//						nrf_gpio_pin_set(17);
+//					}
+//					//nrf_gpio_pin_toggle(31);
+//				//nrf_gpio_pin_toggle(17);
+//				break;
+				case PROTOCOL_TYPE:
+					if(set_value == GENERAL_PROTOCOL){
+						protocol = GENERAL_PROTOCOL;
+					} else if (set_value == MIDDLE_MI_12_COMMAND_MODE){
+						protocol = MIDDLE_MI_12_COMMAND_MODE;
 					}
-					//nrf_gpio_pin_toggle(31);
-				//nrf_gpio_pin_toggle(17);
-				break;
+					SEGGER_RTT_printf(0, "protocol = %d\n", protocol);
+					ble_comm_send_handler("protocol changed");	
+					
+					fds_update_value(&protocol, file_id_c, fds_rk_protocol);				
+					
 }
 }

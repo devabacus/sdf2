@@ -83,7 +83,8 @@ extern percent_cor_mode_t percent_cor_mode;
 #define COR_PERC_3 2350
 
 
-#define COR_PLUS_START 1250
+#define COR_MINUS_START 1250
+#define COR_PLUS_START 1110
 #define COR_PERC_START 2250
 
 

@@ -52,6 +52,7 @@
 #include "archive.h"
 #include "weight.h"
 
+
 #include "device_name.h"
 #include "LoRa.h"
 #include "m_interface.h"
@@ -231,6 +232,9 @@ static void m_clock_timer_handler (void *p_context)
 }
 void fds_get_init_data()
 {
+	SEGGER_RTT_printf(0, "correct_mode init_flash = %d\r\n", correct_mode);
+	fds_get_data(&correct_mode, file_id, fds_rk_corr_mode);
+	SEGGER_RTT_printf(0, "correct_mode init_flash = %d\r\n", correct_mode);
 	fds_get_data(&life_counter, file_id_c, fds_rk_clock);
 	fds_get_data(&activate_status, file_id_c, fds_rk_activate_status);
 	fds_get_data(&activate_attempts, file_id_c, fds_rk_activate_attempts);
@@ -247,7 +251,7 @@ void fds_get_init_data()
 	
 	fds_get_data(&num_cor_buts, file_id, fds_rk_num_cor_but);
 	fds_get_data(&cor_feedback, file_id, fds_rk_cor_feedback);
-	fds_get_data(&correct_mode, file_id, fds_rk_corr_mode);
+	
 	
 	fds_get_data(&time_feedback, file_id, fds_rk_time_feedback);
 	fds_get_data(&feedback, file_id, fds_rk_feedback);
@@ -256,8 +260,9 @@ void fds_get_init_data()
 	fds_get_data(&weight_float, file_id, fds_rk_weight_float);
 	fds_get_data(&startWeightIndex, file_id, fds_rk_uart_weight_st);
 	fds_get_data(&endWeightIndex, file_id, fds_rk_uart_weight_end);
+	SEGGER_RTT_printf(0, "end_index = %d\r\n", endWeightIndex);
 	fds_get_data(&uart_ble_mode, file_id, fds_rk_uart_ble_mode);
-	
+	SEGGER_RTT_printf(0, "protocol = %d\r\n", protocol);
 	
 	fds_get_data(&fds_remote_type, file_id_c, fds_rk_remote_type);
 	fds_get_data(&phone_cor_counter, file_id_c, fds_rk_phone_cor_counter);
@@ -271,13 +276,15 @@ void fds_get_init_data()
 	
 	fds_get_data(&fds_clear_counter, file_id_c, fds_rk_clear_counter);
 	
+	fds_get_data(&protocol, file_id_c, fds_rk_protocol);
+	
 	power_down_count++;
 	fds_update_value(&power_down_count, file_id_c, fds_rk_power_down);
   init_corr_values();
 	init_cal_values();
 	offset_fds_kg_get_data();
 	autocor_adc_values_get();
-	SEGGER_RTT_printf(0, "STATUS = %d\r\n", activate_status);
+	SEGGER_RTT_printf(0, "protocol = %d\r\n", protocol);
 		//APP_ERROR_CHECK(err_code);
 }
 
@@ -1146,8 +1153,7 @@ int main(void)
 		segnum1(fds_option_status);
 		//rgb_set(0, 50, 0, 2, 500);
 		nrf_gpio_pin_set(17);
-		SEGGER_RTT_printf(0, "correct_mode = %d\n", correct_mode);
-		
+		SEGGER_RTT_printf(0, "correct_mode = %d\n", correct_mode);		
     for (;;)
     {
 			app_sched_execute();
