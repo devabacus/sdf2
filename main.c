@@ -1019,10 +1019,16 @@ void lora_hendler(uint8_t * _p_arr, uint8_t size, lora_event_t event)
 		case RX_DONE:
 			{
 				NRF_LOG_INFO("%s %d %d", _p_arr, size, rssi());
-				//beginPacket();
-//				lora_write("12345678", 8);
-//				endPacket();
-				//NRF_LOG_INFO("%d", rssi());
+				
+				switch(*_p_arr)
+				{
+					case 1:
+					{
+						
+						break;
+					}
+				}
+
 				lora_recive();
 				
 /*				
@@ -1111,7 +1117,7 @@ int main(void)
 		APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 		
 		//simple init lora
-		lora_init(spi_lora, 433E6, &lora_hendler);
+		//lora_init(spi_lora, 433E6, &lora_hendler);
 		//lora_receive();
 		
 		
@@ -1133,8 +1139,7 @@ int main(void)
 		//SEGGER_RTT_printf(0, "start_weight_index = %d\n", startWeightIndex);
 		SEGGER_RTT_printf(0, "fds_uart_automode = %d, cal_turn_on = %d\n", fds_uart_automode, cal_turn_on);
 		segtext("fds_option_status = ");
-		segnum1(fds_option_status);
-		
+		segnum1(fds_option_status);	
 			
 		
 				

@@ -20,7 +20,7 @@
 #endif
 
 #ifdef DEBUG_MODE
-#define DEVICE_NAME											"debug_5.4.9_4"
+#define DEVICE_NAME											"debug_5.4.9_5"
 #endif
 
 //728123108

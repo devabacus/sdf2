@@ -227,6 +227,7 @@ void beginPacket()
 //	SEGGER_RTT_printf(0, "Pacet begin\r\nSet Signal bandwidth: 7.8 kHz\r\nError coding rate = 4/5\r\nExplicit header mode\r\n");
 	writeRegister(REG_MODEM_CONFIG_1, 0x72);
 	
+	
 	SEGGER_RTT_printf(0, "Reset FIFO address and paload length\r\n");
   writeRegister(REG_FIFO_ADDR_PTR, 0);
   writeRegister(REG_PAYLOAD_LENGTH, 0);

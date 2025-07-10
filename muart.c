@@ -61,13 +61,13 @@ void weight_ble_msg(void){
 void send_uart_msg(void){
 	
 	if(uart_ble_mode == 1){
-		segtext(data_array);
+		//segtext(data_array);
 		ble_comm_send_handler(data_array);
 		
 		
 	} else if (uart_ble_mode == 2){
-		segtext(data_array + startWeightIndex);
-		segtext("\n");
+//		segtext(data_array + startWeightIndex);
+//		segtext("\n");
 		ble_comm_send_handler(data_array + startWeightIndex);
 	}
 										
@@ -93,8 +93,13 @@ void define_uart_weight(void){
 				uart_weight_max = 0;
 			}
 			
+			
+			
+			
 		beginPacket();
+			
 		lora_write(uart_weight_ch, strlen(uart_weight_ch));
+
 		endPacket();
 		segtext(uart_weight_ch);
 		segtext("\n");
@@ -128,17 +133,13 @@ void define_uart_weight(void){
 			time_changed=0;
 			sprintf(uart_weight_ch, "%.2f", uart_weight_f);
 			uart_weight_f_last = uart_weight_f;
-			segtext(uart_weight_ch);
-			segtext("\n");
-			
-			beginPacket();
-		lora_write(uart_weight_ch, strlen(uart_weight_ch));
-		endPacket();
+//			segtext(uart_weight_ch);
+//			segtext("\n");
+   		beginPacket();
+	  	lora_write(uart_weight_ch, strlen(uart_weight_ch));
+  		endPacket();
 			
 			//ble_comm_send_handler((uint8_t*)uart_weight_ch);
-			
-			
-			
 			
 			weight_ble_msg();
 		} else {
