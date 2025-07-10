@@ -46,6 +46,7 @@ SRC_FILES += \
   $(SDK_ROOT)/components/drivers_nrf/pwm/nrf_drv_pwm.c \
   $(SDK_ROOT)/components/drivers_nrf/spi_master/nrf_drv_spi.c \
   $(SDK_ROOT)/components/drivers_nrf/saadc/nrf_drv_saadc.c \
+  $(SDK_ROOT)/components/drivers_nrf/hal/nrf_saadc.c \
   $(SDK_ROOT)/components/drivers_nrf/timer/nrf_drv_timer.c \
   $(SDK_ROOT)/components/drivers_nrf/ppi/nrf_drv_ppi.c \
   $(SDK_ROOT)/components/libraries/mem_manager/mem_manager.c \
@@ -108,10 +109,11 @@ SRC_FILES += \
 
 # Include folders common to all targets
 INC_FOLDERS += \
+  ../config \
   $(SDK_ROOT)/components \
+  $(SDK_ROOT)/components/toolchain/cmsis/include \
   $(SDK_ROOT)/components/libraries/scheduler \
   $(SDK_ROOT)/components/libraries/experimental_log \
-  $(SDK_ROOT)/components/toolchain/cmsis/include \
   $(SDK_ROOT)/components/libraries/pwr_mgmt \
   $(SDK_ROOT)/components/libraries/strerror \
   $(SDK_ROOT)/components/drivers_nrf/delay \
@@ -136,7 +138,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/gpiote \
   $(SDK_ROOT)/external/segger_rtt \
   $(SDK_ROOT)/components/libraries/atomic_fifo \
-  ../config \
   $(SDK_ROOT)/components/libraries/atomic \
   $(SDK_ROOT)/components/boards \
   $(SDK_ROOT)/components/drivers_nrf/hal \

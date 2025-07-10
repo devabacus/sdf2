@@ -18,7 +18,7 @@
 #endif
 
 #ifdef DEBUG_MODE
-#define DEVICE_NAME											"debug_5.6.5"
+#define DEVICE_NAME											"debug_5.6.5_stas"
 #endif
 
 //728123108

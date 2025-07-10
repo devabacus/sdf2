@@ -89,14 +89,15 @@ typedef enum
 
 typedef	void (*p_lora_hendler_t)(uint8_t * p_arr, uint8_t, lora_event_t);
 
-extern uint8_t rx_buf[2];
-extern uint8_t tx_buf[2];
-extern long _frequency;
-extern bool irq_flag;
-extern uint8_t lora_init_success;
-extern nrf_drv_spi_t _spi;
-extern volatile bool spi_xfer_done;  /**< Flag used to indicate that SPI instance completed the transfer. */
-extern nrf_drv_spi_xfer_desc_t nrf_drv_spi_xfer_desc;
+static uint8_t rx_buf[2];
+static uint8_t tx_buf[2];
+static long _frequency;
+static bool irq_flag;
+static uint8_t lora_init_success;
+
+static nrf_drv_spi_t _spi;
+static volatile bool spi_xfer_done;  /**< Flag used to indicate that SPI instance completed the transfer. */
+static nrf_drv_spi_xfer_desc_t nrf_drv_spi_xfer_desc;
 
 void lora_recive(void);
 void beginPacket(void);
