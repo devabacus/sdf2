@@ -10,7 +10,11 @@
       <TargetName>nrf52832_xxaa</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+<<<<<<< HEAD
       <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
+=======
+      <pCCUsed>5060960::V5.06 update 7 (build 960)::.\ARMCC</pCCUsed>
+>>>>>>> 1027a916fd062c15c6dae212139012e0f91717e1
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -275,8 +279,13 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
+<<<<<<< HEAD
                 <StartAddress>0x23000</StartAddress>
                 <Size>0x5d000</Size>
+=======
+                <StartAddress>0x0</StartAddress>
+                <Size>0x80000</Size>
+>>>>>>> 1027a916fd062c15c6dae212139012e0f91717e1
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -300,8 +309,13 @@
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
+<<<<<<< HEAD
                 <StartAddress>0x20002800</StartAddress>
                 <Size>0xd800</Size>
+=======
+                <StartAddress>0x20000000</StartAddress>
+                <Size>0x10000</Size>
+>>>>>>> 1027a916fd062c15c6dae212139012e0f91717e1
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -8314,7 +8328,11 @@
       <file attr="config" category="source" condition="ARM Compiler" name="Device\Source\arm\arm_startup_nrf52.s" version="8.15.0">
         <instance index="0">RTE\Device\nRF52832_xxAA\arm_startup_nrf52.s</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="NordicSemiconductor" Cversion="8.44.1" condition="nRF52832 Device and CMSIS"/>
+<<<<<<< HEAD
         <package license="License/license.txt" name="nRF_DeviceFamilyPack" schemaVersion="1.3" url="http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.44.1"/>
+=======
+        <package name="nRF_DeviceFamilyPack" schemaVersion="1.3" url="http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.44.1"/>
+>>>>>>> 1027a916fd062c15c6dae212139012e0f91717e1
         <targetInfos>
           <targetInfo name="flash_s132_nrf52_5.0.0_softdevice"/>
           <targetInfo name="nrf52832_xxaa"/>
@@ -8323,7 +8341,11 @@
       <file attr="config" category="source" name="Device\Source\system_nrf52.c" version="8.15.0">
         <instance index="0">RTE\Device\nRF52832_xxAA\system_nrf52.c</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="NordicSemiconductor" Cversion="8.44.1" condition="nRF52832 Device and CMSIS"/>
+<<<<<<< HEAD
         <package license="License/license.txt" name="nRF_DeviceFamilyPack" schemaVersion="1.3" url="http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.44.1"/>
+=======
+        <package name="nRF_DeviceFamilyPack" schemaVersion="1.3" url="http://developer.nordicsemi.com/nRF5_SDK/pieces/nRF_DeviceFamilyPack/" vendor="NordicSemiconductor" version="8.44.1"/>
+>>>>>>> 1027a916fd062c15c6dae212139012e0f91717e1
         <targetInfos>
           <targetInfo name="flash_s132_nrf52_5.0.0_softdevice"/>
           <targetInfo name="nrf52832_xxaa"/>

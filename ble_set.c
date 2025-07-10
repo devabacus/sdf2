@@ -199,14 +199,15 @@ void ble_set(uint8_t *ble_set_buffer){
 					if(set_value == 1) cal_unload();
 					else if (set_value == 3) 
 						{
-								if(uart_weight > 0)
-								{
-									define_corr_on_uart();
-								}
-								else 
-								{
-									define_corr_on();
-								}
+//								if(uart_weight > 0)
+//								{
+//									define_corr_on_uart();
+//								}
+//								else 
+//								{
+//									define_corr_on();
+//								}
+							define_corr_on_uart();
    					}					
 					
 					else if (set_value == 2) {
