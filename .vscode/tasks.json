@@ -1,0 +1,106 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "\"C:/Program Files (x86)/GnuWin32/bin/make.exe\"",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/pca10040/s132/armgcc"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": {
+                "owner": "gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "\"C:/Program Files (x86)/GnuWin32/bin/make.exe\"",
+            "args": ["clean"],
+            "options": {
+                "cwd": "${workspaceFolder}/pca10040/s132/armgcc"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "flash",
+            "type": "shell",
+            "command": "\"C:/Program Files (x86)/GnuWin32/bin/make.exe\"",
+            "args": ["flash"],
+            "options": {
+                "cwd": "${workspaceFolder}/pca10040/s132/armgcc"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "dependsOn": "build"
+        },
+        {
+            "label": "flash_softdevice",
+            "type": "shell",
+            "command": "\"C:/Program Files (x86)/GnuWin32/bin/make.exe\"",
+            "args": ["flash_softdevice"],
+            "options": {
+                "cwd": "${workspaceFolder}/pca10040/s132/armgcc"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "erase",
+            "type": "shell",
+            "command": "\"C:/Program Files (x86)/GnuWin32/bin/make.exe\"",
+            "args": ["erase"],
+            "options": {
+                "cwd": "${workspaceFolder}/pca10040/s132/armgcc"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        }
+    ]
+}
