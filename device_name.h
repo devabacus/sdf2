@@ -9,7 +9,7 @@
 #include "flash_storage.h"
 
 //Для прошивки рабочей версии строка ниже должна быть закомментирована
-//#define DEBUG_MODE
+#define DEBUG_MODE
 #define LORA_USE
 //#define CHECK_CONFIG 1
 ////////////////////////////////////////////////////////
