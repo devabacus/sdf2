@@ -94,7 +94,6 @@ static uint8_t tx_buf[2];
 static long _frequency;
 static bool irq_flag;
 static uint8_t lora_init_success;
-
 static nrf_drv_spi_t _spi;
 static volatile bool spi_xfer_done;  /**< Flag used to indicate that SPI instance completed the transfer. */
 static nrf_drv_spi_xfer_desc_t nrf_drv_spi_xfer_desc;

@@ -1,0 +1,52 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug nRF52832",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "jlink",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/pca10040/s132/armgcc/_build/nrf52832_xxaa.out",
+            "device": "nRF52832_xxAA",
+            "interface": "swd",
+            "serialNumber": "",
+            "runToMain": true,
+            "preLaunchTask": "build",
+            "svdFile": "${workspaceFolder}/../../../modules/nrfx/mdk/nrf52.svd",
+            "serverpath": "C:/Program Files/SEGGER/JLink_V794e/JLinkGDBServerCL.exe",
+            "armToolchainPath": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/7 2018-q2-update/bin",
+            "showDevDebugOutput": false,
+            "rtos": "FreeRTOS",
+            "swoConfig": {
+                "enabled": true,
+                "cpuFrequency": 64000000,
+                "swoFrequency": 4000000,
+                "source": "probe",
+                "decoders": [
+                    {
+                        "type": "console",
+                        "label": "ITM",
+                        "port": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Attach nRF52832",
+            "type": "cortex-debug",
+            "request": "attach",
+            "servertype": "jlink",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/pca10040/s132/armgcc/_build/nrf52832_xxaa.out",
+            "device": "nRF52832_xxAA",
+            "interface": "swd",
+            "serialNumber": "",
+            "svdFile": "${workspaceFolder}/../../../modules/nrfx/mdk/nrf52.svd",
+            "serverpath": "C:/Program Files/SEGGER/JLink_V794e/JLinkGDBServerCL.exe",
+            "armToolchainPath": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/7 2018-q2-update/bin",
+            "showDevDebugOutput": false,
+            "rtos": "FreeRTOS"
+        }
+    ]
+}

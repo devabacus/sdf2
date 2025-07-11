@@ -194,6 +194,7 @@ void find_average_adc(void)
 								break;
 								
 								case 4:
+								break;
 								}
 								count_average_adc = 0;
 								start_average_adc = 0;

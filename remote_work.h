@@ -24,7 +24,7 @@ void buttons_handle(void);
 void init_corr_values(void);
 
 void cor_auto_handle(void);
-static uint32_t freeze_auto_cor;
+extern uint32_t freeze_auto_cor;
 typedef enum 
 {
 	BUT_1_1 = 1,
